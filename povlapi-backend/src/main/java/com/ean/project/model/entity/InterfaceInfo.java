@@ -1,25 +1,21 @@
-package com.ean.project.model.dto.interfaceinfo;
+package com.ean.project.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 更新请求
  *
- * @TableName product
  */
-@Data
-public class InterfaceInfoUpdateRequest implements Serializable {
 
+@TableName(value = "interface_info")
+@Data
+public class InterfaceInfo {
     /**
      * id
      */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
@@ -53,14 +49,29 @@ public class InterfaceInfoUpdateRequest implements Serializable {
     private String responseHeader;
 
     /*
-     *  接口状态
-     * */
+    *  接口状态
+    * */
     private Integer status;
 
     /*
-     * 请求方式
-     * */
+    * 请求方式
+    * */
     private String method;
+
+    /*
+    * 用户ID
+    * */
+    private Long userId;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 
     /**
      * 是否删除

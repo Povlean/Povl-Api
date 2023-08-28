@@ -1,8 +1,13 @@
 package com.ean.project.model.dto.interfaceinfo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 创建请求
@@ -13,49 +18,51 @@ import java.io.Serializable;
 public class InterfaceInfoAddRequest implements Serializable {
 
     /**
-     * 年龄
+     * 接口名称
      */
-    private Integer age;
+    private String name;
 
     /**
-     * 性别（0-男, 1-女）
+     * 描述
      */
-    private Integer gender;
+    private String description;
 
     /**
-     * 学历
+     * 接口路径
      */
-    private String education;
+    private String url;
 
     /**
-     * 地点
+     * 请求类型
      */
-    private String place;
+    private String type;
 
     /**
-     * 职业
+     * 请求头
      */
-    private String job;
+    private String requestHeader;
 
     /**
-     * 联系方式
+     * 响应头
      */
-    private String contact;
+    private String responseHeader;
+
+    /*
+     * 请求方式
+     * */
+    private String method;
+
+    /*
+     * 用户ID
+     * */
+    private Long userId;
 
     /**
-     * 感情经历
+     * 是否删除
      */
-    private String loveExp;
+    @TableLogic
+    private Integer isDelete;
 
-    /**
-     * 内容（个人介绍）
-     */
-    private String content;
-
-    /**
-     * 照片地址
-     */
-    private String photo;
-
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

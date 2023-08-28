@@ -1,10 +1,15 @@
 package com.ean.project.model.dto.interfaceinfo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.ean.project.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 查询请求
@@ -16,54 +21,55 @@ import java.io.Serializable;
 public class InterfaceInfoQueryRequest extends PageRequest implements Serializable {
 
     /**
-     * 年龄
+     * id
      */
-    private Integer age;
+    private Long id;
 
     /**
-     * 性别（0-男, 1-女）
+     * 接口名称
      */
-    private Integer gender;
+    private String name;
 
     /**
-     * 学历
+     * 描述
      */
-    private String education;
+    private String description;
 
     /**
-     * 地点
+     * 接口路径
      */
-    private String place;
+    private String url;
 
     /**
-     * 职业
+     * 请求类型
      */
-    private String job;
+    private String type;
 
     /**
-     * 联系方式
+     * 请求头
      */
-    private String contact;
+    private String requestHeader;
 
     /**
-     * 感情经历
+     * 响应头
      */
-    private String loveExp;
+    private String responseHeader;
 
-    /**
-     * 内容（个人介绍），支持模糊查询
-     */
-    private String content;
+    /*
+     *  接口状态
+     * */
+    private Integer status;
 
-    /**
-     * 状态（0-待审核, 1-通过, 2-拒绝）
-     */
-    private Integer reviewStatus;
+    /*
+     * 请求方式
+     * */
+    private String method;
 
-    /**
-     * 创建用户 id
-     */
+    /*
+     * 用户ID
+     * */
     private Long userId;
 
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

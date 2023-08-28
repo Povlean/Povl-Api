@@ -26,6 +26,11 @@ public class PageRequest {
      */
     private String sortField;
 
+   /**
+    * 内容
+    */
+    private String content;
+
     /**
      * 排序顺序（默认升序）
      */
