@@ -9,4 +9,4 @@ Povlapi-frontend
 后端初始化项目
 Povlapi-backend
 
-你好啊，povl-api
+该项目目前完成了前后端的初始化，项目进度目前在10%
