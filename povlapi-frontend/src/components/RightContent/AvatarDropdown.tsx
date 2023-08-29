@@ -8,6 +8,7 @@ import type { MenuInfo } from 'rc-menu/lib/interface';
 import React, { useCallback } from 'react';
 import { flushSync } from 'react-dom';
 import HeaderDropdown from '../HeaderDropdown';
+import { userLogoutUsingPOST } from '@/services/povlapi-backend/userController';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -64,7 +65,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
         flushSync(() => {
           setInitialState((s) => ({ ...s, currentUser: undefined }));
         });
-        loginOut();
+        userLogoutUsingPOST();
         return;
       }
       history.push(`/account/${key}`);

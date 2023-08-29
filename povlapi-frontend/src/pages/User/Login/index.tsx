@@ -122,9 +122,11 @@ const Login: React.FC = () => {
       if (res.data) {
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');
+        setInitialState({
+          loginUser: res.data
+        });
         return;
       }
-      setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
