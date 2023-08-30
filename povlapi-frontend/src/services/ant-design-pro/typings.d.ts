@@ -2,6 +2,23 @@
 /* eslint-disable */
 
 declare namespace API {
+
+  type InterfaceInfo = {
+    createTime?: string;
+    description?: string;
+    id?: number;
+    isDelete?: number;
+    method?: string;
+    name?: string;
+    requestHeader?: string;
+    responseHeader?: string;
+    status?: number;
+    type?: string;
+    updateTime?: string;
+    url?: string;
+    userId?: number;
+  };
+
   type CurrentUser = {
     name?: string;
     avatar?: string;

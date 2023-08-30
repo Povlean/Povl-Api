@@ -37,8 +37,8 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String url = interfaceInfo.getUrl();
         // 校验是否为添加项
         if (isAdd) {
-            if (StringUtils.isAnyBlank(description, method, name, requestHeader,
-                    responseHeader, type, url) || ObjectUtils.anyNull(userId, status)) {
+            if (StringUtils.isAnyBlank(description, method, name,
+                    requestHeader, responseHeader, type, url)) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
             }
         }

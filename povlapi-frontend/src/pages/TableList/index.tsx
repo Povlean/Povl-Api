@@ -15,17 +15,20 @@ import { Button, Drawer, Input, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
-import { listInterfaceInfoByPageUsingGET, listInterfaceInfoUsingGET } from '@/services/povlapi-backend/interfaceInfoController';
+import { addInterfaceInfoUsingPOST, listInterfaceInfoByPageUsingGET, listInterfaceInfoUsingGET } from '@/services/povlapi-backend/interfaceInfoController';
+import { SortOrder } from 'antd/es/table/interface';
+import CreateModal from './components/CreateModal';
+import createModal from './components/CreateModal';
 
 /**
  * @en-US Add node
  * @zh-CN 添加节点
  * @param fields
  */
-const handleAdd = async (fields: API.RuleListItem) => {
+const handleAdd = async (fields: API.InterfaceInfo) => {
   const hide = message.loading('正在添加');
   try {
-    await addRule({ ...fields });
+    await addInterfaceInfoUsingPOST({ ...fields });
     hide();
     message.success('Added successfully');
     return true;
@@ -108,6 +111,21 @@ const TableList: React.FC = () => {
    * */
   const intl = useIntl();
 
+  const handleAdd = async (fields: API.InterfaceInfo) => {
+    const hide = message.loading('正在添加');
+    try {
+      await addInterfaceInfoUsingPOST({ ...fields });
+      hide();
+      message.success('创建成功');
+      handleModalOpen(false);
+      return true;
+    } catch (error) {
+      hide();
+      message.error('创建失败');
+      return false;
+    }
+  };
+
   const columns: ProColumns<API.InterfaceInfo>[] = [
     {
       title: 'id',
@@ -168,14 +186,16 @@ const TableList: React.FC = () => {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
+      hideInForm: true,
     },
     {
       title: '更新时间',
       dataIndex: 'updateTime',
       valueType: 'dateTime',
+      hideInForm: true,
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
+      title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
@@ -186,14 +206,8 @@ const TableList: React.FC = () => {
             setCurrentRow(record);
           }}
         >
-          <FormattedMessage id="pages.searchTable.config" defaultMessage="Configuration" />
-        </a>,
-        <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          <FormattedMessage
-            id="pages.searchTable.subscribeAlert"
-            defaultMessage="Subscribe to alerts"
-          />
-        </a>,
+          修改
+        </a>
       ],
     },
   ];
@@ -222,14 +236,20 @@ const TableList: React.FC = () => {
           </Button>,
         ]}
         request = {async(params, sort: Record<string, SortOrder>, filter: Record<string, (string | number)[] | null>) => {
-          const res = await listInterfaceInfoByPageUsingGET({
+          const res: any = await listInterfaceInfoByPageUsingGET({
             ...params
           })
           if (res?.data) {
             return {
               data: res?.data.records || [],
               success: true,
-              total: res.total,
+              total: res?.data.total || 0,
+            }
+          } else {
+            return {
+              data: [],
+              success: false,
+              total: 0,
             }
           }
         }}
@@ -358,6 +378,7 @@ const TableList: React.FC = () => {
           />
         )}
       </Drawer>
+      <CreateModal columns={columns} onCancel={() => {handleModalOpen(false)} } visible={createModalOpen} onSubmit={(values) => {handleAdd(values)}}  />
     </PageContainer>
   );
 };
