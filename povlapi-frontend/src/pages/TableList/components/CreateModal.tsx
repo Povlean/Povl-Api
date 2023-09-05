@@ -15,9 +15,9 @@ export type Props = {
 const createModal: React.FC<Props> = (props) => {
   const { visible, columns, onCancel, onSubmit } = props;
   return (
-    <Modal open = {visible} onCancel={() => onCancel?.()}>
+    <Modal footer={null} open = {visible} onCancel={() => onCancel?.()}>
       <ProTable type="form" columns = {columns} onSubmit= {async(value) => {
-        onSubmit?.(value);
+        onSubmit?.(value); 
       }}/>
     </Modal>
   );

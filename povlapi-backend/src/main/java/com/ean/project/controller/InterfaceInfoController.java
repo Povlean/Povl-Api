@@ -13,7 +13,6 @@ import com.ean.project.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.ean.project.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.ean.project.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import com.ean.project.model.entity.InterfaceInfo;
-import com.ean.project.model.entity.InterfaceInfo;
 import com.ean.project.model.entity.User;
 import com.ean.project.service.InterfaceInfoService;
 import com.ean.project.service.UserService;
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -43,7 +41,6 @@ public class InterfaceInfoController {
     private UserService userService;
 
     // region 增删改查
-
     /**
      * 创建
      *
