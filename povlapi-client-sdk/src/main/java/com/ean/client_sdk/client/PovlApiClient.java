@@ -1,20 +1,19 @@
-package com.example.povlapi_flaten.client;
+package com.ean.client_sdk.client;
 
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.crypto.digest.DigestAlgorithm;
-import cn.hutool.crypto.digest.Digester;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import com.example.povlapi_flaten.model.User;
-import com.example.povlapi_flaten.utils.SignUtil;
+import com.ean.client_sdk.model.User;
+import com.ean.client_sdk.utils.SignUtil;
 
 import java.util.HashMap;
 import java.util.Map;
-import static com.example.povlapi_flaten.constants.ApiConstant.ACCESS_KEY;
-import static com.example.povlapi_flaten.constants.ApiConstant.SECRET_KEY;
+
+import static com.ean.client_sdk.constants.ApiConstant.ACCESS_KEY;
 
 /**
+ * @description:API请求客户端
  * @author:Povlean
  */
 public class PovlApiClient {
@@ -25,7 +24,6 @@ public class PovlApiClient {
     private String secretKey;
 
     public PovlApiClient() {
-
     }
 
     public PovlApiClient(String accessKey, String secretKey) {

@@ -1,4 +1,4 @@
-package com.example.povlapi_flaten.constants;
+package com.ean.client_sdk.constants;
 
 /**
  * @author:Povlean

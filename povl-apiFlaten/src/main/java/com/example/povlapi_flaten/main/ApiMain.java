@@ -9,15 +9,18 @@ import com.example.povlapi_flaten.model.User;
  */
 public class ApiMain {
     public static void main(String[] args) {
+        // 签名认证
         PovlApiClient povlApiClient = new PovlApiClient("123456", "123456");
 
-        String res1 = povlApiClient.getNameByGet("Get Api");
-        System.out.println(res1);
+        // String res1 = povlApiClient.getNameByGet("Get Api");
+        // System.out.println(res1);
+        //
+        // String res2 = povlApiClient.getNameByPost("Post Api");
+        // System.out.println(res2);
 
-        String res2 = povlApiClient.getNameByPost("Post Api");
-        System.out.println(res2);
+        User user = new User();
+        user.setUserAccount("Povl");
 
-        User user = new User("Body User", "24");
         String res3 = povlApiClient.getUsernameByPost(user);
         System.out.println(res3);
     }
