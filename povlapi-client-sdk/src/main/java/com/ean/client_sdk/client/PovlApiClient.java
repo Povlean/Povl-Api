@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.ean.client_sdk.constants.ApiConstant.ACCESS_KEY;
+import static com.ean.client_sdk.constants.ApiConstant.IP;
 
 /**
  * @description:API请求客户端
@@ -18,13 +19,12 @@ import static com.ean.client_sdk.constants.ApiConstant.ACCESS_KEY;
  */
 public class PovlApiClient {
 
-    public static final String API_URL = "http://192.168.43.59:7530/name";
-
+    // 192.168.43.59
+    public static final String API_URL = "http://" + IP + ":7530/name";
     private String accessKey;
     private String secretKey;
 
-    public PovlApiClient() {
-    }
+    public PovlApiClient() {}
 
     public PovlApiClient(String accessKey, String secretKey) {
         this.accessKey = accessKey;
@@ -34,8 +34,6 @@ public class PovlApiClient {
     public HashMap getClientKey(String body) {
         HashMap<String, String> keyMap = new HashMap<>();
         keyMap.put(ACCESS_KEY, accessKey);
-        // 不能直接传递密钥
-        // keyMap.put(SECRET_KEY, secretKey);
         // 生成随机数以防重放
         keyMap.put("nonce", RandomUtil.randomNumbers(4));
         keyMap.put("body", body);

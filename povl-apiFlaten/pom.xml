@@ -19,6 +19,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.ean</groupId>
+            <artifactId>povlapi-client-sdk</artifactId>
+            <version>0.0.6-SNAPSHOT</version>
+        </dependency>
         <!-- mvc -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

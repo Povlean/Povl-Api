@@ -1,8 +1,10 @@
 package com.ean.client_sdk;
 
 import com.ean.client_sdk.client.PovlApiClient;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -11,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConfigurationProperties("povlapi.client")
+@Data
+@ComponentScan
 public class PovlApiClientConfig {
 
     private String accessKey;

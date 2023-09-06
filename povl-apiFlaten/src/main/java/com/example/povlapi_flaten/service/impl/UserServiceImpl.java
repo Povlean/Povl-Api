@@ -3,8 +3,8 @@ package com.example.povlapi_flaten.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ean.client_sdk.model.User;
 import com.example.povlapi_flaten.mapper.UserMapper;
-import com.example.povlapi_flaten.model.User;
 import com.example.povlapi_flaten.service.UserService;
 import org.springframework.stereotype.Service;
 
