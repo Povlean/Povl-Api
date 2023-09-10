@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * @description:客户端请求Starter类
  * @author:Povlean
  */
+
 @Configuration
 @ConfigurationProperties("povlapi.client")
 @Data

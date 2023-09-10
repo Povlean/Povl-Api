@@ -1,7 +1,9 @@
 package com.ean.project.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ean.client_sdk.client.PovlApiClient;
 import com.ean.project.annotation.AuthCheck;
 import com.ean.project.common.BaseResponse;
 import com.ean.project.common.DeleteRequest;
@@ -12,8 +14,10 @@ import com.ean.project.exception.BusinessException;
 import com.ean.project.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.ean.project.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.ean.project.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.ean.project.model.dto.post.PostIdRequest;
 import com.ean.project.model.entity.InterfaceInfo;
 import com.ean.project.model.entity.User;
+import com.ean.project.model.enums.PostStatusEnum;
 import com.ean.project.service.InterfaceInfoService;
 import com.ean.project.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +40,9 @@ public class InterfaceInfoController {
 
     @Resource
     private InterfaceInfoService interfaceInfoService;
+
+    @Resource
+    private PovlApiClient povlApiClient;
 
     @Resource
     private UserService userService;
@@ -174,8 +181,10 @@ public class InterfaceInfoController {
         }
         InterfaceInfo interfaceInfoQuery = new InterfaceInfo();
         BeanUtils.copyProperties(interfaceInfoQueryRequest, interfaceInfoQuery);
+        // 获取分页数量
         long current = interfaceInfoQueryRequest.getCurrent();
         long size = interfaceInfoQueryRequest.getPageSize();
+        // 获取前端中的传输数据
         String sortField = interfaceInfoQueryRequest.getSortField();
         String sortOrder = interfaceInfoQueryRequest.getSortOrder();
         String content = interfaceInfoQueryRequest.getContent();
@@ -193,6 +202,55 @@ public class InterfaceInfoController {
         return ResultUtils.success(interfaceInfoPage);
     }
 
+    // 上线接口
+    @PostMapping("/online")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody PostIdRequest postIdRequest) {
+        if (postIdRequest == null || postIdRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Long id = postIdRequest.getId();
+        // 判断是否存在
+        InterfaceInfo oldInterfaceinfo = interfaceInfoService.getById(id);
+        if (ObjectUtil.isEmpty(oldInterfaceinfo)) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        // 判断该接口是否可以调用
+        com.ean.client_sdk.model
+                .User user = new com.ean.client_sdk.model.User();
+        user.setUserName("povl");
+        String username = povlApiClient.getUsernameByPost(user);
+        if (StringUtils.isAnyBlank(username)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 将接口状态改为1
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        interfaceInfo.setUserId(id);
+        interfaceInfo.setStatus(PostStatusEnum.ONLINE.getValue());
+        boolean res = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(res);
+    }
+
+
+    @PostMapping("/offline")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> offlineInterfaceInfo(@RequestBody PostIdRequest postIdRequest){
+        if (postIdRequest == null || postIdRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Long id = postIdRequest.getId();
+        // 判断是否存在
+        InterfaceInfo oldInterfaceinfo = interfaceInfoService.getById(id);
+        if (ObjectUtil.isEmpty(oldInterfaceinfo)) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        // 将接口状态改为1
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        interfaceInfo.setUserId(id);
+        interfaceInfo.setStatus(PostStatusEnum.OFFLINE.getValue());
+        boolean res = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(res);
+    }
     // endregion
 
 }

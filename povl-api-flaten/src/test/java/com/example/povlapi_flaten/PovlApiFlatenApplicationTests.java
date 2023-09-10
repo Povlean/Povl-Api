@@ -22,4 +22,10 @@ class PovlApiFlatenApplicationTests {
         System.out.println(result);
     }
 
+    @Test
+    public void sdkTest02() {
+        String test = povlApiClient.getNameByGet("test");
+        System.out.println(test);
+    }
+
 }

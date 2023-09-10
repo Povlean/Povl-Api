@@ -10,10 +10,9 @@ import com.ean.client_sdk.utils.SignUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ean.client_sdk.constants.ApiConstant.ACCESS_KEY;
-import static com.ean.client_sdk.constants.ApiConstant.IP;
+import static com.ean.client_sdk.constants.ApiConstant.*;
 
-/**
+/*
  * @description:API请求客户端
  * @author:Povlean
  */
@@ -24,8 +23,6 @@ public class PovlApiClient {
     private String accessKey;
     private String secretKey;
 
-    public PovlApiClient() {}
-
     public PovlApiClient(String accessKey, String secretKey) {
         this.accessKey = accessKey;
         this.secretKey = secretKey;
@@ -35,10 +32,10 @@ public class PovlApiClient {
         HashMap<String, String> keyMap = new HashMap<>();
         keyMap.put(ACCESS_KEY, accessKey);
         // 生成随机数以防重放
-        keyMap.put("nonce", RandomUtil.randomNumbers(4));
-        keyMap.put("body", body);
-        keyMap.put("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
-        keyMap.put("sign", SignUtil.getSign(body, secretKey));
+        keyMap.put(NONCE, RandomUtil.randomNumbers(4));
+        keyMap.put(BODY, body);
+        keyMap.put(TIMESTAMP, String.valueOf(System.currentTimeMillis() / 1000));
+        keyMap.put(SIGN, SignUtil.getSign(body, secretKey));
         return keyMap;
     }
 

@@ -1,2 +1,2 @@
 # spring boot starter
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.ean.client_sdk.client.PovlApiClient
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.ean.client_sdk.PovlApiClientConfig

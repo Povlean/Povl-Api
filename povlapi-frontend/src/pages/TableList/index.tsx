@@ -219,7 +219,27 @@ const TableList: React.FC = () => {
           }}
         >
           删除
-        </a>
+        </a>,
+        record.status === 0 ? <Button
+          type='text'
+          danger
+          key="config"
+          onClick={() => {
+            handleRemove(record);
+          }}
+        >
+          上线
+        </Button> : null,
+        record.status === 1 ? <Button
+          type='text'
+          danger
+          key="config"
+          onClick={() => {
+            handleRemove(record);
+          }}
+        >
+          下线
+        </Button> : null,
       ],
     },
   ];

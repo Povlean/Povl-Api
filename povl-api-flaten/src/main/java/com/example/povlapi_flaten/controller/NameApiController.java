@@ -3,8 +3,6 @@ package com.example.povlapi_flaten.controller;
 import com.ean.client_sdk.model.User;
 import com.ean.client_sdk.utils.SignUtil;
 import com.example.povlapi_flaten.service.UserService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
