@@ -22,12 +22,19 @@ export default [
       },
     ],
   },
-  // {
-  //   path: '/welcome',
-  //   name: 'welcome',
-  //   icon: 'smile',
-  //   component: './Welcome',
-  // },
+  {
+    path: '/interface_info/:id',
+    name: '查看接口',
+    icon: 'smile',
+    component: './InterfaceInfo',
+    hideInMenu: true
+  },
+  {
+    path: '/',
+    name: '主页',
+    icon: 'smile',
+    component: './Index',
+  },
   {
     path: '/admin',
     name: 'admin',

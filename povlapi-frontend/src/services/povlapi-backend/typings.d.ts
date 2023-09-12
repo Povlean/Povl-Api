@@ -388,6 +388,10 @@ declare namespace API {
     place?: string;
   };
 
+  type PostIdRequest = {
+    id?: number;
+  };
+
   type PostUpdateRequest = {
     age?: number;
     contact?: string;
@@ -405,7 +409,6 @@ declare namespace API {
 
   type User = {
     createTime?: string;
-    gender?: number;
     id?: number;
     isDelete?: number;
     updateTime?: string;

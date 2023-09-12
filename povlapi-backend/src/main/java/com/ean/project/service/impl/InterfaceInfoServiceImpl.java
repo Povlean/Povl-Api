@@ -29,8 +29,6 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String description = interfaceInfo.getDescription();
         String method = interfaceInfo.getMethod();
         String name = interfaceInfo.getName();
-        Long userId = interfaceInfo.getUserId();
-        Integer status = interfaceInfo.getStatus();
         String requestHeader = interfaceInfo.getRequestHeader();
         String responseHeader = interfaceInfo.getResponseHeader();
         String type = interfaceInfo.getType();

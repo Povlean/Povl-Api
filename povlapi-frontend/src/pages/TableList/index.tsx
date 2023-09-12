@@ -12,7 +12,7 @@ import {
 import { FormattedMessage, useIntl } from '@umijs/max';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
-import { addInterfaceInfoUsingPOST, deleteInterfaceInfoUsingPOST, listInterfaceInfoByPageUsingGET, updateInterfaceInfoUsingPOST } from '@/services/povlapi-backend/interfaceInfoController';
+import { addInterfaceInfoUsingPOST, deleteInterfaceInfoUsingPOST, listInterfaceInfoByPageUsingGET, offlineInterfaceInfoUsingPOST, onlineInterfaceInfoUsingPOST, updateInterfaceInfoUsingPOST } from '@/services/povlapi-backend/interfaceInfoController';
 import { SortOrder } from 'antd/es/table/interface';
 import CreateModal from './components/CreateModal';
 import UpdateModal from './components/UpdateModal';
@@ -42,7 +42,7 @@ const TableList: React.FC = () => {
   const intl = useIntl();
 
 
-  /**
+/**
  *  Delete node
  * @zh-CN 删除节点
  *
@@ -62,6 +62,54 @@ const TableList: React.FC = () => {
     } catch (error) {
       hide();
       message.error('删除失败');
+      return false;
+    }
+  };
+
+/**
+ *  Delete node
+ * @zh-CN 发布接口
+ *
+ * @param selectedRows
+ */
+  const handleOnline = async (record: API.PostIdRequest) => {
+    const hide = message.loading('发布中');
+    if (!record) return true;
+    try {
+      await onlineInterfaceInfoUsingPOST({
+        id: record.id
+      });
+      hide();
+      message.success('操作成功');
+      actionRef.current?.reload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('操作失败');
+      return false;
+    }
+  };
+
+/**
+ * Delete node
+ * @zh-CN 发布接口
+ *
+ * @param selectedRows
+ */
+  const handleOffline = async (record: API.PostIdRequest) => {
+    const hide = message.loading('下线中');
+    if (!record) return true;
+    try {
+      await offlineInterfaceInfoUsingPOST({
+        id: record.id
+      });
+      hide();
+      message.success('操作成功');
+      actionRef.current?.reload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('操作失败');
       return false;
     }
   };
@@ -212,34 +260,34 @@ const TableList: React.FC = () => {
         >
           修改
         </a>,
-        <a
+        record.status === 0 ? <a
           key="config"
+          onClick={() => {
+            handleOnline(record);
+          }}
+        >
+          发布
+        </a> : null,
+        record.status === 1 ? <Button
+          type='text'
+          key="config"
+          danger
+          onClick={() => {
+            handleOffline(record);
+          }}
+        >
+          下线
+        </Button> : null,
+        <Button
+          type='text'
+          key="config"
+          danger
           onClick={() => {
             handleRemove(record);
           }}
         >
           删除
-        </a>,
-        record.status === 0 ? <Button
-          type='text'
-          danger
-          key="config"
-          onClick={() => {
-            handleRemove(record);
-          }}
-        >
-          上线
-        </Button> : null,
-        record.status === 1 ? <Button
-          type='text'
-          danger
-          key="config"
-          onClick={() => {
-            handleRemove(record);
-          }}
-        >
-          下线
-        </Button> : null,
+        </Button>,
       ],
     },
   ];

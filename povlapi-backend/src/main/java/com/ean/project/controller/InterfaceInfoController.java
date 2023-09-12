@@ -112,7 +112,7 @@ public class InterfaceInfoController {
     @PostMapping("/update")
     public BaseResponse<Boolean> updateInterfaceInfo(@RequestBody InterfaceInfoUpdateRequest interfaceInfoUpdateRequest,
                                             HttpServletRequest request) {
-        if (interfaceInfoUpdateRequest == null || interfaceInfoUpdateRequest.getId() <= 0) {
+        if (interfaceInfoUpdateRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         InterfaceInfo InterfaceInfo = new InterfaceInfo();
@@ -218,14 +218,14 @@ public class InterfaceInfoController {
         // 判断该接口是否可以调用
         com.ean.client_sdk.model
                 .User user = new com.ean.client_sdk.model.User();
-        user.setUserName("povl");
+        user.setUserAccount("hello");
         String username = povlApiClient.getUsernameByPost(user);
         if (StringUtils.isAnyBlank(username)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 将接口状态改为1
         InterfaceInfo interfaceInfo = new InterfaceInfo();
-        interfaceInfo.setUserId(id);
+        interfaceInfo.setId(id);
         interfaceInfo.setStatus(PostStatusEnum.ONLINE.getValue());
         boolean res = interfaceInfoService.updateById(interfaceInfo);
         return ResultUtils.success(res);
@@ -246,7 +246,7 @@ public class InterfaceInfoController {
         }
         // 将接口状态改为1
         InterfaceInfo interfaceInfo = new InterfaceInfo();
-        interfaceInfo.setUserId(id);
+        interfaceInfo.setId(id);
         interfaceInfo.setStatus(PostStatusEnum.OFFLINE.getValue());
         boolean res = interfaceInfoService.updateById(interfaceInfo);
         return ResultUtils.success(res);

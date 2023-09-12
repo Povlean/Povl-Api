@@ -29,7 +29,6 @@ public class NameApiController {
     public String getUsernameByPost(@RequestBody User user, HttpServletRequest request) {
         String accessKey = request.getHeader(ACCESS_KEY);
         String nonce = request.getHeader(NONCE);
-        String timestamp = request.getHeader(TIMESTAMP);
         String receiveSign = request.getHeader(SIGN);
         String body = request.getHeader(BODY);
         // 从实现类中查出数据库中的用户
