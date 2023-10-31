@@ -282,6 +282,7 @@ public class InterfaceInfoController {
         user.setUserAccount("Povl");
         String result = tempClient.getUsernameByPost(user);
         return ResultUtils.success(result);
+
     }
 
 }

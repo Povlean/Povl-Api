@@ -26,5 +26,4 @@ public class PovlApiClientConfig {
     public PovlApiClient povlApiClient() {
         return new PovlApiClient(accessKey, secretKey);
     }
-
 }
