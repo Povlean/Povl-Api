@@ -10,6 +10,7 @@
         <result property="description" column="description" jdbcType="VARCHAR"/>
         <result property="url" column="url" jdbcType="VARCHAR"/>
         <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="requestParams" column="requestParams" jdbcType="VARCHAR"/>
         <result property="requestHeader" column="requestHeader" jdbcType="VARCHAR"/>
         <result property="responseHeader" column="responseHeader" jdbcType="VARCHAR"/>
         <result property="status" column="status" jdbcType="INTEGER"/>
@@ -18,13 +19,13 @@
         <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
         <result property="method" column="method" jdbcType="VARCHAR"/>
         <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
-    </resultMap>
+            </resultMap>
 
     <sql id="Base_Column_List">
         id,name,description,
         url,type,requestHeader,
         responseHeader,status,
-        userId,method,
+        userId,method,requestParams
         createTime,updateTime,isDelete
     </sql>
 </mapper>

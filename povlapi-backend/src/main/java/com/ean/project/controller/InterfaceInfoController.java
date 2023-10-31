@@ -14,12 +14,14 @@ import com.ean.project.exception.BusinessException;
 import com.ean.project.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.ean.project.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.ean.project.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.ean.project.model.dto.interfaceinfo.InterfaceInvokeRequest;
 import com.ean.project.model.dto.post.PostIdRequest;
 import com.ean.project.model.entity.InterfaceInfo;
 import com.ean.project.model.entity.User;
 import com.ean.project.model.enums.PostStatusEnum;
 import com.ean.project.service.InterfaceInfoService;
 import com.ean.project.service.UserService;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -110,8 +112,8 @@ public class InterfaceInfoController {
      * @return
      */
     @PostMapping("/update")
-    public BaseResponse<Boolean> updateInterfaceInfo(@RequestBody InterfaceInfoUpdateRequest interfaceInfoUpdateRequest,
-                                            HttpServletRequest request) {
+    public BaseResponse<Boolean> updateInterfaceInfo(HttpServletRequest request,
+                                                     @RequestBody InterfaceInfoUpdateRequest interfaceInfoUpdateRequest) {
         if (interfaceInfoUpdateRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -215,14 +217,16 @@ public class InterfaceInfoController {
         if (ObjectUtil.isEmpty(oldInterfaceinfo)) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
+
         // 判断该接口是否可以调用
-        com.ean.client_sdk.model
-                .User user = new com.ean.client_sdk.model.User();
-        user.setUserAccount("hello");
-        String username = povlApiClient.getUsernameByPost(user);
-        if (StringUtils.isAnyBlank(username)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+        // com.ean.client_sdk.model
+        //         .User user = new com.ean.client_sdk.model.User();
+        // user.setUserAccount("hello");
+        // String username = povlApiClient.getUsernameByPost(user);
+        // if (StringUtils.isAnyBlank(username)) {
+        //     throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        // }
+
         // 将接口状态改为1
         InterfaceInfo interfaceInfo = new InterfaceInfo();
         interfaceInfo.setId(id);
@@ -252,5 +256,32 @@ public class InterfaceInfoController {
         return ResultUtils.success(res);
     }
     // endregion
+
+    @PostMapping("/invoke")
+    public BaseResponse<Object> invokeInterfaceInfo(HttpServletRequest request,
+                                                      @RequestBody InterfaceInvokeRequest interfaceInvokeRequest){
+        if (interfaceInvokeRequest == null || interfaceInvokeRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Long id = interfaceInvokeRequest.getId();
+        String requestParams = interfaceInvokeRequest.getRequestParams();
+        // 判断是否存在
+        InterfaceInfo oldInterfaceinfo = interfaceInfoService.getById(id);
+        if (ObjectUtil.isEmpty(oldInterfaceinfo)) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        if (oldInterfaceinfo.getStatus() == PostStatusEnum.OFFLINE.getValue()) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        PovlApiClient tempClient = new PovlApiClient(accessKey, secretKey);
+        Gson gson = new Gson();
+        com.ean.client_sdk.model.User user = gson.fromJson(requestParams, com.ean.client_sdk.model.User.class);
+        user.setUserAccount("Povl");
+        String result = tempClient.getUsernameByPost(user);
+        return ResultUtils.success(result);
+    }
 
 }

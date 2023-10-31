@@ -29,6 +29,11 @@ public class InterfaceInfo {
     private String description;
 
     /**
+     * 请求参数
+     */
+    private String requestParams;
+
+    /**
      * 接口路径
      */
     private String url;

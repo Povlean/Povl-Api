@@ -11,7 +11,7 @@
 
     <groupId>com.ean</groupId>
     <artifactId>povlapi-client-sdk</artifactId>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
 
     <name>povlapi-client-sdk</name>
     <description>povlapi-client-sdk</description>

@@ -26,7 +26,6 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         if (interfaceInfo == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        String description = interfaceInfo.getDescription();
         String method = interfaceInfo.getMethod();
         String name = interfaceInfo.getName();
         String requestHeader = interfaceInfo.getRequestHeader();
@@ -35,8 +34,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String url = interfaceInfo.getUrl();
         // 校验是否为添加项
         if (isAdd) {
-            if (StringUtils.isAnyBlank(description, method, name,
-                    requestHeader, responseHeader, type, url)) {
+            if (StringUtils.isAnyBlank(method, name, requestHeader, responseHeader, type, url)) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
             }
         }

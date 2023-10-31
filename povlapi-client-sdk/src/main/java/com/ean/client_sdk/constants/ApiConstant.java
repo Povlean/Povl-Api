@@ -5,7 +5,7 @@ package com.ean.client_sdk.constants;
  */
 public class ApiConstant {
 
-    public static final String IP = "192.168.43.59";
+    public static final String IP = "192.168.31.93";
     public static final String ACCESS_KEY = "accessKey";
 
     public static final String SECRET_KEY = "secretKey";
