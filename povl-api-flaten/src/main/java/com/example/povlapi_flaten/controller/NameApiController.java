@@ -44,7 +44,10 @@ public class NameApiController {
         if (!receiveSign.equals(metaSign)) {
             throw new RuntimeException("签名有误");
         }
-        return "Post userAccount===>" + user.getUserAccount();
+        String res = "Post userAccount===>" + user.getUserAccount();
+        // 在用户调用接口信息表中，更新用户调用的次数
+
+        return res;
     }
 
 }

@@ -255,7 +255,6 @@ public class InterfaceInfoController {
         boolean res = interfaceInfoService.updateById(interfaceInfo);
         return ResultUtils.success(res);
     }
-    // endregion
 
     @PostMapping("/invoke")
     public BaseResponse<Object> invokeInterfaceInfo(HttpServletRequest request,
