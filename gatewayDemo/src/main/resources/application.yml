@@ -1,0 +1,17 @@
+server:
+  port: 8090
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: api_route
+          uri: http://localhost:7530
+          predicates:
+            - Path=/api/**
+  main:
+    web-application-type: reactive
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Lhj2001124111
+    url: jdbc:mysql://localhost:3306/api_db
