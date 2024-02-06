@@ -8,9 +8,10 @@
         <version>2.7.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
+
+    <groupId>com.ean</groupId>
     <artifactId>povl-apiFlaten</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.5-SNAPSHOT</version>
     <name>povl-apiFlaten</name>
     <description>povl-api-flaten</description>
 
@@ -22,7 +23,7 @@
         <dependency>
             <groupId>com.ean</groupId>
             <artifactId>povlapi-client-sdk</artifactId>
-            <version>0.0.8-SNAPSHOT</version>
+            <version>0.1.1-SNAPSHOT</version>
         </dependency>
         <!-- mvc -->
         <dependency>
@@ -72,16 +73,7 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-        </resources>
+   <!--  <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -96,6 +88,6 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build> -->
 
 </project>

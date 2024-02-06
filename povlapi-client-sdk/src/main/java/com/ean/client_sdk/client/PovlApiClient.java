@@ -18,10 +18,10 @@ import static com.ean.client_sdk.constants.ApiConstant.*;
  */
 public class PovlApiClient {
 
-    // 192.168.43.59
-    public static final String API_URL = "http://" + IP + ":7530/name";
-    private String accessKey;
-    private String secretKey;
+    public static final String GATEWAY_HOST = "http://127.0.0.1:8090";
+
+    private final String accessKey;
+    private final String secretKey;
 
     public PovlApiClient(String accessKey, String secretKey) {
         this.accessKey = accessKey;
@@ -40,7 +40,7 @@ public class PovlApiClient {
     }
 
     public String getNameByGet(String name) {
-        String url = API_URL + "/get";
+        String url = GATEWAY_HOST + "/api/name/get";
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("name", name);
         String result = HttpUtil.get(url, paramMap);
@@ -48,7 +48,7 @@ public class PovlApiClient {
     }
 
     public String getNameByPost(String name) {
-        String url = API_URL + "/post";
+        String url = GATEWAY_HOST + "/api/name/post";
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("name", name);
         String result = HttpUtil.post(url, paramMap);
@@ -57,7 +57,7 @@ public class PovlApiClient {
 
     public String getUsernameByPost(User user) {
         String json = JSONUtil.toJsonStr(user);
-        String url = API_URL + "/user";
+        String url = GATEWAY_HOST + "/api/name/user";
         String result = HttpRequest
                 .post(url)
                 .addHeaders(getClientKey(json))

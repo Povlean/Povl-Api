@@ -1,5 +1,7 @@
 server:
   port: 7530
+  servlet:
+    context-path: /api
 # DataSource Config
 spring:
   datasource:

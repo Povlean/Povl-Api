@@ -258,8 +258,8 @@ public class InterfaceInfoController {
 
     @PostMapping("/invoke")
     public BaseResponse<Object> invokeInterfaceInfo(HttpServletRequest request,
-                                                      @RequestBody InterfaceInvokeRequest interfaceInvokeRequest){
-        if (interfaceInvokeRequest == null || interfaceInvokeRequest.getId() <= 0) {
+                                                    @RequestBody InterfaceInvokeRequest interfaceInvokeRequest){
+        if (interfaceInvokeRequest.getRequestParams() == null || interfaceInvokeRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         Long id = interfaceInvokeRequest.getId();
@@ -279,6 +279,7 @@ public class InterfaceInfoController {
         Gson gson = new Gson();
         com.ean.client_sdk.model.User user = gson.fromJson(requestParams, com.ean.client_sdk.model.User.class);
         user.setUserAccount("Povl");
+        // 网关层
         String result = tempClient.getUsernameByPost(user);
         return ResultUtils.success(result);
 

@@ -7,17 +7,20 @@ import com.ean.project.common.BaseResponse;
 import com.ean.project.common.DeleteRequest;
 import com.ean.project.common.ErrorCode;
 import com.ean.project.common.ResultUtils;
+import com.ean.project.convert.IUserMapper;
 import com.ean.project.exception.BusinessException;
 import com.ean.project.model.dto.user.*;
 import com.ean.project.model.entity.User;
 import com.ean.project.model.vo.UserVO;
 import com.ean.project.service.UserService;
-import org.apache.commons.lang3.StringUtils;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,111 +36,46 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    // region 登录相关
+    @Resource
+    private IUserMapper iUserMapper;
 
-    /**
-     * 用户注册
-     *
-     * @param userRegisterRequest
-     * @return
-     */
+    @ApiOperation("用户注册")
     @PostMapping("/register")
-    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
-        if (userRegisterRequest == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        String userAccount = userRegisterRequest.getUserAccount();
-        String userPassword = userRegisterRequest.getUserPassword();
-        String checkPassword = userRegisterRequest.getCheckPassword();
-        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
-            return null;
-        }
-        long result = userService.userRegister(userAccount, userPassword, checkPassword);
+    public BaseResponse<Long> userRegister(@RequestBody @Validated UserRegisterRequest userRegisterRequest) {
+        long result = userService.userRegister(userRegisterRequest);
         return ResultUtils.success(result);
     }
 
-    /**
-     * 用户登录
-     *
-     * @param userLoginRequest
-     * @param request
-     * @return
-     */
+    @ApiOperation("用户登录")
     @PostMapping("/login")
-    public BaseResponse<User> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
-        if (userLoginRequest == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        String userAccount = userLoginRequest.getUserAccount();
-        String userPassword = userLoginRequest.getUserPassword();
-        if (StringUtils.isAnyBlank(userAccount, userPassword)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        User user = userService.userLogin(userAccount, userPassword, request);
+    public BaseResponse<User> userLogin(@RequestBody @Validated UserLoginRequest userLoginRequest, HttpServletRequest request) {
+        User user = userService.userLogin(userLoginRequest, request);
         return ResultUtils.success(user);
     }
 
-    /**
-     * 用户注销
-     *
-     * @param request
-     * @return
-     */
+    @ApiOperation("用户登出")
     @PostMapping("/logout")
-    public BaseResponse<Boolean> userLogout(HttpServletRequest request) {
-        if (request == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+    public BaseResponse<Boolean> userLogout(@NotNull HttpServletRequest request) {
         boolean result = userService.userLogout(request);
         return ResultUtils.success(result);
     }
 
-    /**
-     * 获取当前登录用户
-     *
-     * @param request
-     * @return
-     */
+    @ApiOperation("获取当前用户")
     @GetMapping("/get/login")
     public BaseResponse<UserVO> getLoginUser(HttpServletRequest request) {
         User user = userService.getLoginUser(request);
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(user, userVO);
-        return ResultUtils.success(userVO);
+        return ResultUtils.success(iUserMapper.userToUserVO(user));
     }
 
-    // endregion
-
-    // region 增删改查
-
-    /**
-     * 创建用户
-     *
-     * @param userAddRequest
-     * @param request
-     * @return
-     */
+    @ApiOperation("添加用户")
     @PostMapping("/add")
-    public BaseResponse<Long> addUser(@RequestBody UserAddRequest userAddRequest, HttpServletRequest request) {
-        if (userAddRequest == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        User user = new User();
-        BeanUtils.copyProperties(userAddRequest, user);
-        boolean result = userService.save(user);
-        if (!result) {
-            throw new BusinessException(ErrorCode.OPERATION_ERROR);
-        }
-        return ResultUtils.success(user.getId());
+    public BaseResponse<Long> addUser(@RequestBody @Validated UserAddRequest userAddRequest, HttpServletRequest request) {
+        userService.addUser(userAddRequest);
+        return ResultUtils.success();
     }
 
-    /**
-     * 删除用户
-     *
-     * @param deleteRequest
-     * @param request
-     * @return
-     */
+
+    @ApiOperation("删除用户")
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteUser(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {

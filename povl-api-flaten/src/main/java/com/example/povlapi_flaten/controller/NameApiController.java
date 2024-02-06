@@ -21,7 +21,7 @@ public class NameApiController {
     }
 
     @PostMapping("/post")
-    public String getNameByPost(@RequestParam String name) {
+    public String getNameByPost(@RequestParam(required = false, defaultValue = "default") String name) {
         return "Post Name===>" + name;
     }
 
@@ -44,10 +44,8 @@ public class NameApiController {
         if (!receiveSign.equals(metaSign)) {
             throw new RuntimeException("签名有误");
         }
-        String res = "Post userAccount===>" + user.getUserAccount();
         // 在用户调用接口信息表中，更新用户调用的次数
-
-        return res;
+        return "Post userAccount===>" + user.getUserAccount();
     }
 
 }

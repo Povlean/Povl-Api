@@ -1,20 +1,30 @@
 package com.ean.project.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ean.project.common.ErrorCode;
 import com.ean.project.exception.BusinessException;
 import com.ean.project.mapper.UserMapper;
+import com.ean.project.model.dto.user.UserAddRequest;
+import com.ean.project.model.dto.user.UserLoginRequest;
+import com.ean.project.model.dto.user.UserRegisterRequest;
 import com.ean.project.model.entity.User;
+import com.ean.project.model.vo.UserVO;
 import com.ean.project.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.ean.project.constant.UserConstant.ADMIN_ROLE;
 import static com.ean.project.constant.UserConstant.USER_LOGIN_STATE;
@@ -39,14 +49,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private static final String SALT = "povl";
 
     @Override
-    public long userRegister(String userAccount, String userPassword, String checkPassword) {
+    public long userRegister(UserRegisterRequest userRegisterRequest) {
         // 1. 校验
-        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
+        if (ObjectUtil.isNull(userRegisterRequest)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求不能为空");
         }
+        String userAccount = userRegisterRequest.getUserAccount();
         if (userAccount.length() < 4) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户账号过短");
         }
+        String userPassword = userRegisterRequest.getUserPassword();
+        String checkPassword = userRegisterRequest.getCheckPassword();
         if (userPassword.length() < 8 || checkPassword.length() < 8) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户密码过短");
         }
@@ -54,24 +67,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (!userPassword.equals(checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次输入的密码不一致");
         }
+        // 防止并发导致重复注册
         synchronized (userAccount.intern()) {
             // 账户不能重复
-            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("userAccount", userAccount);
-            long count = userMapper.selectCount(queryWrapper);
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(User::getUserAccount, userAccount);
+            long count = count(wrapper);
             if (count > 0) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
             }
             // 2. 加密
-            String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
-            String accessKey = DigestUtils.md5DigestAsHex((SALT + userAccount + RandomUtil.randomString(5)).getBytes());
-            String secretKey = DigestUtils.md5DigestAsHex((SALT + userAccount + RandomUtil.randomString(5)).getBytes());
+            List<String> encryptInfo = this.encryptInfo(Arrays.asList(userPassword, userAccount));
             // 3. 插入数据
-            User user = new User();
-            user.setUserAccount(userAccount);
-            user.setUserPassword(encryptPassword);
-            user.setAccessKey(accessKey);
-            user.setSecretKey(secretKey);
+            User user = User.builder().userAccount(userAccount)
+                    .userPassword(encryptInfo.get(0))
+                    .accessKey(encryptInfo.get(1))
+                    .secretKey(encryptInfo.get(2)).build();
             boolean saveResult = this.save(user);
             if (!saveResult) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
@@ -81,8 +92,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public User userLogin(String userAccount, String userPassword, HttpServletRequest request) {
+    public User userLogin(UserLoginRequest userLoginRequest, HttpServletRequest request) {
         // 1. 校验
+        if (ObjectUtil.isNull(userLoginRequest)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        String userAccount = userLoginRequest.getUserAccount();
+        String userPassword = userLoginRequest.getUserPassword();
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
@@ -140,6 +156,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public boolean isAdmin(HttpServletRequest request) {
+        // 校验request参数是否为空
+        if (ObjectUtil.isNull(request)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
         // 仅管理员可查询
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User user = (User) userObj;
@@ -153,6 +173,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public boolean userLogout(HttpServletRequest request) {
+        if (ObjectUtil.isNull(request)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "request为空");
+        }
         if (request.getSession().getAttribute(USER_LOGIN_STATE) == null) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "未登录");
         }
@@ -161,6 +184,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return true;
     }
 
+    @Override
+    public void addUser(UserAddRequest userAddRequest) {
+        if (userAddRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = new User();
+        BeanUtils.copyProperties(userAddRequest, user);
+        boolean isSuccess = this.save(user);
+        if (!isSuccess) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+        }
+    }
+
+    private List<String> encryptInfo(List<String> metaUserInfo) {
+        String userPassword = metaUserInfo.get(0);
+        String userAccount = metaUserInfo.get(1);
+        // 加密
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+        String accessKey = DigestUtils.md5DigestAsHex((SALT + userAccount + RandomUtil.randomString(5)).getBytes());
+        String secretKey = DigestUtils.md5DigestAsHex((SALT + userAccount + RandomUtil.randomString(5)).getBytes());
+        return Arrays.asList(encryptPassword, accessKey, secretKey);
+    }
 }
 
 
