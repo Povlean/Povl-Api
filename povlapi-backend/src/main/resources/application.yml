@@ -36,3 +36,16 @@ povlapi:
   client:
     access-key: 123456
     secret-key: 123456
+# Dubbo + Nacos
+dubbo:
+  application:
+    name: provider-povlapi
+  registry:
+    address: nacos://127.0.0.1:8848
+    username: nacos
+    password: nacos
+  scan:
+    base-packages: com.ean.project.service.impl
+  protocol:
+    name: dubbo
+    port: 15511

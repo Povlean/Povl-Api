@@ -7,6 +7,7 @@ import com.ean.project.exception.BusinessException;
 import com.ean.project.mapper.UserInterfaceInfoMapper;
 import com.ean.project.model.entity.UserInterfaceInfo;
 import com.ean.project.service.UserInterfaceInfoService;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
+@DubboService
 public class UserInterfaceInfoServiceImpl extends ServiceImpl<UserInterfaceInfoMapper, UserInterfaceInfo>
     implements UserInterfaceInfoService {
 

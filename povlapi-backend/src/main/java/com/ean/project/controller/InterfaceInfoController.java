@@ -22,6 +22,7 @@ import com.ean.project.model.enums.PostStatusEnum;
 import com.ean.project.service.InterfaceInfoService;
 import com.ean.project.service.UserService;
 import com.google.gson.Gson;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -257,6 +258,7 @@ public class InterfaceInfoController {
     }
 
     @PostMapping("/invoke")
+    @ApiOperation("调用接口")
     public BaseResponse<Object> invokeInterfaceInfo(HttpServletRequest request,
                                                     @RequestBody InterfaceInvokeRequest interfaceInvokeRequest){
         if (interfaceInvokeRequest.getRequestParams() == null || interfaceInvokeRequest.getId() <= 0) {
@@ -282,7 +284,6 @@ public class InterfaceInfoController {
         // 网关层
         String result = tempClient.getUsernameByPost(user);
         return ResultUtils.success(result);
-
     }
 
 }

@@ -10,13 +10,15 @@ import com.ean.project.model.enums.PostReviewStatusEnum;
 import com.ean.project.service.PostService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
 /**
- * @author yupili
+ * @author Povlean
  * @description 针对表【post(帖子)】的数据库操作Service实现
  */
 @Service
+@DubboService
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
 
     @Override

@@ -6,6 +6,7 @@ import com.ean.project.exception.BusinessException;
 import com.ean.project.mapper.InterfaceInfoMapper;
 import com.ean.project.model.entity.InterfaceInfo;
 import com.ean.project.service.InterfaceInfoService;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,7 @@ import javax.annotation.Resource;
  *
  */
 @Service
+@DubboService
 public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, InterfaceInfo> implements InterfaceInfoService {
 
     @Resource

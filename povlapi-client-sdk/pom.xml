@@ -8,17 +8,14 @@
         <version>2.7.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
     <groupId>com.ean</groupId>
     <artifactId>povlapi-client-sdk</artifactId>
     <version>0.1.1-SNAPSHOT</version>
-
     <name>povlapi-client-sdk</name>
     <description>povlapi-client-sdk</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
-
     <dependencies>
         <!-- mvc -->
         <dependency>
@@ -44,6 +41,7 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.5.1</version>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -72,11 +70,13 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

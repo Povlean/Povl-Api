@@ -16,6 +16,7 @@ import com.ean.project.model.vo.UserVO;
 import com.ean.project.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -35,10 +36,10 @@ import static com.ean.project.constant.UserConstant.USER_LOGIN_STATE;
  *
  * @author yupi
  */
+@DubboService
 @Service
 @Slf4j
-public class UserServiceImpl extends ServiceImpl<UserMapper, User>
-        implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Resource
     private UserMapper userMapper;

@@ -1,8 +1,9 @@
 package com.example.gatewayDemo;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.ean.client_sdk.utils.SignUtil;
+import com.ean.project.service.UserInterfaceInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -21,7 +22,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +38,9 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     public static final List<String> IP_WHITE_LIST = Arrays.asList("127.0.0.1", "0:0:0:0:0:0:0:1");
 
     public static final long FIVE_MINUTE = 5 * 60l;
+
+    @DubboReference
+    private UserInterfaceInfoService userInterfaceInfoService;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -61,8 +64,11 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             throw new RuntimeException("调用状态错误");
         }
         if (isSuccess) {
+            // 打印统一日志
             return handleResponse(exchange, chain);
         }
+        // TODO:调用后调用总量+1，剩余调用次数-1
+        // userInterfaceInfoService.invokeCount();
         // TODO:统一错误码类型
         return null;
     }
