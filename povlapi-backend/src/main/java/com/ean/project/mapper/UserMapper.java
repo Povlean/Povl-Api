@@ -1,7 +1,7 @@
 package com.ean.project.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ean.project.model.entity.User;
+import com.ean.commonapi.model.entity.User;
 
 /**
  *

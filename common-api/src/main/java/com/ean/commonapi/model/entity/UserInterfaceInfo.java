@@ -1,4 +1,4 @@
-package com.ean.project.model.entity;
+package com.ean.commonapi.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
@@ -8,9 +8,6 @@ import java.util.Date;
 
 /**
  * 用户调用接口关系
- *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 @TableName(value ="user_interface_info")
 @Data

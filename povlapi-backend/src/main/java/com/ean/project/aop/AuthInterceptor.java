@@ -1,10 +1,10 @@
 package com.ean.project.aop;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.ean.commonapi.model.entity.User;
 import com.ean.project.annotation.AuthCheck;
 import com.ean.project.common.ErrorCode;
 import com.ean.project.exception.BusinessException;
-import com.ean.project.model.entity.User;
 import com.ean.project.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * 权限校验 AOP
  *
- * @author yupi
+ * @author ean
  */
 @Aspect
 @Component

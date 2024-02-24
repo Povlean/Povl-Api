@@ -5,14 +5,13 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ean.commonapi.model.entity.User;
 import com.ean.project.common.ErrorCode;
 import com.ean.project.exception.BusinessException;
 import com.ean.project.mapper.UserMapper;
 import com.ean.project.model.dto.user.UserAddRequest;
 import com.ean.project.model.dto.user.UserLoginRequest;
 import com.ean.project.model.dto.user.UserRegisterRequest;
-import com.ean.project.model.entity.User;
-import com.ean.project.model.vo.UserVO;
 import com.ean.project.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +22,6 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.Arrays;
 import java.util.List;
 

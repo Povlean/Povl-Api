@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 /**
  * 帖子审核状态枚举
  *
- * @author yupi
+ * @author ean
  */
 public enum PostReviewStatusEnum {
 
@@ -23,6 +23,7 @@ public enum PostReviewStatusEnum {
         this.text = text;
         this.value = value;
     }
+
 
     /**
      * 获取值列表

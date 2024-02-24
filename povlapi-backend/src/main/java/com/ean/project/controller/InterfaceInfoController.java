@@ -4,6 +4,8 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ean.client_sdk.client.PovlApiClient;
+import com.ean.commonapi.model.entity.InterfaceInfo;
+import com.ean.commonapi.model.entity.User;
 import com.ean.project.annotation.AuthCheck;
 import com.ean.project.common.BaseResponse;
 import com.ean.project.common.DeleteRequest;
@@ -16,8 +18,6 @@ import com.ean.project.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.ean.project.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import com.ean.project.model.dto.interfaceinfo.InterfaceInvokeRequest;
 import com.ean.project.model.dto.post.PostIdRequest;
-import com.ean.project.model.entity.InterfaceInfo;
-import com.ean.project.model.entity.User;
 import com.ean.project.model.enums.PostStatusEnum;
 import com.ean.project.service.InterfaceInfoService;
 import com.ean.project.service.UserService;
@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * 帖子接口
  *
- * @author yupi
+ * @author ean
  */
 @RestController
 @RequestMapping("/interfaceInfo")

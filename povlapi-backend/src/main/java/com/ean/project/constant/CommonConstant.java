@@ -3,7 +3,7 @@ package com.ean.project.constant;
 /**
  * 通用常量
  *
- * @author yupi
+ * @author ean
  */
 public interface CommonConstant {
 

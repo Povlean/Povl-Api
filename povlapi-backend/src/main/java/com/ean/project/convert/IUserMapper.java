@@ -1,6 +1,6 @@
 package com.ean.project.convert;
 
-import com.ean.project.model.entity.User;
+import com.ean.commonapi.model.entity.User;
 import com.ean.project.model.vo.UserVO;
 import org.mapstruct.Mapper;
 

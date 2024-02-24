@@ -1,10 +1,10 @@
 package com.ean.project.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ean.commonapi.model.entity.Post;
 import com.ean.project.common.ErrorCode;
 import com.ean.project.exception.BusinessException;
 import com.ean.project.mapper.PostMapper;
-import com.ean.project.model.entity.Post;
 import com.ean.project.model.enums.PostGenderEnum;
 import com.ean.project.model.enums.PostReviewStatusEnum;
 import com.ean.project.service.PostService;

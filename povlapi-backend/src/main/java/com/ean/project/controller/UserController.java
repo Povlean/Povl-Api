@@ -3,6 +3,7 @@ package com.ean.project.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
+import com.ean.commonapi.model.entity.User;
 import com.ean.project.common.BaseResponse;
 import com.ean.project.common.DeleteRequest;
 import com.ean.project.common.ErrorCode;
@@ -10,7 +11,6 @@ import com.ean.project.common.ResultUtils;
 import com.ean.project.convert.IUserMapper;
 import com.ean.project.exception.BusinessException;
 import com.ean.project.model.dto.user.*;
-import com.ean.project.model.entity.User;
 import com.ean.project.model.vo.UserVO;
 import com.ean.project.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 /**
  * 用户接口
  *
- * @author yupi
+ * @author ean
  */
 @RestController
 @RequestMapping("/user")

@@ -3,7 +3,7 @@ package com.ean.project.common;
 /**
  * 返回工具类
  *
- * @author yupi
+ * @author ean
  */
 public class ResultUtils {
 

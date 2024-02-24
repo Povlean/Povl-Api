@@ -5,6 +5,9 @@
     <groupId>com.ean</groupId>
     <artifactId>Povl-Api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <modules>
+        <module>common-api</module>
+    </modules>
     <name>Povl-API</name>
     <packaging>pom</packaging>
 

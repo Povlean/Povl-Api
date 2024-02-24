@@ -1,20 +1,16 @@
 package com.ean.project.model.dto.interfaceinfo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.ean.project.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 查询请求
  *
- * @author yupi
+ * @author ean
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

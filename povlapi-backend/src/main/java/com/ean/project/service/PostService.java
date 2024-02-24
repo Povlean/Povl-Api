@@ -1,12 +1,9 @@
 package com.ean.project.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.ean.project.model.entity.Post;
 
-/**
- * @author yupili
- * @description 针对表【post(帖子)】的数据库操作Service
- */
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.ean.commonapi.model.entity.Post;
+
 public interface PostService extends IService<Post> {
 
     /**

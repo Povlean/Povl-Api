@@ -1,7 +1,7 @@
 package com.ean.project.service;
 
+import com.ean.commonapi.model.entity.User;
 import com.ean.project.convert.IUserMapper;
-import com.ean.project.model.entity.User;
 import com.ean.project.model.vo.UserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;

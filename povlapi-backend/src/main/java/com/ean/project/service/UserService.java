@@ -2,11 +2,10 @@ package com.ean.project.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ean.commonapi.model.entity.User;
 import com.ean.project.model.dto.user.UserAddRequest;
 import com.ean.project.model.dto.user.UserLoginRequest;
 import com.ean.project.model.dto.user.UserRegisterRequest;
-import com.ean.project.model.entity.User;
-import com.ean.project.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
 

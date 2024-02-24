@@ -1,13 +1,13 @@
 package com.ean.project.model.vo;
 
-import com.ean.project.model.entity.Post;
+import com.ean.commonapi.model.entity.Post;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * 帖子视图
  *
- * @author yupi
+ * @author ean
  * @TableName product
  */
 @EqualsAndHashCode(callSuper = true)

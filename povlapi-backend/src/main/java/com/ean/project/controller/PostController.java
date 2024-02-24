@@ -2,6 +2,8 @@ package com.ean.project.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ean.commonapi.model.entity.Post;
+import com.ean.commonapi.model.entity.User;
 import com.ean.project.annotation.AuthCheck;
 import com.ean.project.common.BaseResponse;
 import com.ean.project.common.DeleteRequest;
@@ -12,8 +14,6 @@ import com.ean.project.exception.BusinessException;
 import com.ean.project.model.dto.post.PostAddRequest;
 import com.ean.project.model.dto.post.PostQueryRequest;
 import com.ean.project.model.dto.post.PostUpdateRequest;
-import com.ean.project.model.entity.Post;
-import com.ean.project.model.entity.User;
 import com.ean.project.service.PostService;
 import com.ean.project.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * 帖子接口
  *
- * @author yupi
+ * @author ean
  */
 @RestController
 @RequestMapping("/post")

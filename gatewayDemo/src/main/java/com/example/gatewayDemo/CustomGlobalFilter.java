@@ -1,7 +1,7 @@
 package com.example.gatewayDemo;
 
 import com.ean.client_sdk.utils.SignUtil;
-import com.ean.project.service.UserInterfaceInfoService;
+import com.ean.commonapi.service.InnerUserInterfaceInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.reactivestreams.Publisher;
@@ -40,7 +40,8 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     public static final long FIVE_MINUTE = 5 * 60l;
 
     @DubboReference
-    private UserInterfaceInfoService userInterfaceInfoService;
+    private InnerUserInterfaceInfoService userInterfaceInfoService;
+    
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

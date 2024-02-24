@@ -3,7 +3,7 @@ package com.ean.project.constant;
 /**
  * 用户常量
  *
- * @author yupi
+ * @author ean
  */
 public interface UserConstant {
 

@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * 分页请求
  *
- * @author yupi
+ * @author ean
  */
 @Data
 public class PageRequest {
