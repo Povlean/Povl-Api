@@ -1,8 +1,16 @@
 package com.example.gatewayDemo;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.ean.client_sdk.utils.SignUtil;
+import com.ean.commonapi.model.entity.InterfaceInfo;
+import com.ean.commonapi.model.entity.User;
+import com.ean.commonapi.service.InnerInterfaceInfoService;
 import com.ean.commonapi.service.InnerUserInterfaceInfoService;
+import com.ean.commonapi.service.InnerUserService;
+import com.ean.project.common.ErrorCode;
+import com.ean.project.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.Lifecycle;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -13,6 +21,7 @@ import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.RequestPath;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
@@ -40,7 +49,13 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     public static final long FIVE_MINUTE = 5 * 60l;
 
     @DubboReference
-    private InnerUserInterfaceInfoService userInterfaceInfoService;
+    private InnerUserInterfaceInfoService innerUserInterfaceInfoService;
+
+    @DubboReference
+    private InnerInterfaceInfoService innerInterfaceInfoService;
+
+    @DubboReference
+    private InnerUserService innerUserService;
     
 
     @Override
@@ -58,40 +73,33 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         // 3.AK SK 用户鉴权
         HttpHeaders headers = request.getHeaders();
         boolean isSuccess = verifyRoot(headers);
-        // 请求的模拟接口是否存在？
-        // TODO:从数据库中查询模拟接口是否存在，以及请求方式是否匹配
         // 调用失败，返回一个规范的异常
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new RuntimeException("调用状态错误");
         }
+        InterfaceInfo interfaceInfo = innerInterfaceInfoService.getInterfaceInfo(request.getPath().toString(),
+                request.getMethod().toString());
+        String accessKey = headers.getFirst(ACCESS_KEY);
+        User invokeUser = innerUserService.getInvokeUser(accessKey);
         if (isSuccess) {
             // 打印统一日志
-            return handleResponse(exchange, chain);
+            return handleResponse(exchange, chain, interfaceInfo.getId(), invokeUser.getId());
+        } else {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // TODO:调用后调用总量+1，剩余调用次数-1
-        // userInterfaceInfoService.invokeCount();
-        // TODO:统一错误码类型
-        return null;
     }
 
     // 校验AK SK用户权限
     public boolean verifyRoot(HttpHeaders headers) {
         String accessKey = headers.getFirst(ACCESS_KEY);
-        // 从实现类中查出数据库中的用户
-        // User currentUser = userService.getUserByUserAccount("demo");
         // 从数据库中取出AK进行校验
-        if (!accessKey.equals("123456")) {
-            throw new RuntimeException("无权限");
+        User invokeUser = innerUserService.getInvokeUser(accessKey);
+        if (ObjectUtil.isNull(invokeUser)) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "数据不存在");
         }
         String nonce = headers.getFirst(NONCE);
         if (Long.parseLong(nonce) > 10000) {
             throw new RuntimeException("无权限");
-        }
-        String body = headers.getFirst(BODY);
-        String metaSign = SignUtil.getSign(body, "123456");
-        String receiveSign = headers.getFirst(SIGN);
-        if (!receiveSign.equals(metaSign)) {
-            throw new RuntimeException("签名有误");
         }
         // 响应时间超过五分钟
         long currentTime = System.currentTimeMillis();
@@ -100,10 +108,18 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         if (currentTime - time > FIVE_MINUTE) {
             throw new RuntimeException("超过接口有效时长");
         }
+        String sign = headers.getFirst(SIGN);
+        String body = headers.getFirst(BODY);
+        // 校验secretKey
+        String secretKey = invokeUser.getSecretKey();
+        String metaSign = SignUtil.getSign(body, secretKey);
+        if (!metaSign.equals(sign)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
         return true;
     }
 
-    public Mono<Void> handleResponse(ServerWebExchange exchange, GatewayFilterChain chain) {
+    public Mono<Void> handleResponse(ServerWebExchange exchange, GatewayFilterChain chain, long interfaceInfoId, long userId) {
         try {
             // 从交换机中获取到原响应值
             ServerHttpResponse originalResponse = exchange.getResponse();
@@ -121,6 +137,8 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                             Flux<? extends DataBuffer> fluxBody = Flux.from(body);
                             // 增强响应值
                             return super.writeWith(fluxBody.map(dataBuffer -> {
+                                // TODO:调用后调用总量+1，剩余调用次数-1
+                                innerUserInterfaceInfoService.invokeCount(interfaceInfoId, userId);
                                 byte[] content = new byte[dataBuffer.readableByteCount()];
                                 dataBuffer.read(content);
                                 DataBufferUtils.release(dataBuffer);//释放掉内存

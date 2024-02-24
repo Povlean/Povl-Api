@@ -14,7 +14,6 @@ public interface InnerUserService {
     * @author Ean  
     * @date 2024/2/24 13:55  
     * @param accessKey
-    * @param secretKey
     */
-    User getInvokeUser(String accessKey, String secretKey);
+    User getInvokeUser(String accessKey);
 }
