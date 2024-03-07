@@ -4,9 +4,8 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import com.ean.client_sdk.model.User;
 import com.ean.client_sdk.utils.SignUtil;
-
+import com.ean.commonapi.model.entity.User;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,8 +42,7 @@ public class PovlApiClient {
         String url = GATEWAY_HOST + "/api/name/get";
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("name", name);
-        String result = HttpUtil.get(url, paramMap);
-        return result;
+        return HttpUtil.get(url, paramMap);
     }
 
     public String getNameByPost(String name) {
@@ -57,6 +55,7 @@ public class PovlApiClient {
 
     public String getUsernameByPost(User user) {
         String json = JSONUtil.toJsonStr(user);
+        // 这里的路由转发是写死的
         String url = GATEWAY_HOST + "/api/name/user";
         String result = HttpRequest
                 .post(url)

@@ -31,27 +31,33 @@ export default [
   },
   {
     path: '/',
-    name: '主页',
+    name: '调用接口',
     icon: 'smile',
     component: './Index',
   },
   {
-    path: '/admin',
-    name: 'admin',
+    path: '/',
+    name: '个人中心',
     icon: 'crown',
-    access: 'canAdmin',
-    routes: [
-      {
-        path: '/admin',
-        redirect: '/admin/sub-page',
-      },
-      {
-        path: '/admin/sub-page',
-        name: 'sub-page',
-        component: './Admin',
-      },
-    ],
+    component: './User/Profile',
   },
+  // {
+  //   path: '/admin',
+  //   name: 'admin',
+  //   icon: 'crown',
+  //   access: 'canAdmin',
+  //   routes: [
+  //     {
+  //       path: '/admin',
+  //       redirect: '/admin/sub-page',
+  //     },
+  //     {
+  //       path: '/admin/sub-page',
+  //       name: 'sub-page',
+  //       component: './Admin',
+  //     },
+  //   ],
+  // },
   {
     name: 'list.table-list',
     icon: 'table',

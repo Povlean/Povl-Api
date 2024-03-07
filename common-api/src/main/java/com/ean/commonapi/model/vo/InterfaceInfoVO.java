@@ -1,4 +1,4 @@
-package com.ean.commonapi.model.entity;
+package com.ean.commonapi.model.vo;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.util.Date;
 
 @TableName(value = "interface_info")
 @Data
-public class InterfaceInfo implements Serializable {
+public class InterfaceInfoVO implements Serializable {
     
     /**
      * id

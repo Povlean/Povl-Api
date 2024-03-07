@@ -22,8 +22,8 @@
         createTime,updateTime,isDelete
     </sql>
 
-    <select id="listTopInvokeInterfaceInfo">
-        select interfaceInfoId, sum(totalNum) as totalNum from user_interface_info group by interfaceInfoId
-        order by totalNum desc limit #{limit};
+    <select id="getTopInvokeInterface" resultType="com.ean.commonapi.model.entity.UserInterfaceInfo">
+        SELECT interfaceInfoId, count(*) FROM `user_interface_info` GROUP BY interfaceInfoId LIMIT #{limit}
     </select>
+
 </mapper>

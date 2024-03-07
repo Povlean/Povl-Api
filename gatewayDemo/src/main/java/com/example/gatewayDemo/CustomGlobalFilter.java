@@ -10,7 +10,6 @@ import com.ean.commonapi.service.InnerUserService;
 import com.ean.project.common.ErrorCode;
 import com.ean.project.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.Lifecycle;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -21,7 +20,6 @@ import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.RequestPath;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
@@ -56,7 +54,9 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
     @DubboReference
     private InnerUserService innerUserService;
-    
+
+    public CustomGlobalFilter() {
+    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -77,10 +77,12 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new RuntimeException("调用状态错误");
         }
-        InterfaceInfo interfaceInfo = innerInterfaceInfoService.getInterfaceInfo(request.getPath().toString(),
-                request.getMethod().toString());
+        InterfaceInfo interfaceInfo = innerInterfaceInfoService
+                .getInterfaceInfo(request.getPath().toString(), request.getMethod().toString());
+        log.info("interfaceInfo==>", interfaceInfo);
         String accessKey = headers.getFirst(ACCESS_KEY);
         User invokeUser = innerUserService.getInvokeUser(accessKey);
+        log.info("user:invokeUser==>", invokeUser);
         if (isSuccess) {
             // 打印统一日志
             return handleResponse(exchange, chain, interfaceInfo.getId(), invokeUser.getId());
@@ -99,7 +101,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         }
         String nonce = headers.getFirst(NONCE);
         if (Long.parseLong(nonce) > 10000) {
-            throw new RuntimeException("无权限");
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "数据不存在");
         }
         // 响应时间超过五分钟
         long currentTime = System.currentTimeMillis();
@@ -137,7 +139,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                             Flux<? extends DataBuffer> fluxBody = Flux.from(body);
                             // 增强响应值
                             return super.writeWith(fluxBody.map(dataBuffer -> {
-                                // TODO:调用后调用总量+1，剩余调用次数-1
+                                // 调用后调用总量+1，剩余调用次数-1
                                 innerUserInterfaceInfoService.invokeCount(interfaceInfoId, userId);
                                 byte[] content = new byte[dataBuffer.readableByteCount()];
                                 dataBuffer.read(content);

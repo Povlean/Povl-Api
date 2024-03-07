@@ -258,31 +258,10 @@ public class InterfaceInfoController {
     }
 
     @PostMapping("/invoke")
-    @ApiOperation("调用接口")
+    @ApiOperation("调用自带接口")
     public BaseResponse<Object> invokeInterfaceInfo(HttpServletRequest request,
-                                                    @RequestBody InterfaceInvokeRequest interfaceInvokeRequest){
-        if (interfaceInvokeRequest.getRequestParams() == null || interfaceInvokeRequest.getId() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        Long id = interfaceInvokeRequest.getId();
-        String requestParams = interfaceInvokeRequest.getRequestParams();
-        // 判断是否存在
-        InterfaceInfo oldInterfaceinfo = interfaceInfoService.getById(id);
-        if (ObjectUtil.isEmpty(oldInterfaceinfo)) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
-        }
-        if (oldInterfaceinfo.getStatus() == PostStatusEnum.OFFLINE.getValue()) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        User loginUser = userService.getLoginUser(request);
-        String accessKey = loginUser.getAccessKey();
-        String secretKey = loginUser.getSecretKey();
-        PovlApiClient tempClient = new PovlApiClient(accessKey, secretKey);
-        Gson gson = new Gson();
-        com.ean.client_sdk.model.User user = gson.fromJson(requestParams, com.ean.client_sdk.model.User.class);
-        user.setUserAccount("Povl");
-        // 网关层
-        String result = tempClient.getUsernameByPost(user);
+                                                    @RequestBody InterfaceInvokeRequest interfaceInvokeRequest) {
+        String result = interfaceInfoService.invokeInterfaceInfo(request, interfaceInvokeRequest);
         return ResultUtils.success(result);
     }
 

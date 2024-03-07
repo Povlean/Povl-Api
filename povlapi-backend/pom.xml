@@ -190,12 +190,7 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- Povl-Api -->
-        <dependency>
-            <artifactId>Povl-Api</artifactId>
-            <groupId>com.ean</groupId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+
         <dependency>
             <groupId>com.ean</groupId>
             <artifactId>common-api</artifactId>

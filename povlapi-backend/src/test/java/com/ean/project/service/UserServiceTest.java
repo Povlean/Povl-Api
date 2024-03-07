@@ -3,6 +3,7 @@ package com.ean.project.service;
 import com.ean.commonapi.model.entity.User;
 import com.ean.project.convert.IUserMapper;
 import com.ean.project.model.vo.UserVO;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -55,10 +56,12 @@ class UserServiceTest {
     }
 
     @Test
-    void mapStruct() {
-        User user = User.builder().userName("zhangsan").userRole("管理员").build();
-        UserVO userVO = iUserMapper.userToUserVO(user);
-        log.info("result===>" + userVO);
+    void gson() {
+        Gson gson = new Gson();
+        String jsonStr = "{" + "accessKey" + ":" + 123458 + "," + "secretKey" + ":" + 123456 + "}";
+        System.out.println(jsonStr);
+        User user = gson.fromJson(jsonStr, User.class);
+        System.out.println(user);
     }
 
 }
