@@ -1,6 +1,8 @@
 package com.ean.project.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ean.client_sdk.client.PovlApiClient;
@@ -21,8 +23,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -41,6 +43,20 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
     @Resource
     private InterfaceInfoMapper interfaceInfoMapper;
+
+    @Override
+    public Map<Long, String> getNameByIdList(List<Long> ids) {
+        // 只查前五个出来
+        List<InterfaceInfo> interfaceInfos = interfaceInfoMapper.getNameByIds(ids);
+        if (CollectionUtil.isEmpty(interfaceInfos)) {
+            return new HashMap<>();
+        }
+        Map<Long, String> resMap = new HashMap<>();
+        interfaceInfos.forEach(i -> {
+            resMap.put(i.getId(), i.getName());
+        });
+        return resMap;
+    }
 
     @Override
     public void validInterfaceInfo(InterfaceInfo interfaceInfo, boolean isAdd) {

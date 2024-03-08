@@ -47,7 +47,7 @@ export async function getInterfaceInfoByIdUsingGET(
   });
 }
 
-/** invokeInterfaceInfo POST /api/interfaceInfo/invoke */
+/** 调用自带接口 POST /api/interfaceInfo/invoke */
 export async function invokeInterfaceInfoUsingPOST(
   body: API.InterfaceInvokeRequest,
   options?: { [key: string]: any },

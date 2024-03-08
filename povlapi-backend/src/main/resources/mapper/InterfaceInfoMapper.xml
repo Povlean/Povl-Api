@@ -28,4 +28,10 @@
         userId,method,requestParams
         createTime,updateTime,isDelete
     </sql>
+    <select id="getNameByIds" resultType="com.ean.commonapi.model.entity.InterfaceInfo">
+        SELECT id, `name` FROM `interface_info` WHERE id IN
+        <foreach collection="list" item="interfaceInfoId" open="(" separator="," close=")">
+            #{interfaceInfoId}
+        </foreach>
+    </select>
 </mapper>

@@ -2,7 +2,7 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** addUser POST /api/user/add */
+/** 添加用户 POST /api/user/add */
 export async function addUserUsingPOST(body: API.UserAddRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponselong>('/api/user/add', {
     method: 'POST',
@@ -14,7 +14,7 @@ export async function addUserUsingPOST(body: API.UserAddRequest, options?: { [ke
   });
 }
 
-/** deleteUser POST /api/user/delete */
+/** 删除用户 POST /api/user/delete */
 export async function deleteUserUsingPOST(
   body: API.DeleteRequest,
   options?: { [key: string]: any },
@@ -44,7 +44,7 @@ export async function getUserByIdUsingGET(
   });
 }
 
-/** getLoginUser GET /api/user/get/login */
+/** 获取当前用户 GET /api/user/get/login */
 export async function getLoginUserUsingGET(options?: { [key: string]: any }) {
   return request<API.BaseResponseUserVO>('/api/user/get/login', {
     method: 'GET',
@@ -82,7 +82,7 @@ export async function listUserByPageUsingGET(
   });
 }
 
-/** userLogin POST /api/user/login */
+/** 用户登录 POST /api/user/login */
 export async function userLoginUsingPOST(
   body: API.UserLoginRequest,
   options?: { [key: string]: any },
@@ -97,7 +97,7 @@ export async function userLoginUsingPOST(
   });
 }
 
-/** userLogout POST /api/user/logout */
+/** 用户登出 POST /api/user/logout */
 export async function userLogoutUsingPOST(options?: { [key: string]: any }) {
   return request<API.BaseResponseboolean>('/api/user/logout', {
     method: 'POST',
@@ -105,7 +105,7 @@ export async function userLogoutUsingPOST(options?: { [key: string]: any }) {
   });
 }
 
-/** userRegister POST /api/user/register */
+/** 用户注册 POST /api/user/register */
 export async function userRegisterUsingPOST(
   body: API.UserRegisterRequest,
   options?: { [key: string]: any },

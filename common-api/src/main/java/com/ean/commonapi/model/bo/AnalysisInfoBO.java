@@ -1,6 +1,7 @@
-package com.ean.commonapi.model.vo;
+package com.ean.commonapi.model.bo;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,14 +11,15 @@ import javax.validation.constraints.NotNull;
  * @author:ean
  */
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class InterfaceAnalVO {
+@AllArgsConstructor
+public class AnalysisInfoBO {
 
     @NotNull(message = "接口名不能为空")
     private String interfaceName;
 
-    @NotNull(message = "调用总数不能为空")
+    @NotNull(message = "统计调用次数不能为空")
     private Integer totalNum;
 
 }

@@ -23,7 +23,7 @@
     </sql>
 
     <select id="getTopInvokeInterface" resultType="com.ean.commonapi.model.entity.UserInterfaceInfo">
-        SELECT interfaceInfoId, count(*) FROM `user_interface_info` GROUP BY interfaceInfoId LIMIT #{limit}
+        SELECT interfaceInfoId, count(*) as totalNum FROM `user_interface_info` GROUP BY interfaceInfoId ORDER BY totalNum DESC LIMIT 5
     </select>
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.ean.project.convert;
 
+import com.ean.commonapi.model.bo.AnalysisInfoBO;
 import com.ean.commonapi.model.entity.InterfaceInfo;
 import com.ean.commonapi.model.entity.UserInterfaceInfo;
 import com.ean.commonapi.model.vo.InterfaceAnalVO;
@@ -10,7 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface IInterfaceInfoMapper {
 
-    List<InterfaceAnalVO> interfaceToAnalVOList(List<UserInterfaceInfo> interfaceInfo);
+    List<InterfaceAnalVO> interfaceToAnalVOList(List<AnalysisInfoBO> interfaceInfo);
 
     InterfaceAnalVO interfaceToAnalVO(UserInterfaceInfo interfaceInfo);
 }

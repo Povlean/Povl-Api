@@ -1,6 +1,7 @@
 package com.ean.project.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ean.commonapi.model.bo.AnalysisInfoBO;
 import com.ean.commonapi.model.entity.UserInterfaceInfo;
 
 import java.util.List;
@@ -10,6 +11,6 @@ import java.util.List;
  */
 public interface AnalysisService extends IService<UserInterfaceInfo> {
 
-    List<UserInterfaceInfo> getTopInvokeInterface(int limit);
+    List<AnalysisInfoBO> getTopInvokeInterface();
 
 }

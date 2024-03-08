@@ -20,6 +20,11 @@ export default [
         path: '/user/login',
         component: './User/Login',
       },
+      {
+        name: 'register',
+        path: '/user/register',
+        component: './User/Register',
+      },
     ],
   },
   {
@@ -41,28 +46,32 @@ export default [
     icon: 'crown',
     component: './User/Profile',
   },
-  // {
-  //   path: '/admin',
-  //   name: 'admin',
-  //   icon: 'crown',
-  //   access: 'canAdmin',
-  //   routes: [
-  //     {
-  //       path: '/admin',
-  //       redirect: '/admin/sub-page',
-  //     },
-  //     {
-  //       path: '/admin/sub-page',
-  //       name: 'sub-page',
-  //       component: './Admin',
-  //     },
-  //   ],
-  // },
   {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/list',
-    component: './TableList',
+    path: '/admin',
+    name: '管理功能',
+    icon: 'crown',
+    access: 'canAdmin',
+    routes: [
+      {
+        path: '/admin',
+        redirect: '/admin/sub-page',
+      },
+      {
+        path: '/admin/sub-page',
+        name: '使用数据',
+        component: './Analysis',
+      },
+      {
+        path: '/admin/sub-page2',
+        name: '测试页面',
+        component: './404',
+      },
+      {
+        path: '/admin/list',
+        name: '接口管理',
+        component: './TableList',
+      },
+    ],
   },
   {
     path: '*',
