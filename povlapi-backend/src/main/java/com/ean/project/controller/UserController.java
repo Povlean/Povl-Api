@@ -14,6 +14,7 @@ import com.ean.project.model.dto.user.*;
 import com.ean.project.model.vo.UserVO;
 import com.ean.project.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
  *
  * @author ean
  */
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {

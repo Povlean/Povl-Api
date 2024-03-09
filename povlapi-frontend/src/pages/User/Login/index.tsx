@@ -96,7 +96,6 @@ const Login: React.FC = () => {
       height: '100vh',
       overflow: 'auto',
       backgroundImage: "url('https://pic1.zhimg.com/v2-bf58008f796155656c2972bc92b7dd7f_r.jpg?source=1940ef5c')",
-      // backgroundVideo: "url('https://gw.alipayobjects.com/v/huamei_gcee1x/afts/video/jXRBRK_VAwoAAAAAAAAAAAAAK4eUAQBr')",  
       backgroundSize: '100% 100%',
     };
   });
@@ -159,7 +158,7 @@ const Login: React.FC = () => {
           subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
           initialValues={{
             autoLogin: true,
-          }}       
+          }}
           onFinish={async (values) => {
             await handleSubmit(values as API.UserLoginRequest);
           }}

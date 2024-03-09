@@ -41,10 +41,10 @@ export default [
     component: './Index',
   },
   {
-    path: '/',
+    path: '/profile',
     name: '个人中心',
     icon: 'crown',
-    component: './User/Profile',
+    component: './Profile',
   },
   {
     path: '/admin',
