@@ -12,10 +12,11 @@ import java.io.Serializable;
  */
 @Data
 public class UserUpdateRequest implements Serializable {
+
     /**
      * id
      */
-    private Long id;
+    private String id;
 
     /**
      * 用户昵称
@@ -23,9 +24,14 @@ public class UserUpdateRequest implements Serializable {
     private String userName;
 
     /**
-     * 账号
+     * 手机号
      */
-    private String userAccount;
+    private String unionId;
+
+    /**
+     * 用户简介
+     */
+    private String userProfile;
 
     /**
      * 用户头像
@@ -35,17 +41,12 @@ public class UserUpdateRequest implements Serializable {
     /**
      * 性别
      */
-    private Integer gender;
+    private String gender;
 
     /**
-     * 用户角色: user, admin
+     * 工作
      */
-    private String userRole;
-
-    /**
-     * 密码
-     */
-    private String userPassword;
+    private String job;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

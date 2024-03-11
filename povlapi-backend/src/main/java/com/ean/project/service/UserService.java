@@ -6,6 +6,8 @@ import com.ean.commonapi.model.entity.User;
 import com.ean.project.model.dto.user.UserAddRequest;
 import com.ean.project.model.dto.user.UserLoginRequest;
 import com.ean.project.model.dto.user.UserRegisterRequest;
+import com.ean.project.model.dto.user.UserUpdateRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -59,4 +61,20 @@ public interface UserService extends IService<User> {
     * @author Ean
     */
     void addUser(UserAddRequest user);
+
+    boolean updateUser(UserUpdateRequest userUpdateRequest, HttpServletRequest request);
+
+    /**
+    * @description: 上传头像
+    * @author Ean  
+    * @date 2024/3/11 17:13
+    */
+    String uploadAvatar(MultipartFile file);
+
+    /**
+    * @description: 根据id获取用户
+    * @author Ean  
+    * @date 2024/3/11 21:47
+    */
+    User getUserById(HttpServletRequest request);
 }

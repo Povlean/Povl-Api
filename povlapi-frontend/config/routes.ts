@@ -29,26 +29,26 @@ export default [
   },
   {
     path: '/interface_info/:id',
-    name: '查看接口',
+    name: 'through',
     icon: 'smile',
     component: './InterfaceInfo',
     hideInMenu: true
   },
   {
     path: '/',
-    name: '调用接口',
+    name: 'usingInterface',
     icon: 'smile',
     component: './Index',
   },
   {
     path: '/profile',
-    name: '个人中心',
+    name: 'user-center',
     icon: 'crown',
     component: './Profile',
   },
   {
     path: '/admin',
-    name: '管理功能',
+    name: 'management',
     icon: 'crown',
     access: 'canAdmin',
     routes: [
@@ -58,17 +58,17 @@ export default [
       },
       {
         path: '/admin/sub-page',
-        name: '使用数据',
+        name: 'analysis',
         component: './Analysis',
       },
       {
         path: '/admin/sub-page2',
-        name: '测试页面',
+        name: 'test',
         component: './404',
       },
       {
         path: '/admin/list',
-        name: '接口管理',
+        name: 'management',
         component: './TableList',
       },
     ],

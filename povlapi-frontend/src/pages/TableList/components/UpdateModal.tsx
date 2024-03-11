@@ -34,9 +34,9 @@ const updateModal: React.FC<Props> = (props) => {
         onSubmit= {async(value) => {
           onSubmit?.(value);
         }}
-      form={{
-        initialValues: values
-      }}
+        form={{
+          initialValues: values
+        }}
       />
     </Modal>
   );

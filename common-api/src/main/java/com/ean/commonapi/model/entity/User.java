@@ -37,15 +37,29 @@ public class User implements Serializable {
     private String userAccount;
 
     /**
+     * 手机号
+     */
+    private String unionId;
+
+    /**
+     * 性别
+     */
+    private String gender;
+
+    /**
      * 用户头像
      */
     private String userAvatar;
-
 
     /**
      * 用户角色: user, admin
      */
     private String userRole;
+
+    /**
+     * 用户简介
+     */
+    private String userProfile;
 
     /**
      * 密码
@@ -71,6 +85,11 @@ public class User implements Serializable {
      * 更新时间
      */
     private Date updateTime;
+
+    /**
+     * 从事行业
+     */
+    private String job;
 
     /**
      * 是否删除

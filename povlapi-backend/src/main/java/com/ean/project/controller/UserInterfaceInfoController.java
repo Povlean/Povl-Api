@@ -17,9 +17,11 @@ import com.ean.project.model.dto.userinterfaceinfo.UserInterfaceInfoQueryRequest
 import com.ean.project.model.dto.userinterfaceinfo.UserInterfaceInfoUpdateRequest;
 import com.ean.project.service.UserInterfaceInfoService;
 import com.ean.project.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -40,33 +42,17 @@ public class UserInterfaceInfoController {
 
     @Resource
     private UserService userService;
-
-    // region 增删改查
-
+    
     /**
-     * 创建
-     *
-     * @param userInterfaceInfoAddRequest
-     * @param request
-     * @return
-     */
+    * @description: 添加用户接口信息
+    * @author Ean  
+    * @date 2024/3/11 9:15
+    */
+    @ApiOperation("添加用户接口映射记录")
     @PostMapping("/add")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Long> addUserInterfaceInfo(@RequestBody UserInterfaceInfoAddRequest userInterfaceInfoAddRequest, HttpServletRequest request) {
-        if (userInterfaceInfoAddRequest == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        UserInterfaceInfo userInterfaceInfo = new UserInterfaceInfo();
-        BeanUtils.copyProperties(userInterfaceInfoAddRequest, userInterfaceInfo);
-        // 校验
-        userInterfaceInfoService.validUserInterfaceInfo(userInterfaceInfo, true);
-        User loginUser = userService.getLoginUser(request);
-        userInterfaceInfo.setUserId(loginUser.getId());
-        boolean result = userInterfaceInfoService.save(userInterfaceInfo);
-        if (!result) {
-            throw new BusinessException(ErrorCode.OPERATION_ERROR);
-        }
-        long newUserInterfaceInfoId = userInterfaceInfo.getId();
+    public BaseResponse<Long> addUserInterfaceInfo(@RequestBody @Validated UserInterfaceInfoAddRequest userInterfaceInfoAddRequest, HttpServletRequest request) {
+        long newUserInterfaceInfoId = userInterfaceInfoService.addUserInterfaceInfo(userInterfaceInfoAddRequest, request);
         return ResultUtils.success(newUserInterfaceInfoId);
     }
 
@@ -77,25 +63,12 @@ public class UserInterfaceInfoController {
      * @param request
      * @return
      */
+    @ApiOperation("删除用户接口映射")
     @PostMapping("/delete")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteUserInterfaceInfo(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
-        if (deleteRequest == null || deleteRequest.getId() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        User user = userService.getLoginUser(request);
-        long id = deleteRequest.getId();
-        // 判断是否存在
-        UserInterfaceInfo oldUserInterfaceInfo = userInterfaceInfoService.getById(id);
-        if (oldUserInterfaceInfo == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
-        }
-        // 仅本人或管理员可删除
-        if (!oldUserInterfaceInfo.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
-            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-        }
-        boolean b = userInterfaceInfoService.removeById(id);
-        return ResultUtils.success(b);
+        boolean res = userInterfaceInfoService.deleteUserInterfaceInfo(deleteRequest, request);
+        return ResultUtils.success(res);
     }
 
     /**
@@ -105,29 +78,12 @@ public class UserInterfaceInfoController {
      * @param request
      * @return
      */
+    @ApiOperation("更新用户接口映射")
     @PostMapping("/update")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> updateUserInterfaceInfo(@RequestBody UserInterfaceInfoUpdateRequest userInterfaceInfoUpdateRequest,
                                                      HttpServletRequest request) {
-        if (userInterfaceInfoUpdateRequest == null || userInterfaceInfoUpdateRequest.getId() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        UserInterfaceInfo userInterfaceInfo = new UserInterfaceInfo();
-        BeanUtils.copyProperties(userInterfaceInfoUpdateRequest, userInterfaceInfo);
-        // 参数校验
-        userInterfaceInfoService.validUserInterfaceInfo(userInterfaceInfo, false);
-        User user = userService.getLoginUser(request);
-        long id = userInterfaceInfoUpdateRequest.getId();
-        // 判断是否存在
-        UserInterfaceInfo oldUserInterfaceInfo = userInterfaceInfoService.getById(id);
-        if (oldUserInterfaceInfo == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
-        }
-        // 仅本人或管理员可修改
-        if (!oldUserInterfaceInfo.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
-            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-        }
-        boolean result = userInterfaceInfoService.updateById(userInterfaceInfo);
+        boolean result = userInterfaceInfoService.updateUserInterfaceInfo(userInterfaceInfoUpdateRequest, request);
         return ResultUtils.success(result);
     }
 

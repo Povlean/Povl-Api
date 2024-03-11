@@ -83,6 +83,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsestring = {
+    code?: number;
+    data?: string;
+    message?: string;
+  };
+
   type BaseResponseUser = {
     code?: number;
     data?: User;
@@ -111,11 +117,6 @@ declare namespace API {
   };
 
   type getPostByIdUsingGETParams = {
-    /** id */
-    id?: number;
-  };
-
-  type getUserByIdUsingGETParams = {
     /** id */
     id?: number;
   };
@@ -499,14 +500,18 @@ declare namespace API {
   type User = {
     accessKey?: string;
     createTime?: string;
-    id?: number;
+    gender?: string;
+    id?: string;
     isDelete?: number;
+    job?: string;
     secretKey?: string;
+    unionId?: string;
     updateTime?: string;
     userAccount?: string;
     userAvatar?: string;
     userName?: string;
     userPassword?: string;
+    userProfile?: string;
     userRole?: string;
   };
 
@@ -532,10 +537,10 @@ declare namespace API {
   };
 
   type UserInterfaceInfoAddRequest = {
-    interfaceInfoId?: number;
-    leftNum?: number;
-    totalNum?: number;
-    userId?: number;
+    interfaceInfoId: number;
+    leftNum: number;
+    totalNum: number;
+    userId: number;
   };
 
   type UserInterfaceInfoUpdateRequest = {
@@ -557,13 +562,13 @@ declare namespace API {
   };
 
   type UserUpdateRequest = {
-    gender?: number;
-    id?: number;
-    userAccount?: string;
+    gender?: string;
+    id?: string;
+    job?: string;
+    unionId?: string;
     userAvatar?: string;
     userName?: string;
-    userPassword?: string;
-    userRole?: string;
+    userProfile?: string;
   };
 
   type UserVO = {

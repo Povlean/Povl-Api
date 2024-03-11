@@ -12,6 +12,7 @@ import com.ean.project.mapper.UserMapper;
 import com.ean.project.model.dto.user.UserAddRequest;
 import com.ean.project.model.dto.user.UserLoginRequest;
 import com.ean.project.model.dto.user.UserRegisterRequest;
+import com.ean.project.model.dto.user.UserUpdateRequest;
 import com.ean.project.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,11 +20,15 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static com.ean.project.constant.UserConstant.ADMIN_ROLE;
 import static com.ean.project.constant.UserConstant.USER_LOGIN_STATE;
@@ -46,6 +51,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 盐值，混淆密码
      */
     private static final String SALT = "povl";
+
+    public static final String BASE_PATH = "D:\\tempImg\\";
 
     @Override
     public long userRegister(UserRegisterRequest userRegisterRequest) {
@@ -124,12 +131,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return user;
     }
 
-    /**
-     * 获取当前登录用户
-     *
-     * @param request
-     * @return
-     */
     @Override
     public User getLoginUser(HttpServletRequest request) {
         // 先判断是否已登录
@@ -147,12 +148,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return currentUser;
     }
 
-    /**
-     * 是否为管理员
-     *
-     * @param request
-     * @return
-     */
     @Override
     public boolean isAdmin(HttpServletRequest request) {
         // 校验request参数是否为空
@@ -165,11 +160,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return user != null && ADMIN_ROLE.equals(user.getUserRole());
     }
 
-    /**
-     * 用户注销
-     *
-     * @param request
-     */
     @Override
     public boolean userLogout(HttpServletRequest request) {
         if (ObjectUtil.isNull(request)) {
@@ -194,6 +184,50 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!isSuccess) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
+    }
+
+    @Override
+    public boolean updateUser(UserUpdateRequest userUpdateRequest, HttpServletRequest request) {
+        User attribute = (User)request.getSession().getAttribute(USER_LOGIN_STATE);
+        userUpdateRequest.setId(attribute.getId().toString());
+        if (userUpdateRequest.getId() == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = new User();
+        BeanUtils.copyProperties(userUpdateRequest, user);
+        user.setId(Long.parseLong(userUpdateRequest.getId()));
+        return updateById(user);
+    }
+
+    @Override
+    public String uploadAvatar(MultipartFile file) {
+        log.info(file.toString());
+        String originalName = file.getOriginalFilename();
+        String suffix = null;
+        if (originalName != null) {
+            suffix = originalName.substring(originalName.lastIndexOf("."));
+        }
+        String fileName = UUID.randomUUID() + suffix;
+        File dir = new File(BASE_PATH);
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
+        try{
+            file.transferTo(new File(BASE_PATH + fileName));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return fileName;
+    }
+
+    @Override
+    public User getUserById(HttpServletRequest request) {
+        User loginUser = (User)request.getSession().getAttribute(USER_LOGIN_STATE);
+        User user = getById(loginUser.getId());
+        if (ObjectUtil.isNull(user)) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        return user;
     }
 
     private List<String> encryptInfo(List<String> metaUserInfo) {

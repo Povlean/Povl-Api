@@ -40,14 +40,24 @@ public class UserVO implements Serializable {
     private String userAvatar;
 
     /**
+     * 手机号
+     */
+    private String unionId;
+
+    /**
      * 性别
      */
-    private Integer gender;
+    private String gender;
 
     /**
      * 用户角色: user, admin
      */
     private String userRole;
+
+    /**
+     * 用户简介
+     */
+    private String userProfile;
 
     /**
      * 创建时间
@@ -58,6 +68,11 @@ public class UserVO implements Serializable {
      * 更新时间
      */
     private Date updateTime;
+
+    /**
+     * 从事工作
+     */
+    private String job;
 
     private static final long serialVersionUID = 1L;
 }

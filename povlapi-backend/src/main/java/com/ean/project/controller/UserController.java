@@ -16,8 +16,10 @@ import com.ean.project.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -67,6 +69,7 @@ public class UserController {
     public BaseResponse<UserVO> getLoginUser(HttpServletRequest request) {
         User user = userService.getLoginUser(request);
         return ResultUtils.success(iUserMapper.userToUserVO(user));
+        // return null;
     }
 
     @ApiOperation("添加用户")
@@ -75,7 +78,6 @@ public class UserController {
         userService.addUser(userAddRequest);
         return ResultUtils.success();
     }
-
 
     @ApiOperation("删除用户")
     @PostMapping("/delete")
@@ -87,49 +89,28 @@ public class UserController {
         return ResultUtils.success(b);
     }
 
-    /**
-     * 更新用户
-     *
-     * @param userUpdateRequest
-     * @param request
-     * @return
-     */
+    @ApiOperation("更新用户")
     @PostMapping("/update")
     public BaseResponse<Boolean> updateUser(@RequestBody UserUpdateRequest userUpdateRequest, HttpServletRequest request) {
-        if (userUpdateRequest == null || userUpdateRequest.getId() == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        User user = new User();
-        BeanUtils.copyProperties(userUpdateRequest, user);
-        boolean result = userService.updateById(user);
+        boolean result = userService.updateUser(userUpdateRequest, request);
         return ResultUtils.success(result);
     }
 
-    /**
-     * 根据 id 获取用户
-     *
-     * @param id
-     * @param request
-     * @return
-     */
-    @GetMapping("/get")
-    public BaseResponse<UserVO> getUserById(int id, HttpServletRequest request) {
-        if (id <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        User user = userService.getById(id);
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(user, userVO);
-        return ResultUtils.success(userVO);
+    @ApiOperation("上传头像")
+    @PostMapping("/upload")
+    public BaseResponse<String> upload(MultipartFile file){
+        String fileName = userService.uploadAvatar(file);
+        return ResultUtils.success(fileName);
     }
 
-    /**
-     * 获取用户列表
-     *
-     * @param userQueryRequest
-     * @param request
-     * @return
-     */
+    @ApiOperation("根据id获取用户")
+    @GetMapping("/get")
+    public BaseResponse<UserVO> getUserById(HttpServletRequest request) {
+        User user = userService.getUserById(request);
+        return ResultUtils.success(iUserMapper.userToUserVO(user));
+        // return null;
+    }
+
     @GetMapping("/list")
     public BaseResponse<List<UserVO>> listUser(UserQueryRequest userQueryRequest, HttpServletRequest request) {
         User userQuery = new User();
@@ -175,5 +156,4 @@ public class UserController {
         return ResultUtils.success(userVOPage);
     }
 
-    // endregion
 }
