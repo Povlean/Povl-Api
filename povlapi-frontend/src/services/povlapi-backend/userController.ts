@@ -29,6 +29,14 @@ export async function deleteUserUsingPOST(
   });
 }
 
+/** generateTextFile GET /api/user/generate */
+export async function generateTextFileUsingGET(options?: { [key: string]: any }) {
+  return request<API.BaseResponseResponseEntityResource>('/api/user/generate', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 根据id获取用户 GET /api/user/get */
 export async function getUserByIdUsingGET(options?: { [key: string]: any }) {
   return request<API.BaseResponseUserVO>('/api/user/get', {

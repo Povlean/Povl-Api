@@ -18,6 +18,9 @@ public class UserRegisterRequest implements Serializable {
     @NotNull(message = "用户昵称不能为空")
     private String userAccount;
 
+    @NotNull(message = "用户昵称不能为空")
+    private String userName;
+
     @NotNull(message = "密码不能为空")
     private String userPassword;
 

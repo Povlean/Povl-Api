@@ -57,11 +57,6 @@ export default [
         redirect: '/admin/sub-page',
       },
       {
-        path: '/admin/sub-page',
-        name: 'analysis',
-        component: './Analysis',
-      },
-      {
         path: '/admin/sub-page2',
         name: 'test',
         component: './404',
@@ -72,6 +67,31 @@ export default [
         component: './TableList',
       },
     ],
+  },
+  {
+    icon: 'crown',
+    access: 'canAdmin',
+    path: '/analysis',
+    name: 'analysis',
+    component: './Analysis',
+  },
+  {
+    icon: 'smile',
+    path: '/community',
+    name: 'community',
+    component: './Community',
+  },
+  {
+    icon: 'mail',
+    path: '/mail',
+    name: 'mail',
+    component: './Mail',
+  },
+  {
+    icon: 'smile',
+    path: '/basic',
+    name: 'basic',
+    component: './BasicFunc',
   },
   {
     path: '*',

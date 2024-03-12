@@ -16,7 +16,7 @@ import com.ean.project.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +36,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    private final String FILE_PATH = "E:\\file.txt";
 
     @Resource
     private UserService userService;
@@ -109,6 +111,13 @@ public class UserController {
         User user = userService.getUserById(request);
         return ResultUtils.success(iUserMapper.userToUserVO(user));
         // return null;
+    }
+
+    @ApiOperation("生成密钥")
+    @GetMapping("/generate")
+    public ResponseEntity<org.springframework.core.io.Resource> generateTextFile(HttpServletRequest request) {
+        ResponseEntity<org.springframework.core.io.Resource> res = userService.generateTextFile(FILE_PATH, request);
+        return res;
     }
 
     @GetMapping("/list")

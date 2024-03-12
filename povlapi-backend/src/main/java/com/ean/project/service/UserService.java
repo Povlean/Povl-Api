@@ -7,6 +7,8 @@ import com.ean.project.model.dto.user.UserAddRequest;
 import com.ean.project.model.dto.user.UserLoginRequest;
 import com.ean.project.model.dto.user.UserRegisterRequest;
 import com.ean.project.model.dto.user.UserUpdateRequest;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -77,4 +79,11 @@ public interface UserService extends IService<User> {
     * @date 2024/3/11 21:47
     */
     User getUserById(HttpServletRequest request);
+
+    /**
+    * @description: 生成文本
+    * @author Ean  
+    * @date 2024/3/12 9:23
+    */
+    ResponseEntity<Resource> generateTextFile(String file_path, HttpServletRequest request);
 }

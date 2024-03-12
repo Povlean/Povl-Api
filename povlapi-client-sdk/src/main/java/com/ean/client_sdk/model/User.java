@@ -28,9 +28,6 @@ public class User {
     private String unionId;
 
     @TableField
-    private String mpOpenId;
-
-    @TableField
     private String userName;
 
     @TableField

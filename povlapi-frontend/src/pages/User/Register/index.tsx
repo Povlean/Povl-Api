@@ -6,6 +6,7 @@ type FieldType = {
   userAccount?: string;
   userPassword?: string;
   checkPassword?: string;
+  userName?: string;
 };
 
 const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
@@ -33,7 +34,8 @@ const handleSubmit = async (values: API.UserRegisterRequest) => {
 };
 
 const App: React.FC = () => (
-  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundImage: "url('https://pic1.zhimg.com/v2-bf58008f796155656c2972bc92b7dd7f_r.jpg?source=1940ef5c')", backgroundSize: '100% 100%'}}>
+  <div style={{backgroundImage: "url('/images/background.jpeg')", backgroundSize: '100% 100%'}}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
     <Form
     title="用户注册页面"
     name="basic"
@@ -46,8 +48,16 @@ const App: React.FC = () => (
     onFinishFailed={onFinishFailed}
   >
     <Form.Item<FieldType>
-      label="用户名"
+      label="用户账户"
       name="userAccount"
+      rules={[{ required: true, message: '请输入你的账户!' }]}
+    >
+      <Input />
+    </Form.Item>
+
+    <Form.Item<FieldType>
+      label="用户昵称"
+      name="userName"
       rules={[{ required: true, message: '请输入你的昵称!' }]}
     >
       <Input />
@@ -86,6 +96,8 @@ const App: React.FC = () => (
     </Form.Item>
   </Form>
   </div>
+  </div>
+  
 );
 
 export default App;

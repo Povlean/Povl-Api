@@ -83,6 +83,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseResponseEntityResource = {
+    code?: number;
+    data?: Resource;
+    message?: string;
+  };
+
   type BaseResponsestring = {
     code?: number;
     data?: string;
@@ -125,6 +131,8 @@ declare namespace API {
     /** id */
     id?: number;
   };
+
+  type InputStream = true;
 
   type InterfaceAnalVO = {
     interfaceName: string;
@@ -497,11 +505,22 @@ declare namespace API {
     reviewStatus?: number;
   };
 
+  type Resource = {
+    description?: string;
+    file?: string;
+    filename?: string;
+    inputStream?: InputStream;
+    open?: boolean;
+    readable?: boolean;
+    uri?: string;
+    url?: string;
+  };
+
   type User = {
     accessKey?: string;
     createTime?: string;
     gender?: string;
-    id?: string;
+    id?: number;
     isDelete?: number;
     job?: string;
     secretKey?: string;
@@ -556,6 +575,7 @@ declare namespace API {
   };
 
   type UserRegisterRequest = {
+    userName: string;
     checkPassword: string;
     userAccount: string;
     userPassword: string;
@@ -573,12 +593,15 @@ declare namespace API {
 
   type UserVO = {
     createTime?: string;
-    gender?: number;
-    id?: number;
+    gender?: string;
+    id?: string;
+    job?: string;
+    unionId?: string;
     updateTime?: string;
     userAccount?: string;
     userAvatar?: string;
     userName?: string;
+    userProfile?: string;
     userRole?: string;
   };
 

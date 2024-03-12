@@ -30,7 +30,7 @@ export const requestConfig: RequestConfig = {
   // 错误处理： umi@3 的错误处理方案。
   errorConfig: {
     // 错误抛出
-    errorThrower: (res) => {
+    errorThrower: (res: unknown) => {
       const { success, data, errorCode, errorMessage, showType } =
         res as unknown as ResponseStructure;
       if (!success) {
@@ -101,6 +101,7 @@ export const requestConfig: RequestConfig = {
     (response) => {
       // 拦截响应数据，进行个性化处理
       const { data } = response as unknown as ResponseStructure;
+      console.log("intercepter===>" + JSON.stringify(data))
       if (data.code !== 0) {
         throw new Error(data.message);
       }

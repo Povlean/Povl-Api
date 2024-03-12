@@ -95,7 +95,7 @@ const Login: React.FC = () => {
       flexDirection: 'column',
       height: '100vh',
       overflow: 'auto',
-      backgroundImage: "url('https://pic1.zhimg.com/v2-bf58008f796155656c2972bc92b7dd7f_r.jpg?source=1940ef5c')",
+      backgroundImage: "url('/images/background.jpeg')",
       backgroundSize: '100% 100%',
     };
   });

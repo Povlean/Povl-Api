@@ -18,13 +18,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +57,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     private static final String SALT = "povl";
 
-    public static final String BASE_PATH = "D:\\tempImg\\";
+    public static final String BASE_PATH = "D:\\tempImg";
 
     @Override
     public long userRegister(UserRegisterRequest userRegisterRequest) {
@@ -73,6 +78,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!userPassword.equals(checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次输入的密码不一致");
         }
+        String userName = userRegisterRequest.getUserName();
+        if (StringUtils.isAnyBlank(userName)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户昵称不能为空");
+        }
         // 防止并发导致重复注册
         synchronized (userAccount.intern()) {
             // 账户不能重复
@@ -85,7 +94,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // 2. 加密
             List<String> encryptInfo = this.encryptInfo(Arrays.asList(userPassword, userAccount));
             // 3. 插入数据
-            User user = User.builder().userAccount(userAccount)
+            User user = User.builder()
+                    .userName(userName)
+                    .userAccount(userAccount)
                     .userPassword(encryptInfo.get(0))
                     .accessKey(encryptInfo.get(1))
                     .secretKey(encryptInfo.get(2)).build();
@@ -212,9 +223,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(!dir.exists()){
             dir.mkdirs();
         }
-        try{
+        try {
             file.transferTo(new File(BASE_PATH + fileName));
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return fileName;
@@ -228,6 +239,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         return user;
+    }
+
+    @Override
+    public ResponseEntity<org.springframework.core.io.Resource> generateTextFile(String filePath, HttpServletRequest request) {
+        try {
+            User user = (User)request.getSession().getAttribute(USER_LOGIN_STATE);
+            String accessKey = user.getAccessKey();
+            String secretKey = user.getSecretKey();
+            // 创建文件并写入内容
+            File file = new File(filePath);
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                String content = "accessKey:" + accessKey + "\n" + "secretKey:" + secretKey + "\n";
+                writer.write(content);
+            }
+            // 将文件作为响应返回
+            org.springframework.core.io.Resource resource = new FileSystemResource(file);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"")
+                    .body(resource);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     private List<String> encryptInfo(List<String> metaUserInfo) {
