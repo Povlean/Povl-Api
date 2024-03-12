@@ -28,6 +28,12 @@ export default [
     ],
   },
   {
+    icon: 'smile',
+    path: '/basic',
+    name: 'basic',
+    component: './BasicFunc',
+  },
+  {
     path: '/interface_info/:id',
     name: 'through',
     icon: 'smile',
@@ -86,12 +92,6 @@ export default [
     path: '/mail',
     name: 'mail',
     component: './Mail',
-  },
-  {
-    icon: 'smile',
-    path: '/basic',
-    name: 'basic',
-    component: './BasicFunc',
   },
   {
     path: '*',

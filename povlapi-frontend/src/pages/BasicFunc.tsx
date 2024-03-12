@@ -1,96 +1,69 @@
-import { invokeInterfaceInfoUsingPOST } from '@/services/povlapi-backend/interfaceInfoController';
-import { getTopInvokeInterfaceUsingGET } from '@/services/povlapi-backend/analysisController';
-import { HeartTwoTone, SmileTwoTone } from '@ant-design/icons';
-import { PageContainer } from '@ant-design/pro-components';
-import { useIntl } from '@umijs/max';
-import { Alert, Card, Typography } from 'antd';
-import ReactECharts from 'echarts-for-react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+import { Avatar, Card } from 'antd';
 
-const Analysis: React.FC = () => {
+const { Meta } = Card;
 
-  const [data, setData] = useState<API.InterfaceAnalVO[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(()=>{
-    try {
-      getTopInvokeInterfaceUsingGET().then(res => {
-        if (res.data) {
-          setData(res.data);
-        }
-      })
-    } catch (e:any) {
-
-    }
-
-  }, [])
-
-  const chartData = data.map(item => {
-    return {
-      value: item.totalNum,
-      name: item.interfaceName,
-    }
-  })
-
-  const val = chartData.map(item => item.value)
-  const name = chartData.map(item => item.name)
-
-  const option1 = {
-    title: {
-      text: '接口调用情况',
-      subtext: '饼状图分析',
-      left: 'center'
-    },
-    tooltip: {
-      trigger: 'item'
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left'
-    },
-    series: [
-      {
-        name: 'Access From',
-        type: 'pie',
-        radius: '50%',
-        data: chartData,
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          }
-        }
+const App: React.FC = () => (
+  <div style={{ display: 'flex', justifyContent: 'center' }}>
+    <Card
+      style={{ width: 300, margin: 20}}
+      cover={
+        <img
+          alt="example"
+          src="/images/solarTerm03.png"
+        />
       }
-    ]
-  };
+      actions={[
+        <EllipsisOutlined key="ellipsis" />,
+      ]}
+    >
+      <Meta
+        avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
+        title="Card title"
+        description="This is the description"
+      />
+    </Card>
 
-  const option2 = {
-    title: {
-      text: '接口调用情况',
-      subtext: '柱状图分析',
-      left: 'center'
-    },
-    xAxis: {
-      type: 'category',
-      data: name
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        data: val,
-        type: 'bar'
+    <Card
+      style={{ width: 300, margin: 20}}
+      cover={
+        <img
+          alt="example"
+          src="/images/music01.png"
+        />
       }
-    ]
-  };
-  return (
-    <PageContainer>
-      <ReactECharts option={option1} />
-      <ReactECharts option={option2} />
-    </PageContainer>
-  );
-};
+      actions={[
+        <EllipsisOutlined key="ellipsis" />,
+      ]}
+    >
+      <Meta
+        avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
+        title="Card title"
+        description="This is the description"
+      />
+    </Card>
 
-export default Analysis;
+    <Card
+      style={{ width: 300, margin: 20}}
+      cover={
+        <img
+          alt="example"
+          src="/images/lp.jpg"
+        />
+      }
+      actions={[
+        <EllipsisOutlined key="ellipsis" />,
+      ]}
+    >
+      <Meta
+        avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
+        title="Card title"
+        description="This is the description"
+      />
+    </Card>
+  </div>
+  
+);
+
+export default App;

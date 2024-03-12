@@ -13,7 +13,7 @@ export default {
   'menu.analysis': '数据分析',
   'menu.community': '社区交流',
   'menu.mail': '信息',
-  'menu.basic': '基础功能',
+  'menu.basic': '接口体验',
   'menu.management.test': '测试页面',
   'menu.management.management': '接口管理',
   'menu.register-result': '注册结果',
