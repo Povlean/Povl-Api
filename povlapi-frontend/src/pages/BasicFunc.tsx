@@ -1,69 +1,72 @@
 import React from 'react';
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { Avatar, Card } from 'antd';
+import { PageContainer } from '@ant-design/pro-components';
 
 const { Meta } = Card;
 
 const App: React.FC = () => (
-  <div style={{ display: 'flex', justifyContent: 'center' }}>
-    <Card
-      style={{ width: 300, margin: 20}}
-      cover={
-        <img
-          alt="example"
-          src="/images/solarTerm03.png"
-        />
-      }
-      actions={[
-        <EllipsisOutlined key="ellipsis" />,
-      ]}
-    >
-      <Meta
-        avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
-        title="Card title"
-        description="This is the description"
-      />
-    </Card>
-
-    <Card
-      style={{ width: 300, margin: 20}}
-      cover={
-        <img
-          alt="example"
-          src="/images/music01.png"
-        />
-      }
-      actions={[
-        <EllipsisOutlined key="ellipsis" />,
-      ]}
-    >
-      <Meta
-        avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
-        title="Card title"
-        description="This is the description"
-      />
-    </Card>
-
-    <Card
-      style={{ width: 300, margin: 20}}
-      cover={
-        <img
-          alt="example"
-          src="/images/lp.jpg"
-        />
-      }
-      actions={[
-        <EllipsisOutlined key="ellipsis" />,
-      ]}
-    >
-      <Meta
-        avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
-        title="Card title"
-        description="This is the description"
-      />
-    </Card>
-  </div>
   
+  <PageContainer title='集成接口测试'>
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <Card
+        style={{ width: 300, margin: 20}}
+        cover={
+          <img
+            alt="example"
+            src="/images/solarTerm03.png"
+          />
+        }
+        actions={[
+          <EllipsisOutlined key="ellipsis" />,
+        ]}
+      >
+        <Meta
+          avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
+          title="天气查询接口"
+          description="用于查询降水、天气、运动指数等数据的接口--该接口由和风天气API提供"
+        />
+      </Card>
+
+      <Card
+        style={{ width: 300, margin: 20}}
+        cover={
+          <img
+            alt="example"
+            src="/images/music01.png"
+          />
+        }
+        actions={[
+          <EllipsisOutlined key="ellipsis" />,
+        ]}
+      >
+        <Meta
+          avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
+          title="音乐查询接口"
+          description="用于查询音乐名、专辑名、作者等数据的接口--该接口由网易云音乐API提供"
+        />
+      </Card>
+
+      <Card
+        style={{ width: 300, margin: 20}}
+        cover={
+          <img
+            alt="example"
+            src="/images/lp.jpg"
+          />
+        }
+        actions={[
+          <EllipsisOutlined key="ellipsis" />,
+        ]}
+      >
+        <Meta
+          avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
+          title="图书推荐接口"
+          description="用于查询书名、作家、年份、书籍内容等数据的接口--该接口由豆瓣API提供"
+        />
+      </Card>
+    </div>
+  </PageContainer>
 );
 
 export default App;

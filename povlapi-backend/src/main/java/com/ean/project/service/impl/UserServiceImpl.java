@@ -13,6 +13,7 @@ import com.ean.project.model.dto.user.UserAddRequest;
 import com.ean.project.model.dto.user.UserLoginRequest;
 import com.ean.project.model.dto.user.UserRegisterRequest;
 import com.ean.project.model.dto.user.UserUpdateRequest;
+import com.ean.project.service.UserLogService;
 import com.ean.project.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +23,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,6 +53,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private UserLogService userLogService;
 
     /**
      * 盐值，混淆密码
@@ -109,6 +114,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public User userLogin(UserLoginRequest userLoginRequest, HttpServletRequest request) {
         // 1. 校验
         if (ObjectUtil.isNull(userLoginRequest)) {
@@ -139,6 +145,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         // 3. 记录用户的登录态
         request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        Boolean isSuccess = userLogService.addLogOfLogin(user.getId());
+        if (!isSuccess) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "记录日志异常");
+        }
         return user;
     }
 

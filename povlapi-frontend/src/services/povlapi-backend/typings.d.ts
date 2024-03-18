@@ -41,6 +41,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListUsingInterfaceCountVO = {
+    code?: number;
+    data?: UsingInterfaceCountVO[];
+    message?: string;
+  };
+
   type BaseResponselong = {
     code?: number;
     data?: number;
@@ -80,12 +86,6 @@ declare namespace API {
   type BaseResponsePost = {
     code?: number;
     data?: Post;
-    message?: string;
-  };
-
-  type BaseResponseResponseEntityResource = {
-    code?: number;
-    data?: Resource;
     message?: string;
   };
 
@@ -575,9 +575,9 @@ declare namespace API {
   };
 
   type UserRegisterRequest = {
-    userName: string;
     checkPassword: string;
     userAccount: string;
+    userName: string;
     userPassword: string;
   };
 
@@ -594,7 +594,7 @@ declare namespace API {
   type UserVO = {
     createTime?: string;
     gender?: string;
-    id?: string;
+    id?: number;
     job?: string;
     unionId?: string;
     updateTime?: string;
@@ -603,6 +603,11 @@ declare namespace API {
     userName?: string;
     userProfile?: string;
     userRole?: string;
+  };
+
+  type UsingInterfaceCountVO = {
+    count?: string;
+    date?: string;
   };
 
   type View = {

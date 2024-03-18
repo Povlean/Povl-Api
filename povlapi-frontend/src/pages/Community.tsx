@@ -7,9 +7,11 @@ const data = Array.from({ length: 23 }).map((_, i) => ({
   title: `demo${i * i + 1}用户`,
   avatar: `https://api.dicebear.com/7.x/miniavs/svg?seed=${i}`,
   description:
-    `接口测试管理平台${'test' + i + 'community'}`,
+    `接口管理主要包含增加、删除、修改接口、显示接口列表、接口详情、搜索接口等功能。
+    增加第三方接口，点击创建接口按钮，进入添加卡片组件，填写接口信息后，点击保存即可返回列表页面，返回后tsx文件中的then()作为回调函数，会调用获取数据接口，用于刷新数据。
+    `,
   content:
-    `${'test' + i + 'community'}`
+    `测试数据`
 }));
 
 const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
@@ -38,11 +40,11 @@ const Community: React.FC = () => (
     renderItem={(item) => (
       <List.Item
         key={item.title}
-        // actions={[
-        //   <IconText icon={StarOutlined} text="157" key="list-vertical-star-o" />,
-        //   <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-        //   <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
-        // ]}
+        actions={[
+          <IconText icon={StarOutlined} text="157" key="list-vertical-star-o" />,
+          <IconText icon={LikeOutlined} text="157" key="list-vertical-like-o" />,
+          <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+        ]}
         // extra={
         //   <img
         //     width={272}

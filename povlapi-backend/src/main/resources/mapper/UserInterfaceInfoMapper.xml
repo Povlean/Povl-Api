@@ -25,5 +25,14 @@
     <select id="getTopInvokeInterface" resultType="com.ean.commonapi.model.entity.UserInterfaceInfo">
         SELECT interfaceInfoId, count(*) as totalNum FROM `user_interface_info` GROUP BY interfaceInfoId ORDER BY totalNum DESC LIMIT 5
     </select>
+    <select id="getDailyInterface" resultType="com.ean.commonapi.model.vo.UsingInterfaceCountVO">
+        SELECT DATE(createTime) as date,count(*) as count FROM `user_interface_info` GROUP BY DATE(createTime)
+    </select>
+    <select id="dailyInterface" resultType="com.ean.commonapi.model.bo.DailyInterfaceBO">
+        SELECT interfaceInfoId, count(interfaceInfoId) as count, DATE(createTime) as date
+        FROM `user_interface_info` GROUP BY interfaceInfoId, DATE(createTime)
+                                   ORDER BY Date(createTime) DESC limit 5
+    </select>
+
 
 </mapper>

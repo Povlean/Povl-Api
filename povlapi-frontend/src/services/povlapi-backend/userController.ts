@@ -29,9 +29,9 @@ export async function deleteUserUsingPOST(
   });
 }
 
-/** generateTextFile GET /api/user/generate */
+/** 生成密钥 GET /api/user/generate */
 export async function generateTextFileUsingGET(options?: { [key: string]: any }) {
-  return request<API.BaseResponseResponseEntityResource>('/api/user/generate', {
+  return request<API.Resource>('/api/user/generate', {
     method: 'GET',
     ...(options || {}),
   });

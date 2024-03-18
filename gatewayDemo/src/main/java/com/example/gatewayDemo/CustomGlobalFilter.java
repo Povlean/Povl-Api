@@ -56,6 +56,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     private InnerUserService innerUserService;
 
     public CustomGlobalFilter() {
+
     }
 
     @Override
@@ -79,10 +80,8 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         }
         InterfaceInfo interfaceInfo = innerInterfaceInfoService
                 .getInterfaceInfo(request.getPath().toString(), request.getMethod().toString());
-        log.info("interfaceInfo==>", interfaceInfo);
         String accessKey = headers.getFirst(ACCESS_KEY);
         User invokeUser = innerUserService.getInvokeUser(accessKey);
-        log.info("user:invokeUser==>", invokeUser);
         if (isSuccess) {
             // 打印统一日志
             return handleResponse(exchange, chain, interfaceInfo.getId(), invokeUser.getId());

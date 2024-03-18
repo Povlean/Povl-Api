@@ -88,10 +88,10 @@ export default [
     component: './Community',
   },
   {
-    icon: 'mail',
-    path: '/mail',
-    name: 'mail',
-    component: './Mail',
+    icon: 'crown',
+    path: '/log',
+    name: 'log',
+    component: './LogManage',
   },
   {
     path: '*',
