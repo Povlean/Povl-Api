@@ -160,9 +160,10 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                                     redisTemplate.opsForValue().set(ApiConstant.INVOKE_COUNT_KEY, JSONUtil.toJsonStr(invokeCountBO));
                                 } else {
                                     // 如果Redis中已经存在
-                                    String s = redisTemplate.opsForValue().get(ApiConstant.INVOKE_COUNT_KEY);
-                                    String count = JSON.parseObject(s).getString("count");
+                                    String res = redisTemplate.opsForValue().get(ApiConstant.INVOKE_COUNT_KEY);
+                                    String count = JSON.parseObject(res).getString("count");
                                     Integer countInt = Integer.valueOf(count);
+                                    // 调用次数加1
                                     countInt = countInt + 1;
                                     InvokeCountBO invokeCountBO = InvokeCountBO.builder()
                                             .userId(userId)
