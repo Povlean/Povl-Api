@@ -64,6 +64,11 @@ public interface UserService extends IService<User> {
     */
     void addUser(UserAddRequest user);
 
+    /**
+    * @description: 更新用户资料
+    * @author Ean
+    * @date 2024/3/19 17:19
+    */
     boolean updateUser(UserUpdateRequest userUpdateRequest, HttpServletRequest request);
 
     /**

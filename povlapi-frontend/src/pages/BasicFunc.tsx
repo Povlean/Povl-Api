@@ -2,6 +2,7 @@ import React from 'react';
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { Avatar, Card } from 'antd';
 import { PageContainer } from '@ant-design/pro-components';
+import { Link } from '@umijs/max';
 
 const { Meta } = Card;
 
@@ -18,11 +19,12 @@ const App: React.FC = () => (
           />
         }
         actions={[
-          <EllipsisOutlined key="ellipsis" />,
+          <Link to="/weather">
+            体验
+          </Link> 
         ]}
       >
         <Meta
-          avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
           title="天气查询接口"
           description="用于查询降水、天气、运动指数等数据的接口--该接口由和风天气API提供"
         />
@@ -37,11 +39,12 @@ const App: React.FC = () => (
           />
         }
         actions={[
-          <EllipsisOutlined key="ellipsis" />,
+          <Link to="/your-target-page">
+            体验
+          </Link> 
         ]}
       >
         <Meta
-          avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
           title="音乐查询接口"
           description="用于查询音乐名、专辑名、作者等数据的接口--该接口由网易云音乐API提供"
         />
@@ -56,11 +59,12 @@ const App: React.FC = () => (
           />
         }
         actions={[
-          <EllipsisOutlined key="ellipsis" />,
+          <Link to="/your-target-page">
+            体验
+          </Link> 
         ]}
       >
         <Meta
-          avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
           title="图书推荐接口"
           description="用于查询书名、作家、年份、书籍内容等数据的接口--该接口由豆瓣API提供"
         />

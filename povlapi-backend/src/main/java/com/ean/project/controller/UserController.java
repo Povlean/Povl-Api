@@ -110,7 +110,6 @@ public class UserController {
     public BaseResponse<UserVO> getUserById(HttpServletRequest request) {
         User user = userService.getUserById(request);
         return ResultUtils.success(iUserMapper.userToUserVO(user));
-        // return null;
     }
 
     @ApiOperation("生成密钥")

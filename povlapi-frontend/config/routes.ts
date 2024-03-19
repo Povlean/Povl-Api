@@ -94,6 +94,12 @@ export default [
     component: './LogManage',
   },
   {
+    layout: false,
+    path: '/weather',
+    name: 'weather',
+    component: './IDE/Weather',
+  },
+  {
     path: '*',
     layout: false,
     component: './404',

@@ -1,7 +1,11 @@
 package com.example.gatewayDemo;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 import com.ean.client_sdk.utils.SignUtil;
+import com.ean.commonapi.model.bo.InvokeCountBO;
+import com.ean.commonapi.model.constant.ApiConstant;
 import com.ean.commonapi.model.entity.InterfaceInfo;
 import com.ean.commonapi.model.entity.User;
 import com.ean.commonapi.service.InnerInterfaceInfoService;
@@ -18,6 +22,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -28,6 +33,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +60,9 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
     @DubboReference
     private InnerUserService innerUserService;
+
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
 
     public CustomGlobalFilter() {
 
@@ -139,7 +148,30 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                             // 增强响应值
                             return super.writeWith(fluxBody.map(dataBuffer -> {
                                 // 调用后调用总量+1，剩余调用次数-1
-                                innerUserInterfaceInfoService.invokeCount(interfaceInfoId, userId);
+                                // 这里可以考虑替换为redis+SpringScheduler
+                                Object obj = redisTemplate.opsForValue().get(ApiConstant.INVOKE_COUNT_KEY);
+                                if (ObjectUtil.isNull(obj)) {
+                                    // 如果redis中不存在
+                                    InvokeCountBO invokeCountBO = InvokeCountBO.builder()
+                                            .userId(userId)
+                                            .interfaceInfoId(interfaceInfoId)
+                                            .count(1)
+                                            .build();
+                                    redisTemplate.opsForValue().set(ApiConstant.INVOKE_COUNT_KEY, JSONUtil.toJsonStr(invokeCountBO));
+                                } else {
+                                    // 如果Redis中已经存在
+                                    String s = redisTemplate.opsForValue().get(ApiConstant.INVOKE_COUNT_KEY);
+                                    String count = JSON.parseObject(s).getString("count");
+                                    Integer countInt = Integer.valueOf(count);
+                                    countInt = countInt + 1;
+                                    InvokeCountBO invokeCountBO = InvokeCountBO.builder()
+                                            .userId(userId)
+                                            .interfaceInfoId(interfaceInfoId)
+                                            .count(countInt)
+                                            .build();
+                                    redisTemplate.opsForValue().set(ApiConstant.INVOKE_COUNT_KEY, JSONUtil.toJsonStr(invokeCountBO));
+                                }
+                                // innerUserInterfaceInfoService.invokeCount(interfaceInfoId, userId);
                                 byte[] content = new byte[dataBuffer.readableByteCount()];
                                 dataBuffer.read(content);
                                 DataBufferUtils.release(dataBuffer);//释放掉内存
