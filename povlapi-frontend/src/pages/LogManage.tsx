@@ -1,35 +1,61 @@
-import React from 'react';
-import { Avatar, List } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Avatar, List, Pagination } from 'antd';
+import { getLogDataListUsingGET } from '@/services/povlapi-backend/logController';
+import { PageContainer } from '@ant-design/pro-components';
 
-const data = [
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
-  },
-];
 
-const App: React.FC = () => (
-  <List
+
+const LogManage: React.FC = () => {
+
+  const [list, setList] = useState<API.LogDataVO[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const loadData = async (current = 1, pageSize = 5) => {  
+    setLoading(true);
+    const response = await getLogDataListUsingGET();  
+    console.log(response);  
+    // 假设 response.data 是 API.LogDataVO[] 类型的数组，可能是 undefined  
+    if (response && response.data) {  
+      setList(response.data);  
+    } else {  
+      // 如果 response.data 是 undefined，则设置一个空数组  
+      setList([]);  
+    }  
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  return (
+  <PageContainer>
+    <List
     itemLayout="horizontal"
-    dataSource={data}
-    renderItem={(item, index) => (
+    loading={loading}
+    dataSource={list}
+    renderItem={(item) => (
       <List.Item>
         <List.Item.Meta
-          avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
-          title={<a href="https://ant.design">{item.title}</a>}
-          description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+          title={`操作账户：${item.userAccount}`}
+          description={`操作记录：${item.operation}，操作时间：${item.createTime}`}
         />
       </List.Item>
     )}
-  />
-);
+    pagination={{
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      showTotal(total: number) {
+        return '总数：' + total;
+      },
+      pageSize: 7,
+      onChange(page, pageSize) {
+        loadData(page, pageSize);
+      },
+    }}
+    />
+  </PageContainer>
+  );
+  
+};
 
-export default App;
+export default LogManage;

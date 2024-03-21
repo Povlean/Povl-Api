@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/basic")
 public class BasicController {
 
-    public static final String WEATHER_KEY = "d21c461963234236bf12913f0b161aa5";
+    public static final String WEATHER_KEY = "128edb8cb717492580145a919826303e";
 
     @PostMapping("/weather/{cityName}")
     public BaseResponse<WeatherVO> weatherCondition(@PathVariable String cityName) {
@@ -37,7 +37,7 @@ public class BasicController {
         String id = JSONObject.parseObject(JSONObject.toJSONString(jsonObject
                         .getJSONArray("location").get(0)))
                         .getString("id");
-        String url1 = "https://devapi.qweather.com/v7/weather/3d?location=" + id + "&key=" + WEATHER_KEY;
+        String url1 = "https://devapi.qweather.com/v7/weather/7d?location=" + id + "&key=" + WEATHER_KEY;
         String body1 = HttpRequest.get(url1)
                 .execute()
                 .body();
@@ -65,5 +65,4 @@ public class BasicController {
                 .build();
         return ResultUtils.success(weatherVO);
     }
-
 }

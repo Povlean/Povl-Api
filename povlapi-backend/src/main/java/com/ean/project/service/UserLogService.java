@@ -2,6 +2,9 @@ package com.ean.project.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ean.commonapi.model.entity.UserLog;
+import com.ean.commonapi.model.vo.LogDataVO;
+
+import java.util.List;
 
 /**
 * @author Asphyxia
@@ -11,5 +14,7 @@ import com.ean.commonapi.model.entity.UserLog;
 public interface UserLogService extends IService<UserLog> {
 
     Boolean addLogOfLogin(Long id);
+
+    List<LogDataVO> getLogDataList();
 
 }

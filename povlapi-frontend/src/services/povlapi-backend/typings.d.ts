@@ -23,6 +23,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListLogDataVO = {
+    code?: number;
+    data?: LogDataVO[];
+    message?: string;
+  };
+
   type BaseResponseListPost = {
     code?: number;
     data?: Post[];
@@ -113,8 +119,21 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseWeatherVO = {
+    code?: number;
+    data?: WeatherVO;
+    message?: string;
+  };
+
   type DeleteRequest = {
     id?: number;
+  };
+
+  type ForecastVO = {
+    fxDate?: string;
+    tempMax?: string;
+    tempMin?: string;
+    textDay?: string;
   };
 
   type getInterfaceInfoByIdUsingGETParams = {
@@ -316,6 +335,12 @@ declare namespace API {
     userAvatar?: string;
     userName?: string;
     userRole?: string;
+  };
+
+  type LogDataVO = {
+    createTime?: string;
+    operation?: string;
+    userAccount?: string;
   };
 
   type ModelAndView = {
@@ -612,5 +637,15 @@ declare namespace API {
 
   type View = {
     contentType?: string;
+  };
+
+  type weatherConditionUsingPOSTParams = {
+    /** cityName */
+    cityName: string;
+  };
+
+  type WeatherVO = {
+    cityName?: string;
+    forecastVOList?: ForecastVO[];
   };
 }

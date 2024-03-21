@@ -218,16 +218,6 @@ public class InterfaceInfoController {
         if (ObjectUtil.isEmpty(oldInterfaceinfo)) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
-
-        // 判断该接口是否可以调用
-        // com.ean.client_sdk.model
-        //         .User user = new com.ean.client_sdk.model.User();
-        // user.setUserAccount("hello");
-        // String username = povlApiClient.getUsernameByPost(user);
-        // if (StringUtils.isAnyBlank(username)) {
-        //     throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        // }
-
         // 将接口状态改为1
         InterfaceInfo interfaceInfo = new InterfaceInfo();
         interfaceInfo.setId(id);

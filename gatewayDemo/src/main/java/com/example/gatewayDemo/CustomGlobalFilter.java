@@ -38,6 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import static com.ean.client_sdk.constants.ApiConstant.*;
 
@@ -149,7 +150,8 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                             return super.writeWith(fluxBody.map(dataBuffer -> {
                                 // 调用后调用总量+1，剩余调用次数-1
                                 // 这里可以考虑替换为redis+SpringScheduler
-                                Object obj = redisTemplate.opsForValue().get(ApiConstant.INVOKE_COUNT_KEY);
+                                String redisKey = String.format("invoke:count:%s:%s", interfaceInfoId, userId);
+                                Object obj = redisTemplate.opsForValue().get(redisKey);
                                 if (ObjectUtil.isNull(obj)) {
                                     // 如果redis中不存在
                                     InvokeCountBO invokeCountBO = InvokeCountBO.builder()
@@ -157,10 +159,10 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                                             .interfaceInfoId(interfaceInfoId)
                                             .count(1)
                                             .build();
-                                    redisTemplate.opsForValue().set(ApiConstant.INVOKE_COUNT_KEY, JSONUtil.toJsonStr(invokeCountBO));
+                                    redisTemplate.opsForValue().set(redisKey, JSONUtil.toJsonStr(invokeCountBO), 30, TimeUnit.MINUTES);
                                 } else {
                                     // 如果Redis中已经存在
-                                    String res = redisTemplate.opsForValue().get(ApiConstant.INVOKE_COUNT_KEY);
+                                    String res = redisTemplate.opsForValue().get(redisKey);
                                     String count = JSON.parseObject(res).getString("count");
                                     Integer countInt = Integer.valueOf(count);
                                     // 调用次数加1
@@ -170,7 +172,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                                             .interfaceInfoId(interfaceInfoId)
                                             .count(countInt)
                                             .build();
-                                    redisTemplate.opsForValue().set(ApiConstant.INVOKE_COUNT_KEY, JSONUtil.toJsonStr(invokeCountBO));
+                                    redisTemplate.opsForValue().set(redisKey, JSONUtil.toJsonStr(invokeCountBO), 30, TimeUnit.MINUTES);
                                 }
                                 // innerUserInterfaceInfoService.invokeCount(interfaceInfoId, userId);
                                 byte[] content = new byte[dataBuffer.readableByteCount()];
@@ -192,7 +194,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                 return chain.filter(exchange.mutate().response(decoratedResponse).build());
             }
             return chain.filter(exchange);//降级处理返回数据
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("gateway log exception.\n" + e);
             return chain.filter(exchange);
         }
