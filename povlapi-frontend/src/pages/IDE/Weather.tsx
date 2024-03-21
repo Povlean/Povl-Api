@@ -17,13 +17,13 @@ import {
 } from 'antd';
 
 const Weather: React.FC = () => {
-  const [cityName, setCityName] = useState(''); // 初始化cityName状态
+  const [cityName, setCityName] = useState('成都'); // 初始化cityName状态
+  const paramsRef = useRef({ cityName: '' }); // 初始化ref
   const [data, setData] = useState<API.WeatherVO | null>(null);  
   const [tempMaxArray, setTempMaxArray] = useState<string[]>([]);
   const [tempMinArray, setTempMinArray] = useState<string[]>([]);
   const [textDayArray, setTextDayArray] = useState<string[]>([]);
   const [fxDateArray, setFxDateArray] = useState<string[]>([]);
-  const paramsRef = useRef({ cityName: '' }); // 初始化ref
 
   const formItemLayout = {
     labelCol: {
@@ -35,14 +35,19 @@ const Weather: React.FC = () => {
       sm: { span: 14 },
     },
   };
+  // 当cityName变化时，更新paramsRef中的cityName属性  
+  useEffect(() => {  
+    paramsRef.current.cityName = cityName; // 只更新cityName属性  
+  }, [cityName]); // 依赖项中包含cityName  
+
   useEffect(() => {
     const fetchData = async () => {
       try {  
         paramsRef.current.cityName = cityName;
         const res = await weatherConditionUsingPOST(paramsRef.current);  
         if (res.data) {  
-          setData(res.data);  
-          processData(res.data);  
+          setData(res.data);
+          processData(res.data);
         }  
       } catch (e) {  
         console.error(e);  
@@ -50,6 +55,7 @@ const Weather: React.FC = () => {
     };  
     fetchData();  
   }, []); // 依赖项为空数组，表示只在组件挂载时执行一次  
+
   const processData = (weatherData: API.WeatherVO) => {  
     const forecastVOList = weatherData.forecastVOList;  
     const tempMaxArray: string[] = [];  
