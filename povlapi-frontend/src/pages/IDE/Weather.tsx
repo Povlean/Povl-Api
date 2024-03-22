@@ -15,11 +15,12 @@ import {
   Select,
   TreeSelect,
 } from 'antd';
+import FormItemLabel from 'antd/es/form/FormItemLabel';
 
 const Weather: React.FC = () => {
-  const [cityName, setCityName] = useState('成都'); // 初始化cityName状态
+  const [cityName, setCityName] = useState(''); // 初始化cityName状态
   const paramsRef = useRef({ cityName: '' }); // 初始化ref
-  const [data, setData] = useState(); 
+  const [data1, setData1] = useState("hh"); 
   const [tempMaxArray, setTempMaxArray] = useState<string[]>([]);
   const [tempMinArray, setTempMinArray] = useState<string[]>([]);
   const [textDayArray, setTextDayArray] = useState<string[]>([]);
@@ -31,6 +32,10 @@ const Weather: React.FC = () => {
     paramsRef.current.cityName = cityName; // 只更新cityName属性  
   }, [cityName]); // 依赖项中包含cityName  
 
+  useEffect(() => {  
+    console.log("State updated:", data1);  
+  }, [data1]);
+
   const handleTextAreaChange = (e: any) => {  
     setCityName(e.target.value); // 更新cityName状态  
   };
@@ -39,7 +44,9 @@ const Weather: React.FC = () => {
     try {  
       const res = await weatherConditionUsingPOST(paramsRef.current);  
       if (res.data) {  
-        setData(res.data); // 设置请求返回的数据  
+        console.log("data===>", data1)
+        setData1(JSON.stringify(data1)); 
+        console.log("data===>", data1)
         processData(res.data); // 处理数据并渲染图形  
       }  
     } catch (e) {  
@@ -137,7 +144,7 @@ const Weather: React.FC = () => {
       <div>
         <Form {...formItemLayout}>
           <Form.Item style={{marginLeft: 250}}>
-            <Input addonBefore="http://" suffix=".com" defaultValue="192.168.43.59:7529/api/basic/weather/{cityName}" />
+            <Input addonBefore="http://" suffix=".com" defaultValue="192.168.43.59:7529/api/basic/weather/{cityName}" readOnly />
           </Form.Item>
 
           <Form.Item 
@@ -145,7 +152,7 @@ const Weather: React.FC = () => {
             name="method" 
             style={{ maxWidth: 1000 }}
           >
-            <Input defaultValue="POST"/>
+            <Input defaultValue="POST" readOnly/>
           </Form.Item>
 
           <Form.Item
@@ -161,8 +168,9 @@ const Weather: React.FC = () => {
             label="响应结果"
             name="TextArea01"
             style={{ maxWidth: 1000 }} 
+            initialValue={data1}
           >
-            <Input.TextArea value={data} />
+            
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 12, span: 16 }} style={{ maxWidth: 1000 }}>
