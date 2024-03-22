@@ -101,6 +101,13 @@ export default [
     component: './IDE/Weather',
   },
   {
+    // layout: false,
+    hideInMenu: true,
+    path: '/music',
+    name: 'music',
+    component: './IDE/Music',
+  },
+  {
     path: '*',
     layout: false,
     component: './404',

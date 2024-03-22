@@ -1,4 +1,4 @@
-import { weatherConditionUsingPOST } from '@/services/povlapi-backend/basicController';
+import { weatherConditionUsingGET } from '@/services/povlapi-backend/basicController';
 import { PageContainer } from '@ant-design/pro-components';
 import Search from 'antd/es/input/Search';
 import ReactECharts from 'echarts-for-react';
@@ -16,7 +16,6 @@ import {
   Select,
   TreeSelect,
 } from 'antd';
-import FormItemLabel from 'antd/es/form/FormItemLabel';
 
 const Weather: React.FC = () => {
   const [cityName, setCityName] = useState(''); // 初始化cityName状态
@@ -41,7 +40,7 @@ const Weather: React.FC = () => {
   const handleSubmit = async () => {  
     try {  
       setInvokeLoading(true);
-      const res = await weatherConditionUsingPOST(paramsRef.current);  
+      const res = await weatherConditionUsingGET(paramsRef.current);  
       if (res.data) {  
         setData1(JSON.stringify(data1)); 
         processData(res.data); // 处理数据并渲染图形  
@@ -150,7 +149,7 @@ const Weather: React.FC = () => {
             name="method" 
             style={{ maxWidth: 1000 }}
           >
-            <Input defaultValue="POST" readOnly/>
+            <Input defaultValue="GET" readOnly/>
           </Form.Item>
 
           <Form.Item

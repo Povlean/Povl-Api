@@ -39,7 +39,7 @@ const App: React.FC = () => (
           />
         }
         actions={[
-          <Link to="/your-target-page">
+          <Link to="/music">
             体验
           </Link> 
         ]}

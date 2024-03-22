@@ -12,10 +12,7 @@ import com.ean.project.common.ResultUtils;
 import com.ean.project.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class BasicController {
 
     public static final String WEATHER_KEY = "128edb8cb717492580145a919826303e";
 
-    @PostMapping("/weather/{cityName}")
+    @GetMapping("/weather/{cityName}")
     public BaseResponse<WeatherVO> weatherCondition(@PathVariable String cityName) {
         if (StringUtils.isAnyBlank(cityName)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "城市名不能为空");

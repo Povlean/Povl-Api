@@ -639,7 +639,7 @@ declare namespace API {
     contentType?: string;
   };
 
-  type weatherConditionUsingPOSTParams = {
+  type weatherConditionUsingGETParams = {
     /** cityName */
     cityName: string;
   };
