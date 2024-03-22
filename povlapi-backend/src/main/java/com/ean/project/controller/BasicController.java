@@ -73,8 +73,8 @@ public class BasicController {
             forecastVOList.add(forecast);
         }
         WeatherVO weatherVO = WeatherVO.builder()
-                .cityName(cityName)
                 .forecastVOList(forecastVOList)
+                .cityName(cityName)
                 .build();
         return ResultUtils.success(weatherVO);
     }
