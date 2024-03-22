@@ -20,7 +20,7 @@ import {
 const Weather: React.FC = () => {
   const [cityName, setCityName] = useState(''); // 初始化cityName状态
   const paramsRef = useRef({ cityName: '' }); // 初始化ref
-  const [data1, setData1] = useState<string>(); 
+  const [data, setData] = useState(''); 
   const [invokeLoading, setInvokeLoading] = useState(false);
   const [tempMaxArray, setTempMaxArray] = useState<string[]>([]);
   const [tempMinArray, setTempMinArray] = useState<string[]>([]);
@@ -42,13 +42,14 @@ const Weather: React.FC = () => {
       setInvokeLoading(true);
       const res = await weatherConditionUsingGET(paramsRef.current);  
       if (res.data) {  
-        setData1(JSON.stringify(data1)); 
+        setData(JSON.stringify(res.data)); 
+        console.log("data===>" + data)
         processData(res.data); // 处理数据并渲染图形  
-        setInvokeLoading(false);
       }  
     } catch (e) {  
       console.error(e);  
     }  
+    setInvokeLoading(false);
   };
   
   const processData = (weatherData: API.WeatherVO) => {  
@@ -160,6 +161,16 @@ const Weather: React.FC = () => {
           >
             <Input.TextArea onChange={handleTextAreaChange} value={cityName} />
           </Form.Item>
+
+          <Form.Item
+              label="响应结果"
+              name="responseData"
+              style={{ maxWidth: 1000 }}
+            >
+                <Card loading={invokeLoading}> 
+                    {data}
+                </Card>
+            </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 12, span: 16 }} style={{ maxWidth: 1000 }}>
             <Button type="primary" htmlType="submit" onClick={handleSubmit}>

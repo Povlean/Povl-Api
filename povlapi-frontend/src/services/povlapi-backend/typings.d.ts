@@ -29,6 +29,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListMusicVO = {
+    code?: number;
+    data?: MusicVO[];
+    message?: string;
+  };
+
   type BaseResponseListPost = {
     code?: number;
     data?: Post[];
@@ -419,6 +425,13 @@ declare namespace API {
       | 'VARIANT_ALSO_NEGOTIATES';
     view?: View;
     viewName?: string;
+  };
+
+  type MusicVO = {
+    category?: string;
+    description?: string;
+    music?: string;
+    singer?: string;
   };
 
   type OrderItem = {
