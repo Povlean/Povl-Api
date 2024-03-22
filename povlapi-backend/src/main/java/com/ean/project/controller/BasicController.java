@@ -7,8 +7,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.ean.commonapi.model.vo.ForecastVO;
 import com.ean.commonapi.model.vo.WeatherVO;
 import com.ean.project.common.BaseResponse;
+import com.ean.project.common.ErrorCode;
 import com.ean.project.common.ResultUtils;
+import com.ean.project.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +32,9 @@ public class BasicController {
 
     @PostMapping("/weather/{cityName}")
     public BaseResponse<WeatherVO> weatherCondition(@PathVariable String cityName) {
+        if (StringUtils.isAnyBlank(cityName)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "城市名不能为空");
+        }
         String url = "https://geoapi.qweather.com/v2/city/lookup?location=" + cityName + "&key=" + WEATHER_KEY;
         String body = HttpRequest.get(url)
                 .execute()

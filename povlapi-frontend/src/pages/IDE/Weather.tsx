@@ -19,43 +19,34 @@ import {
 const Weather: React.FC = () => {
   const [cityName, setCityName] = useState('成都'); // 初始化cityName状态
   const paramsRef = useRef({ cityName: '' }); // 初始化ref
-  const [data, setData] = useState<API.WeatherVO | null>(null);  
+  const [data, setData] = useState(); 
   const [tempMaxArray, setTempMaxArray] = useState<string[]>([]);
   const [tempMinArray, setTempMinArray] = useState<string[]>([]);
   const [textDayArray, setTextDayArray] = useState<string[]>([]);
   const [fxDateArray, setFxDateArray] = useState<string[]>([]);
 
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 6 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 14 },
-    },
-  };
+  
   // 当cityName变化时，更新paramsRef中的cityName属性  
   useEffect(() => {  
     paramsRef.current.cityName = cityName; // 只更新cityName属性  
   }, [cityName]); // 依赖项中包含cityName  
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {  
-        paramsRef.current.cityName = cityName;
-        const res = await weatherConditionUsingPOST(paramsRef.current);  
-        if (res.data) {  
-          setData(res.data);
-          processData(res.data);
-        }  
-      } catch (e) {  
-        console.error(e);  
-      }  
-    };  
-    fetchData();  
-  }, []); // 依赖项为空数组，表示只在组件挂载时执行一次  
+  const handleTextAreaChange = (e: any) => {  
+    setCityName(e.target.value); // 更新cityName状态  
+  };
 
+  const handleSubmit = async () => {  
+    try {  
+      const res = await weatherConditionUsingPOST(paramsRef.current);  
+      if (res.data) {  
+        setData(res.data); // 设置请求返回的数据  
+        processData(res.data); // 处理数据并渲染图形  
+      }  
+    } catch (e) {  
+      console.error(e);  
+    }  
+  };
+  
   const processData = (weatherData: API.WeatherVO) => {  
     const forecastVOList = weatherData.forecastVOList;  
     const tempMaxArray: string[] = [];  
@@ -77,16 +68,17 @@ const Weather: React.FC = () => {
     setFxDateArray(fxDateArray);  
   };
 
-  const handleTextAreaChange = (e: any) => {  
-    setCityName(e.target.value); // 更新cityName状态  
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 6 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 14 },
+    },
   };
 
-  const handleSubmit = () => {  
-    // 这里可以使用paramsRef.current来发送请求  
-    // 例如：API.weatherConditionUsingPOST(paramsRef.current)  
-    weatherConditionUsingPOST(paramsRef.current);
-  };
-  
   const option = {
     title: {
       text: '未来一周的天气'
@@ -159,10 +151,18 @@ const Weather: React.FC = () => {
           <Form.Item
             label="请求参数（填写城市名即可）"
             name="TextArea"
-            rules={[{ required: true, message: 'Please input!' }]}
+            rules={[{ required: true, message: '请输入城市名' }]}
             style={{ maxWidth: 1000 }}
           >
             <Input.TextArea onChange={handleTextAreaChange} value={cityName} />
+          </Form.Item>
+
+          <Form.Item
+            label="响应结果"
+            name="TextArea01"
+            style={{ maxWidth: 1000 }} 
+          >
+            <Input.TextArea value={data} />
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 12, span: 16 }} style={{ maxWidth: 1000 }}>
