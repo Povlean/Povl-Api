@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 import {
   Button,
+  Card,
   Cascader,
   DatePicker,
   Form,
@@ -20,7 +21,8 @@ import FormItemLabel from 'antd/es/form/FormItemLabel';
 const Weather: React.FC = () => {
   const [cityName, setCityName] = useState(''); // 初始化cityName状态
   const paramsRef = useRef({ cityName: '' }); // 初始化ref
-  const [data1, setData1] = useState("hh"); 
+  const [data1, setData1] = useState<string>(); 
+  const [invokeLoading, setInvokeLoading] = useState(false);
   const [tempMaxArray, setTempMaxArray] = useState<string[]>([]);
   const [tempMinArray, setTempMinArray] = useState<string[]>([]);
   const [textDayArray, setTextDayArray] = useState<string[]>([]);
@@ -32,22 +34,18 @@ const Weather: React.FC = () => {
     paramsRef.current.cityName = cityName; // 只更新cityName属性  
   }, [cityName]); // 依赖项中包含cityName  
 
-  useEffect(() => {  
-    console.log("State updated:", data1);  
-  }, [data1]);
-
   const handleTextAreaChange = (e: any) => {  
     setCityName(e.target.value); // 更新cityName状态  
   };
 
   const handleSubmit = async () => {  
     try {  
+      setInvokeLoading(true);
       const res = await weatherConditionUsingPOST(paramsRef.current);  
       if (res.data) {  
-        console.log("data===>", data1)
         setData1(JSON.stringify(data1)); 
-        console.log("data===>", data1)
         processData(res.data); // 处理数据并渲染图形  
+        setInvokeLoading(false);
       }  
     } catch (e) {  
       console.error(e);  
@@ -162,15 +160,6 @@ const Weather: React.FC = () => {
             style={{ maxWidth: 1000 }}
           >
             <Input.TextArea onChange={handleTextAreaChange} value={cityName} />
-          </Form.Item>
-
-          <Form.Item
-            label="响应结果"
-            name="TextArea01"
-            style={{ maxWidth: 1000 }} 
-            initialValue={data1}
-          >
-            
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 12, span: 16 }} style={{ maxWidth: 1000 }}>

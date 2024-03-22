@@ -105,6 +105,7 @@ export const requestConfig: RequestConfig = {
       if (data.code !== 0) {
         throw new Error(data.message);
       }
+      console.log("Interceptor:response===>" + response); 
       return response;
     },
   ],
