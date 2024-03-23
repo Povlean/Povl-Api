@@ -1,10 +1,12 @@
 package com.ean.project.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ean.commonapi.model.entity.Post;
 import com.ean.commonapi.model.vo.PostVO;
 import com.ean.project.common.DeleteRequest;
 import com.ean.project.model.dto.post.PostAddRequest;
+import com.ean.project.model.dto.post.PostQueryRequest;
 import com.ean.project.model.dto.post.PostUpdateRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,4 +45,11 @@ public interface PostService extends IService<Post> {
     * @date 2024/3/23 21:38
     */
     PostVO getPostContentById(Long postId);
+
+    /**
+    * @description: 分页获取文章
+    * @author Ean
+    * @date 2024/3/23 23:44
+    */
+    Page<PostVO> listPostByPage(PostQueryRequest postQueryRequest, HttpServletRequest request);
 }
