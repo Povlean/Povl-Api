@@ -1,23 +1,37 @@
 package com.ean.commonapi.model.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import com.ean.commonapi.model.entity.Post;
+import lombok.NoArgsConstructor;
 
 /**
- * 帖子视图
- *
- * @author ean
- * @TableName product
+ * @author:ean
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class PostVO extends Post {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PostVO {
 
-    /**
-     * 是否已点赞
-     */
-    private Boolean hasThumb;
+    private Long postId;
 
-    private static final long serialVersionUID = 1L;
+    private Long userId;
+
+    private String content;
+
+    private String image;
+
+    private String title;
+
+    private Integer thumbNum;
+
+    private Integer favourNum;
+
+    private String userName;
+
+    private String userAvatar;
+
+    private String createTime;
+
 }

@@ -6,31 +6,21 @@
 
     <resultMap id="BaseResultMap" type="com.ean.commonapi.model.entity.Post">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="age" column="age" jdbcType="INTEGER"/>
-            <result property="gender" column="gender" jdbcType="TINYINT"/>
-            <result property="education" column="education" jdbcType="VARCHAR"/>
-            <result property="place" column="place" jdbcType="VARCHAR"/>
-            <result property="job" column="job" jdbcType="VARCHAR"/>
-            <result property="contact" column="contact" jdbcType="VARCHAR"/>
-            <result property="loveExp" column="loveExp" jdbcType="VARCHAR"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
             <result property="content" column="content" jdbcType="VARCHAR"/>
-            <result property="photo" column="photo" jdbcType="VARCHAR"/>
-            <result property="reviewStatus" column="reviewStatus" jdbcType="INTEGER"/>
-            <result property="reviewMessage" column="reviewMessage" jdbcType="VARCHAR"/>
-            <result property="viewNum" column="viewNum" jdbcType="INTEGER"/>
             <result property="thumbNum" column="thumbNum" jdbcType="INTEGER"/>
+            <result property="favourNum" column="favourNum" jdbcType="INTEGER"/>
             <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="image" column="image" jdbcType="VARCHAR"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,age,gender,
-        education,place,job,
-        contact,loveExp,content,
-        photo,reviewStatus,reviewMessage,
-        viewNum,thumbNum,userId,
-        createTime,updateTime,isDelete
+        id,title,content,
+        tags,thumbNum,favourNum,
+        userId,createTime,updateTime,
+        isDelete
     </sql>
 </mapper>

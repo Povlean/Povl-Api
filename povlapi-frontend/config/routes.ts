@@ -57,22 +57,23 @@ export default [
     name: 'management',
     icon: 'crown',
     access: 'canAdmin',
-    routes: [
-      {
-        path: '/admin',
-        redirect: '/admin/sub-page',
-      },
-      {
-        path: '/admin/sub-page2',
-        name: 'test',
-        component: './404',
-      },
-      {
-        path: '/admin/list',
-        name: 'management',
-        component: './TableList',
-      },
-    ],
+    component: './TableList',
+    // routes: [
+    //   {
+    //     path: '/admin',
+    //     redirect: '/admin/sub-page',
+    //   },
+    //   {
+    //     path: '/admin/sub-page2',
+    //     name: 'test',
+    //     component: './404',
+    //   },
+    //   {
+    //     path: '/admin/list',
+    //     name: 'management',
+    //     component: './TableList',
+    //   },
+    // ],
   },
   {
     icon: 'crown',

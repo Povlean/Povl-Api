@@ -2,6 +2,7 @@ package com.ean.project.common;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -11,9 +12,8 @@ import java.io.Serializable;
  */
 @Data
 public class DeleteRequest implements Serializable {
-    /**
-     * id
-     */
+
+    @NotNull
     private Long id;
 
     private static final long serialVersionUID = 1L;
