@@ -18,7 +18,6 @@ import static com.ean.client_sdk.constants.ApiConstant.*;
 public class PovlApiClient {
 
     public static final String GATEWAY_HOST = "http://127.0.0.1:8090";
-
     private final String accessKey;
     private final String secretKey;
 

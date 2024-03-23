@@ -108,6 +108,13 @@ export default [
     component: './IDE/Music',
   },
   {
+    // layout: false,
+    hideInMenu: true,
+    path: '/book',
+    name: 'book',
+    component: './IDE/Book',
+  },
+  {
     path: '*',
     layout: false,
     component: './404',

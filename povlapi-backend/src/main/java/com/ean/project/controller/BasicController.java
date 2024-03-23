@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ean.commonapi.model.entity.Music;
 import com.ean.commonapi.model.vo.ForecastVO;
 import com.ean.commonapi.model.vo.MusicVO;
+import com.ean.commonapi.model.vo.SearchBookVO;
 import com.ean.commonapi.model.vo.WeatherVO;
 import com.ean.project.common.BaseResponse;
 import com.ean.project.common.ErrorCode;
@@ -16,11 +17,13 @@ import com.ean.project.exception.BusinessException;
 import com.ean.project.service.MusicService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +36,9 @@ import java.util.stream.Collectors;
 public class BasicController {
 
     public static final String WEATHER_KEY = "128edb8cb717492580145a919826303e";
+
+    public static final String BOOK_KEY = "ae1718d4587744b0b79f940fbef69e77";
+
 
     @Resource
     private MusicService musicService;
@@ -92,5 +98,27 @@ public class BasicController {
                 .singer(l.getSinger())
                 .build()).collect(Collectors.toList());
         return ResultUtils.success(musicVOList);
+    }
+
+    @GetMapping("/book/{isbnNum}")
+    public BaseResponse<SearchBookVO> searchBookByIsbn(@PathVariable String isbnNum) {
+        if (StringUtils.isAnyBlank(isbnNum)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "书籍的isbn不能为空");
+        }
+        String url = "http://data.isbn.work/openApi/getInfoByIsbn?isbn=" + isbnNum + "&appKey=" + BOOK_KEY;
+        String body = HttpRequest.get(url)
+                .execute()
+                .body();
+        JSONObject jsonObject = JSON.parseObject(body);
+        JSONObject data = jsonObject.getJSONObject("data");
+        SearchBookVO searchBookVO = SearchBookVO.builder()
+                .isbn(data.getString("isbn"))
+                .bookName(data.getString("bookName"))
+                .pressPlace(data.getString("pressPlace"))
+                .author(data.getString("author"))
+                .press(data.getString("press"))
+                .pressDate(data.getString("pressDate"))
+                .build();
+        return ResultUtils.success(searchBookVO);
     }
 }

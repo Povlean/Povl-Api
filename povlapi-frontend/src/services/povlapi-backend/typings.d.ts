@@ -101,6 +101,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseSearchBookVO = {
+    code?: number;
+    data?: SearchBookVO;
+    message?: string;
+  };
+
   type BaseResponsestring = {
     code?: number;
     data?: string;
@@ -552,6 +558,20 @@ declare namespace API {
     readable?: boolean;
     uri?: string;
     url?: string;
+  };
+
+  type searchBookByIsbnUsingGETParams = {
+    /** isbnNum */
+    isbnNum: string;
+  };
+
+  type SearchBookVO = {
+    author?: string;
+    bookName?: string;
+    isbn?: string;
+    press?: string;
+    pressDate?: string;
+    pressPlace?: string;
   };
 
   type User = {

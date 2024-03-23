@@ -13,6 +13,7 @@ export default {
   'menu.analysis': '数据分析',
   'menu.community': '社区交流',
   'menu.weather': '查看天气',
+  'menu.book': '查询书籍',
   'menu.music': '热榜音乐',
   'menu.log': '日志信息',
   'menu.basic': '接口体验',
