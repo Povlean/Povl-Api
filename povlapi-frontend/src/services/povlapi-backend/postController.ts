@@ -2,7 +2,7 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** addPost POST /api/post/add */
+/** 添加社区文章 POST /api/post/add */
 export async function addPostUsingPOST(body: API.PostAddRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponselong>('/api/post/add', {
     method: 'POST',
@@ -14,7 +14,7 @@ export async function addPostUsingPOST(body: API.PostAddRequest, options?: { [ke
   });
 }
 
-/** deletePost POST /api/post/delete */
+/** 删除社区文章 POST /api/post/delete */
 export async function deletePostUsingPOST(
   body: API.DeleteRequest,
   options?: { [key: string]: any },
@@ -29,28 +29,27 @@ export async function deletePostUsingPOST(
   });
 }
 
-/** getPostById GET /api/post/get */
+/** 根据社区ID获取内容 GET /api/post/get/${param0} */
 export async function getPostByIdUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getPostByIdUsingGETParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePost>('/api/post/get', {
+  const { postId: param0, ...queryParams } = params;
+  return request<API.BaseResponsePostVO>(`/api/post/get/${param0}`, {
     method: 'GET',
-    params: {
-      ...params,
-    },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** listPost GET /api/post/list */
+/** 获取所有社区文章 GET /api/post/list */
 export async function listPostUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listPostUsingGETParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseListPost>('/api/post/list', {
+  return request<API.BaseResponseListPostVO>('/api/post/list', {
     method: 'GET',
     params: {
       ...params,
@@ -59,13 +58,13 @@ export async function listPostUsingGET(
   });
 }
 
-/** listPostByPage GET /api/post/list/page */
+/** 分页查询文章 GET /api/post/list/page */
 export async function listPostByPageUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listPostByPageUsingGETParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePagePost>('/api/post/list/page', {
+  return request<API.BaseResponsePagePostVO>('/api/post/list/page', {
     method: 'GET',
     params: {
       ...params,
@@ -74,7 +73,7 @@ export async function listPostByPageUsingGET(
   });
 }
 
-/** updatePost POST /api/post/update */
+/** 更新文章内容 POST /api/post/update */
 export async function updatePostUsingPOST(
   body: API.PostUpdateRequest,
   options?: { [key: string]: any },

@@ -19,8 +19,7 @@ public class PostAddRequest implements Serializable {
     @NotNull
     private String content;
 
-    @NotNull
-    private byte[] image;
+    private String image;
 
     private static final long serialVersionUID = 1L;
 

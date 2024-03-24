@@ -116,6 +116,12 @@ export default [
     component: './IDE/Book',
   },
   {
+    hideInMenu: true,
+    path: '/article',
+    name: 'article',
+    component: './OnArticle',
+  },
+  {
     path: '*',
     layout: false,
     component: './404',

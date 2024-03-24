@@ -182,6 +182,38 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
         postVOPage.setTotal(postPage.getTotal());
         return postVOPage;
     }
+
+    @Override
+    public List<PostVO> listPost(PostQueryRequest postQueryRequest) {
+        List<Post> postList = this.list();
+        List<Long> userIds = postList.stream()
+                .map(Post::getUserId)
+                .distinct().collect(Collectors.toList());
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("id", userIds);
+        List<User> users = userMapper.selectList(queryWrapper);
+        Map<Long, User> userMap = users.stream()
+                .collect(Collectors.toMap(User::getId, user -> user));
+        if (CollectionUtil.isEmpty(userMap)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 可优化，但是赶进度所以写得很乱
+        List<PostVO> postVOList = postList.stream().map((post) -> {
+            Long userId = post.getUserId();
+            User user = userMap.get(userId);
+            return PostVO.builder()
+                    .userAvatar(user.getUserAvatar())
+                    .favourNum(post.getFavourNum())
+                    .postId(post.getId()).userId(userId)
+                    .userName(user.getUserName())
+                    .thumbNum(post.getThumbNum())
+                    .content(post.getContent())
+                    .title(post.getTitle())
+                    .image(post.getImage())
+                    .build();
+        }).collect(Collectors.toList());
+        return postVOList;
+    }
 }
 
 

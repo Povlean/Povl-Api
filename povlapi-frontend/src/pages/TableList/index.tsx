@@ -324,6 +324,7 @@ const TableList: React.FC = () => {
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
         ]}
+
         request = {async(params, sort: Record<string, SortOrder>, filter: Record<string, (string | number)[] | null>) => {
           const res: any = await listInterfaceInfoByPageUsingGET({
             ...params
@@ -342,6 +343,7 @@ const TableList: React.FC = () => {
             }
           }
         }}
+        
         columns = {columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -425,7 +427,7 @@ const TableList: React.FC = () => {
       </ModalForm>
       <UpdateModal
         columns={ columns } 
-        onSubmit={async (value) => {
+        onSubmit={ async (value) => {
           const success = await handleUpdate(value);
           if (success) {
             handleUpdateModalOpen(false);

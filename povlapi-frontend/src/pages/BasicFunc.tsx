@@ -6,7 +6,7 @@ import { Link } from '@umijs/max';
 
 const { Meta } = Card;
 
-const App: React.FC = () => (
+const BasicFunc: React.FC = () => (
   
   <PageContainer title='集成接口测试'>
     <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -73,4 +73,4 @@ const App: React.FC = () => (
   </PageContainer>
 );
 
-export default App;
+export default BasicFunc;

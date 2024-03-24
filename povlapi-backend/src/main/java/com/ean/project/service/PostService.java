@@ -10,6 +10,7 @@ import com.ean.project.model.dto.post.PostQueryRequest;
 import com.ean.project.model.dto.post.PostUpdateRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
 * @author Asphyxia
@@ -52,4 +53,11 @@ public interface PostService extends IService<Post> {
     * @date 2024/3/23 23:44
     */
     Page<PostVO> listPostByPage(PostQueryRequest postQueryRequest, HttpServletRequest request);
+
+    /**
+    * @description: 获取所有社区文章
+    * @author Ean
+    * @date 2024/3/24 9:06
+    */
+    List<PostVO> listPost(PostQueryRequest postQueryRequest);
 }
