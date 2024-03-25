@@ -506,6 +506,7 @@ declare namespace API {
   };
 
   type PostVO = {
+    commentNum?: number;
     content?: string;
     createTime?: string;
     favourNum?: number;

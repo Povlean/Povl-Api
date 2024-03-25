@@ -216,6 +216,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
             return PostVO.builder()
                     .userAvatar(user.getUserAvatar())
                     .favourNum(post.getFavourNum())
+                    .commentNum(post.getCommentNum())
                     .postId(post.getId()).userId(userId)
                     .userName(user.getUserName())
                     .thumbNum(post.getThumbNum())
@@ -268,7 +269,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void favourPost(Long id, HttpServletRequest request) {
+    public String favourPost(Long id, HttpServletRequest request) {
         User currentUser = (User) request.getSession()
                 .getAttribute(USER_LOGIN_STATE);
         if (currentUser == null) {
@@ -290,6 +291,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
                 postFavourMapper.insert(postFavour);
                 stringRedisTemplate.opsForZSet().add(redisKey, userId, System.currentTimeMillis());
             }
+            return "add";
         } else {
             // redis已有，说明已经点赞过
             boolean isSuccess = this.update().setSql("favourNum = favourNum - 1").eq("id", id).update();
@@ -301,6 +303,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
                 postFavourMapper.delete(queryWrapper);
                 stringRedisTemplate.opsForZSet().remove(redisKey, userId);
             }
+            return "remove";
         }
     }
 }

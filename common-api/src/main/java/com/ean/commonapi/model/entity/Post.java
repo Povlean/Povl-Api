@@ -38,6 +38,11 @@ public class Post implements Serializable {
     private Integer thumbNum;
 
     /**
+     * 评论数量
+     */
+    private Integer commentNum;
+
+    /**
      * 收藏数
      */
     private Integer favourNum;

@@ -89,8 +89,8 @@ public class PostController {
     @ApiOperation("喜爱内容")
     @GetMapping("/favour/{id}")
     public BaseResponse<String> favourPost(@PathVariable Long id, HttpServletRequest request) {
-        postService.favourPost(id, request);
-        return ResultUtils.success();
+        String value = postService.favourPost(id, request);
+        return ResultUtils.success(value);
     }
 
 }

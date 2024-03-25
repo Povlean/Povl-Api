@@ -1,4 +1,4 @@
-import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
+import { HeartOutlined, LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { Avatar, FloatButton, List, Space, message } from 'antd';
 import { listPostByPageUsingGET, listPostUsingGET, thumbPostUsingGET } from '@/services/povlapi-backend/postController';
@@ -80,6 +80,7 @@ import { getPostByIdUsingGET } from '@/services/povlapi-backend/postController';
       content: data.title,
       image: data.image,
       thumb: data.thumbNum,
+      comment: data.commentNum
     }));
   
     const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
@@ -111,7 +112,7 @@ import { getPostByIdUsingGET } from '@/services/povlapi-backend/postController';
               <IconText icon={LikeOutlined} text={JSON.stringify(item.thumb)} key="list-vertical-star-o" />
             </div>,
             <div>
-              <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />
+              <IconText icon={MessageOutlined} text={JSON.stringify(item.comment)} key="list-vertical-message" />
             </div>
           ]}
           // extra={

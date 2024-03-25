@@ -73,5 +73,5 @@ public interface PostService extends IService<Post> {
     * @author Ean
     * @date 2024/3/25 19:50
     */
-    void favourPost(Long id, HttpServletRequest request);
+    String favourPost(Long id, HttpServletRequest request);
 }

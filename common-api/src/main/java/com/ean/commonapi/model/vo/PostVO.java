@@ -28,6 +28,8 @@ public class PostVO {
 
     private Integer favourNum;
 
+    private Integer commentNum;
+
     private String userName;
 
     private String userAvatar;

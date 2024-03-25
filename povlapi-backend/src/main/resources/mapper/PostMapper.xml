@@ -10,6 +10,7 @@
             <result property="content" column="content" jdbcType="VARCHAR"/>
             <result property="thumbNum" column="thumbNum" jdbcType="INTEGER"/>
             <result property="favourNum" column="favourNum" jdbcType="INTEGER"/>
+            <result property="commentNum" column="commentNum" jdbcType="INTEGER"/>
             <result property="userId" column="userId" jdbcType="BIGINT"/>
             <result property="image" column="image" jdbcType="VARCHAR"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
@@ -18,8 +19,8 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,title,content,
-        tags,thumbNum,favourNum,
+        id,title,content,tags,
+        thumbNum,favourNum,commentNum,
         userId,createTime,updateTime,
         isDelete
     </sql>
