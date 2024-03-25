@@ -72,11 +72,25 @@ public class PostController {
         return ResultUtils.success(postPage);
     }
 
-    @ApiOperation("获取所有社区文章")
+    @ApiOperation("获取所有社区内容")
     @GetMapping("/list")
     public BaseResponse<List<PostVO>> listPost(PostQueryRequest postQueryRequest) {
         List<PostVO> postVOList = postService.listPost(postQueryRequest);
         return ResultUtils.success(postVOList);
+    }
+
+    @ApiOperation("点赞内容")
+    @GetMapping("/thumb/{id}")
+    public BaseResponse<Void> thumbPost(@PathVariable Long id, HttpServletRequest request) {
+        postService.thumbPost(id, request);
+        return ResultUtils.success();
+    }
+
+    @ApiOperation("点赞内容")
+    @GetMapping("/favour/{id}")
+    public BaseResponse<Void> favourPost(@PathVariable Long id, HttpServletRequest request) {
+        postService.favourPost(id, request);
+        return ResultUtils.success();
     }
 
 }

@@ -60,4 +60,18 @@ public interface PostService extends IService<Post> {
     * @date 2024/3/24 9:06
     */
     List<PostVO> listPost(PostQueryRequest postQueryRequest);
+
+    /**
+    * @description: 点赞内容
+    * @author Ean
+    * @date 2024/3/25 9:41
+    */
+    void thumbPost(Long id, HttpServletRequest request);
+
+    /**
+    * @description: 喜欢内容
+    * @author Ean
+    * @date 2024/3/25 19:50
+    */
+    void favourPost(Long id, HttpServletRequest request);
 }

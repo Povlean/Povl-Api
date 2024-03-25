@@ -7,19 +7,24 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ean.commonapi.model.entity.Post;
+import com.ean.commonapi.model.entity.PostFavour;
+import com.ean.commonapi.model.entity.PostThumb;
 import com.ean.commonapi.model.entity.User;
 import com.ean.commonapi.model.vo.PostVO;
 import com.ean.project.common.DeleteRequest;
 import com.ean.project.common.ErrorCode;
 import com.ean.project.constant.CommonConstant;
 import com.ean.project.exception.BusinessException;
+import com.ean.project.mapper.PostFavourMapper;
 import com.ean.project.mapper.PostMapper;
+import com.ean.project.mapper.PostThumbMapper;
 import com.ean.project.mapper.UserMapper;
 import com.ean.project.model.dto.post.PostAddRequest;
 import com.ean.project.model.dto.post.PostQueryRequest;
 import com.ean.project.model.dto.post.PostUpdateRequest;
 import com.ean.project.service.PostService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +38,6 @@ import static com.ean.project.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
 * @author Asphyxia
-* @description 针对表【post(帖子)】的数据库操作Service实现
-* @createDate 2024-03-23 20:20:30
 */
 @Service
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
@@ -45,6 +48,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private PostThumbMapper postThumbMapper;
+
+    @Resource
+    private PostFavourMapper postFavourMapper;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public Long addPostContent(PostAddRequest postAddRequest, HttpServletRequest request) {
@@ -213,6 +225,81 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
                     .build();
         }).collect(Collectors.toList());
         return postVOList;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void thumbPost(Long id, HttpServletRequest request) {
+        User currentUser = (User) request.getSession()
+                .getAttribute(USER_LOGIN_STATE);
+        if (currentUser == null) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR);
+        }
+        String redisKey = "post:like:" + id;
+        String userId = currentUser.getId().toString();
+        Double score = stringRedisTemplate.opsForZSet().score(redisKey, userId);
+        // 说明没有点赞过
+        if (score == null) {
+            // 更新数据库
+            boolean isSuccess = this.update().setSql("thumbNum = thumbNum + 1").eq("id", id).update();
+            if (isSuccess) {
+                // 数据库更新成功后添加redis
+                PostThumb postThumb = PostThumb.builder()
+                        .postId(id)
+                        .userId(Long.parseLong(userId))
+                        .build();
+                postThumbMapper.insert(postThumb);
+                stringRedisTemplate.opsForZSet().add(redisKey, userId, System.currentTimeMillis());
+            }
+        } else {
+            // redis已有，说明已经点赞过
+            boolean isSuccess = this.update().setSql("thumbNum = thumbNum - 1").eq("id", id).update();
+            if (isSuccess) {
+                // 更新数据库，更新redis
+                QueryWrapper<PostThumb> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("userId", userId);
+                queryWrapper.eq("postId", id);
+                postThumbMapper.delete(queryWrapper);
+                stringRedisTemplate.opsForZSet().remove(redisKey, userId);
+            }
+        }
+    }
+
+    @Override
+    public void favourPost(Long id, HttpServletRequest request) {
+        User currentUser = (User) request.getSession()
+                .getAttribute(USER_LOGIN_STATE);
+        if (currentUser == null) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR);
+        }
+        String redisKey = "post:favour:" + id;
+        String userId = currentUser.getId().toString();
+        Double score = stringRedisTemplate.opsForZSet().score(redisKey, userId);
+        // 说明没有点赞过
+        if (score == null) {
+            // 更新数据库
+            boolean isSuccess = this.update().setSql("favourNum = favourNum + 1").eq("id", id).update();
+            if (isSuccess) {
+                // 数据库更新成功后添加redis
+                PostFavour postFavour = PostFavour.builder()
+                        .postId(id)
+                        .userId(Long.parseLong(userId))
+                        .build();
+                postFavourMapper.insert(postFavour);
+                stringRedisTemplate.opsForZSet().add(redisKey, userId, System.currentTimeMillis());
+            }
+        } else {
+            // redis已有，说明已经点赞过
+            boolean isSuccess = this.update().setSql("favourNum = favourNum - 1").eq("id", id).update();
+            if (isSuccess) {
+                // 更新数据库，更新redis
+                QueryWrapper<PostFavour> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("userId", userId);
+                queryWrapper.eq("postId", id);
+                postFavourMapper.delete(queryWrapper);
+                stringRedisTemplate.opsForZSet().remove(redisKey, userId);
+            }
+        }
     }
 }
 

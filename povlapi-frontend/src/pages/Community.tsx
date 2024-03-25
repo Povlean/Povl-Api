@@ -42,8 +42,6 @@ import Link from 'antd/es/typography/Link';
       favour: data.favourNum
     }));
   
-  
-  
     const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
       <Space>
         {React.createElement(icon)}
