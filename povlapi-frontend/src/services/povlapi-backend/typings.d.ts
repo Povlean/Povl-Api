@@ -141,6 +141,11 @@ declare namespace API {
     id: number;
   };
 
+  type favourPostUsingGETParams = {
+    /** id */
+    id: number;
+  };
+
   type ForecastVO = {
     fxDate?: string;
     tempMax?: string;
@@ -485,7 +490,7 @@ declare namespace API {
 
   type PostAddRequest = {
     content: string;
-    image: string;
+    image?: string;
     title: string;
   };
 
@@ -536,6 +541,11 @@ declare namespace API {
     press?: string;
     pressDate?: string;
     pressPlace?: string;
+  };
+
+  type thumbPostUsingGETParams = {
+    /** id */
+    id: number;
   };
 
   type User = {

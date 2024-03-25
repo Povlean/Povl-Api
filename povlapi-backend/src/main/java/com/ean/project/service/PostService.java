@@ -66,7 +66,7 @@ public interface PostService extends IService<Post> {
     * @author Ean
     * @date 2024/3/25 9:41
     */
-    void thumbPost(Long id, HttpServletRequest request);
+    String thumbPost(Long id, HttpServletRequest request);
 
     /**
     * @description: 喜欢内容

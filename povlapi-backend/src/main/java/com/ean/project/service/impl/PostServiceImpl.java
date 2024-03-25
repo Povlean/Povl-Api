@@ -210,7 +210,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 可优化，但是赶进度所以写得很乱
-        List<PostVO> postVOList = postList.stream().map((post) -> {
+        return postList.stream().map((post) -> {
             Long userId = post.getUserId();
             User user = userMap.get(userId);
             return PostVO.builder()
@@ -224,12 +224,11 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
                     .image(post.getImage())
                     .build();
         }).collect(Collectors.toList());
-        return postVOList;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void thumbPost(Long id, HttpServletRequest request) {
+    public String thumbPost(Long id, HttpServletRequest request) {
         User currentUser = (User) request.getSession()
                 .getAttribute(USER_LOGIN_STATE);
         if (currentUser == null) {
@@ -245,12 +244,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
             if (isSuccess) {
                 // 数据库更新成功后添加redis
                 PostThumb postThumb = PostThumb.builder()
-                        .postId(id)
                         .userId(Long.parseLong(userId))
+                        .postId(id)
                         .build();
                 postThumbMapper.insert(postThumb);
                 stringRedisTemplate.opsForZSet().add(redisKey, userId, System.currentTimeMillis());
             }
+            return "add";
         } else {
             // redis已有，说明已经点赞过
             boolean isSuccess = this.update().setSql("thumbNum = thumbNum - 1").eq("id", id).update();
@@ -262,10 +262,12 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
                 postThumbMapper.delete(queryWrapper);
                 stringRedisTemplate.opsForZSet().remove(redisKey, userId);
             }
+            return "remove";
         }
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void favourPost(Long id, HttpServletRequest request) {
         User currentUser = (User) request.getSession()
                 .getAttribute(USER_LOGIN_STATE);
@@ -282,8 +284,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
             if (isSuccess) {
                 // 数据库更新成功后添加redis
                 PostFavour postFavour = PostFavour.builder()
-                        .postId(id)
                         .userId(Long.parseLong(userId))
+                        .postId(id)
                         .build();
                 postFavourMapper.insert(postFavour);
                 stringRedisTemplate.opsForZSet().add(redisKey, userId, System.currentTimeMillis());

@@ -81,14 +81,14 @@ public class PostController {
 
     @ApiOperation("点赞内容")
     @GetMapping("/thumb/{id}")
-    public BaseResponse<Void> thumbPost(@PathVariable Long id, HttpServletRequest request) {
-        postService.thumbPost(id, request);
-        return ResultUtils.success();
+    public BaseResponse<String> thumbPost(@PathVariable Long id, HttpServletRequest request) {
+        String value = postService.thumbPost(id, request);
+        return ResultUtils.success(value);
     }
 
-    @ApiOperation("点赞内容")
+    @ApiOperation("喜爱内容")
     @GetMapping("/favour/{id}")
-    public BaseResponse<Void> favourPost(@PathVariable Long id, HttpServletRequest request) {
+    public BaseResponse<String> favourPost(@PathVariable Long id, HttpServletRequest request) {
         postService.favourPost(id, request);
         return ResultUtils.success();
     }

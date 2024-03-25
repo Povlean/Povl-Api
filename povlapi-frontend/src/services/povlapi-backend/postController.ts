@@ -29,6 +29,20 @@ export async function deletePostUsingPOST(
   });
 }
 
+/** 喜爱内容 GET /api/post/favour/${param0} */
+export async function favourPostUsingGET(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.favourPostUsingGETParams,
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<API.BaseResponsestring>(`/api/post/favour/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
 /** 根据社区ID获取内容 GET /api/post/get/${param0} */
 export async function getPostByIdUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
@@ -43,7 +57,7 @@ export async function getPostByIdUsingGET(
   });
 }
 
-/** 获取所有社区文章 GET /api/post/list */
+/** 获取所有社区内容 GET /api/post/list */
 export async function listPostUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listPostUsingGETParams,
@@ -69,6 +83,20 @@ export async function listPostByPageUsingGET(
     params: {
       ...params,
     },
+    ...(options || {}),
+  });
+}
+
+/** 点赞内容 GET /api/post/thumb/${param0} */
+export async function thumbPostUsingGET(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.thumbPostUsingGETParams,
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<API.BaseResponsestring>(`/api/post/thumb/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
