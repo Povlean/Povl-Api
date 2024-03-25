@@ -5,37 +5,50 @@ import { listPostByPageUsingGET, listPostUsingGET, thumbPostUsingGET } from '@/s
 import FloatButton_ from './FloatButton_';
 import { PageContainer } from '@ant-design/pro-components';
 import Link from 'antd/es/typography/Link';
+import { getPostByIdUsingGET } from '@/services/povlapi-backend/postController';
 
-  const Community: React.FC = () => {
+  // 定义 item 的类型  
+  interface ItemType {  
+    id: number; // 假设 id 是字符串类型  
+    // ... 可以添加更多 item 的属性及其类型  
+  }  
+  
+// 定义组件的 props 类型  
+  interface MyComponentProps {  
+    item?: ItemType; // 使用 ItemType 作为 item 的类型，并使用 ? 表示它是可选的  
+  }  
+
+  const Community: React.FC<MyComponentProps> = ({ item }) => {
 
     const [resData, setResData] = useState<API.PostVO[]>([]);
     const [loading, setLoading] = useState(false);
-    const [thumb, setThumb] = useState(0); // 假设初始点赞数为0 
+    const [loading1, setLoading1] = useState(false);
+    const [error, setError] = useState('');  
+    const [thumb, setThumb] = useState(0);
+
 
     interface thumbPostUsingGETParams {  
       id: number;  
-    }  
+    }
 
-    const favourUpdate = async() => {
-
-    };
-
-    const thumbUpdate = async(postId: number, thumbNum: number) => {
-      const params: thumbPostUsingGETParams = { id: postId };
-      const res = await thumbPostUsingGET(params);
-      setThumb(thumbNum);
-      if (res.message === 'ok') {
-        console.log(res)
-        if (res.data === 'add') {
-          message.success("点赞成功")
-          setThumb(thumb => thumb + 1)
+    const thumbUpdate = async(postId: number | undefined, thumbNum: number | undefined) => {
+      console.log("thumbUpdate===>" + postId);
+      if (postId !== undefined && thumbNum !== undefined) {
+        const params: thumbPostUsingGETParams = { id: postId };
+        const res = await thumbPostUsingGET(params);
+        setThumb(thumbNum);
+        if (res.message === 'ok') {
+          console.log(res)
+          if (res.data === 'add') {
+            message.success("点赞成功")
+          } else {
+            message.success("取消点赞")
+          }
+          await listConmunity(); // 如果需要等待listConmunity完成，则使用await
         } else {
-          message.success("取消点赞")
-          setThumb(thumb => thumb - 1)
+          message.error("操作失败")
         }
-      } else {
-        message.error("操作失败")
-      }
+      } 
     };
 
     const listConmunity = async() => {
@@ -67,7 +80,6 @@ import Link from 'antd/es/typography/Link';
       content: data.title,
       image: data.image,
       thumb: data.thumbNum,
-      favour: data.favourNum
     }));
   
     const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
@@ -76,7 +88,6 @@ import Link from 'antd/es/typography/Link';
         {text}
       </Space>
     );
-
 
     return(  
     <PageContainer>
@@ -96,10 +107,8 @@ import Link from 'antd/es/typography/Link';
           key={item.title}
           actions={[
             <div onClick={() => thumbUpdate(item.id, item.thumb)}>
-              <IconText icon={LikeOutlined} text={JSON.stringify(thumb)} key="list-vertical-star-o" />
-            </div>,
-            <div onClick={favourUpdate}>
-              <IconText icon={StarOutlined} text={JSON.stringify(item.favour)} key="list-vertical-like-o" />
+            {/* <div> */}
+              <IconText icon={LikeOutlined} text={JSON.stringify(item.thumb)} key="list-vertical-star-o" />
             </div>,
             <div>
               <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />
