@@ -352,6 +352,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
         // 使用userId获取username
         Map<Long, CommentUserBO> idNameMap = new HashMap<>();
         List<User> users = userMapper.getUserByIds(userIds);
+        if (users == null || CollectionUtil.isEmpty(users)) {
+            users = new ArrayList<>();
+        }
         for (User user : users) {
             CommentUserBO commentUserBO = new CommentUserBO();
             commentUserBO.setUserAvatar(user.getUserAvatar());

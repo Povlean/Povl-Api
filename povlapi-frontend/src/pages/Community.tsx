@@ -2,10 +2,8 @@ import { EditTwoTone, HeartOutlined, LikeOutlined, MessageOutlined, MessageTwoTo
 import React, { useEffect, useState } from 'react';
 import { Avatar, Button, FloatButton, Form, Input, List, Modal, Popover, Select, Space, message } from 'antd';
 import { addCommentUsingPOST, listPostByPageUsingGET, listPostUsingGET, thumbPostUsingGET } from '@/services/povlapi-backend/postController';
-import FloatButton_ from './FloatButton_';
 import { PageContainer } from '@ant-design/pro-components';
 import Link from 'antd/es/typography/Link';
-import { getPostByIdUsingGET } from '@/services/povlapi-backend/postController';
 import Collapse, { CollapseProps, ExpandIconPosition } from 'antd/es/collapse/Collapse';
 
   // 定义 item 的类型  
@@ -20,7 +18,9 @@ import Collapse, { CollapseProps, ExpandIconPosition } from 'antd/es/collapse/Co
   }  
 
   const Community: React.FC<MyComponentProps> = () => {
-    const [form] = Form.useForm();
+
+    const [selectedItem, setSelectedItem] = useState(null); // 用于存储当前选中的列表项  
+    const [isModalVisible, setIsModalVisible] = useState(false); // 用于控制模态框的显示与隐藏 
     const [resData, setResData] = useState<API.PostVO[]>([]);
     const [loading, setLoading] = useState(false);
     const [thumb, setThumb] = useState(0);
@@ -30,19 +30,6 @@ import Collapse, { CollapseProps, ExpandIconPosition } from 'antd/es/collapse/Co
     interface thumbPostUsingGETParams {  
       id: number;  
     }
-
-    const onChange = (key: string | string[]) => {
-      console.log(key);
-    };
-
-    const genExtra = () => (
-      <SettingOutlined
-        onClick={(event) => {
-          // If you don't want click extra trigger collapse, you can prevent this:
-          event.stopPropagation();
-        }}
-      />
-    );
 
     const thumbUpdate = async(postId: number | undefined, thumbNum: number | undefined) => {
       console.log("thumbUpdate===>" + postId);
@@ -115,36 +102,44 @@ import Collapse, { CollapseProps, ExpandIconPosition } from 'antd/es/collapse/Co
         </div>  
       );  
     };
-
-    const showModal = () => {
-      setIsModalOpen(true);
-    };
   
-    const handleOk = (postId: number | undefined, commentText: string) => {
-      console.log("postId===>" + postId)
-      if (postId !== undefined) {  
+    const handleModalOk = () => {
+      console.log('用户提交了评论', selectedItem);
+      if (selectedItem !== undefined) {  
         const body: API.AddCommentRequest = {  
-          id: postId,  
-          comment: commentText,  
+          id: selectedItem.id,  
+          comment: comment,  
           // 设置其他需要的字段...  
         };  
         addCommentUsingPOST(body)  
           .then(() => {  
-            setIsModalOpen(false);  
+            setIsModalVisible(false);  
             // 处理成功逻辑  
+            message.success("评论成功")
+            listConmunity();
           })  
           .catch((error) => {  
             // 处理错误逻辑  
+            message.success("评论失败")
           });  
       } else {  
         // 处理 postId 为 undefined 的情况  
       }  
-      setIsModalOpen(false);
+      setIsModalVisible(false);
     };
   
-    const handleCancel = () => {
-      setIsModalOpen(false);
+    const handleModalCancel = () => {  
+      // 清除选中的项  
+      setSelectedItem(null);  
+      // 关闭模态框  
+      setIsModalVisible(false);  
     };  
+
+    // 当点击列表项时，设置选中的项并显示模态框  
+    const handleItemClick = (item: React.SetStateAction<null>) => {  
+      setSelectedItem(item);    
+      setIsModalVisible(true);  
+    };
 
     const handleInputChange = (e: any) => {  
       setComment(e.target.value); // 更新评论状态  
@@ -162,7 +157,6 @@ import Collapse, { CollapseProps, ExpandIconPosition } from 'antd/es/collapse/Co
         pageSize: 6,
       }}
       dataSource={data}
-
       renderItem={(item) => (
         <List.Item
           key={item.title}
@@ -182,10 +176,10 @@ import Collapse, { CollapseProps, ExpandIconPosition } from 'antd/es/collapse/Co
                   </Button>
                 </Popover>
                 <>
-                  <Button onClick={showModal}>
+                  <Button onClick={() => handleItemClick(item)}>
                     发表评论 <EditTwoTone />
                   </Button>
-                  <Modal title="发表评论" open={isModalOpen} onOk={() => handleOk(item.id, comment)} onCancel={handleCancel}>
+                  <Modal title="发表评论" visible={isModalVisible} onOk={handleModalOk} onCancel={handleModalCancel}>
                     <Input value={comment} onChange={handleInputChange}/>
                   </Modal>
                 </>
