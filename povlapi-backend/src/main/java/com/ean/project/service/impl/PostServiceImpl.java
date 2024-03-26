@@ -6,19 +6,16 @@ import com.alibaba.nacos.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ean.commonapi.model.entity.Post;
-import com.ean.commonapi.model.entity.PostFavour;
-import com.ean.commonapi.model.entity.PostThumb;
-import com.ean.commonapi.model.entity.User;
+import com.ean.commonapi.model.bo.CommentUserBO;
+import com.ean.commonapi.model.entity.*;
+import com.ean.commonapi.model.vo.CommentVO;
 import com.ean.commonapi.model.vo.PostVO;
 import com.ean.project.common.DeleteRequest;
 import com.ean.project.common.ErrorCode;
 import com.ean.project.constant.CommonConstant;
 import com.ean.project.exception.BusinessException;
-import com.ean.project.mapper.PostFavourMapper;
-import com.ean.project.mapper.PostMapper;
-import com.ean.project.mapper.PostThumbMapper;
-import com.ean.project.mapper.UserMapper;
+import com.ean.project.mapper.*;
+import com.ean.project.model.dto.comment.AddCommentRequest;
 import com.ean.project.model.dto.post.PostAddRequest;
 import com.ean.project.model.dto.post.PostQueryRequest;
 import com.ean.project.model.dto.post.PostUpdateRequest;
@@ -30,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,6 +53,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
 
     @Resource
     private PostFavourMapper postFavourMapper;
+
+    @Resource
+    private PostCommentMapper postCommentMapper;
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
@@ -209,11 +211,14 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
         if (CollectionUtil.isEmpty(userMap)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 可优化，但是赶进度所以写得很乱
+        // 查询所有的评论
+        Map<Long, List<CommentVO>> commentMap = getCommentMap();
         return postList.stream().map((post) -> {
             Long userId = post.getUserId();
+            Long postId = post.getId();
             User user = userMap.get(userId);
-            return PostVO.builder()
+            List<CommentVO> commentVOList = commentMap.get(postId);
+            PostVO.PostVOBuilder postVOBuilder = PostVO.builder()
                     .userAvatar(user.getUserAvatar())
                     .favourNum(post.getFavourNum())
                     .commentNum(post.getCommentNum())
@@ -222,10 +227,16 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
                     .thumbNum(post.getThumbNum())
                     .content(post.getContent())
                     .title(post.getTitle())
-                    .image(post.getImage())
-                    .build();
+                    .image(post.getImage());
+            if (CollectionUtil.isEmpty(commentVOList)) {
+                return postVOBuilder.commentVOList(new ArrayList<>()).build();
+            } else {
+                return postVOBuilder.commentVOList(commentVOList).build();
+            }
         }).collect(Collectors.toList());
     }
+
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -305,6 +316,65 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post>
             }
             return "remove";
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addComment(AddCommentRequest addCommentRequest, HttpServletRequest request) {
+        if (ObjectUtil.isNull(addCommentRequest)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (addCommentRequest.getComment() == null || addCommentRequest.getId() == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = (User)request.getSession().getAttribute(USER_LOGIN_STATE);
+        Long userId = user.getId();
+        PostComment postComment = new PostComment();
+        postComment.setComment(addCommentRequest.getComment());
+        postComment.setPostId(addCommentRequest.getId());
+        postComment.setUserId(userId);
+        int count = postCommentMapper.insert(postComment);
+        if (count < 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean isSuccess = this.update().setSql("commentNum = commentNum + 1").eq("id", addCommentRequest.getId()).update();
+        if (!isSuccess) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+    }
+
+    public Map<Long, List<CommentVO>> getCommentMap() {
+        Map<Long, List<CommentVO>> commentsByPostId = new HashMap<>();
+        // 假设你知道所有可能的postId，或者你可以从数据库查询所有不重复的postId
+        // 这里为了简化，我们假设有已知的postId列表
+        List<Long> postIds = postCommentMapper.selectAllPostIds();// 获取所有不重复的postId列表的方法
+        List<Long> userIds = postCommentMapper.selectAllUserIds();
+        // 使用userId获取username
+        Map<Long, CommentUserBO> idNameMap = new HashMap<>();
+        List<User> users = userMapper.getUserByIds(userIds);
+        for (User user : users) {
+            CommentUserBO commentUserBO = new CommentUserBO();
+            commentUserBO.setUserAvatar(user.getUserAvatar());
+            commentUserBO.setUserName(user.getUserName());
+            idNameMap.put(user.getId(), commentUserBO);
+        }
+        for (Long postId : postIds) {
+            List<PostComment> comments = postCommentMapper.selectCommentsByPostId(postId);
+            List<CommentVO> commentVOList = comments.stream().map(c -> {
+                CommentUserBO commentUserBO = idNameMap.get(c.getUserId());
+                String userName = commentUserBO.getUserName();
+                String userAvatar = commentUserBO.getUserAvatar();
+                return CommentVO.builder()
+                        .userName(userName)
+                        .userAvatar(userAvatar)
+                        .comment(c.getComment())
+                        .build();
+            }).collect(Collectors.toList());
+            if (!commentVOList.isEmpty()) {
+                commentsByPostId.put(postId, commentVOList);
+            }
+        }
+        return commentsByPostId;
     }
 }
 

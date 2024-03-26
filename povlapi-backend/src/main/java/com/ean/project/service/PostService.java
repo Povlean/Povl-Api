@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ean.commonapi.model.entity.Post;
 import com.ean.commonapi.model.vo.PostVO;
 import com.ean.project.common.DeleteRequest;
+import com.ean.project.model.dto.comment.AddCommentRequest;
 import com.ean.project.model.dto.post.PostAddRequest;
 import com.ean.project.model.dto.post.PostQueryRequest;
 import com.ean.project.model.dto.post.PostUpdateRequest;
@@ -74,4 +75,11 @@ public interface PostService extends IService<Post> {
     * @date 2024/3/25 19:50
     */
     String favourPost(Long id, HttpServletRequest request);
+
+    /**
+    * @description: 添加内容
+    * @author Ean
+    * @date 2024/3/26 21:01
+    */
+    void addComment(AddCommentRequest addCommentRequest, HttpServletRequest request);
 }

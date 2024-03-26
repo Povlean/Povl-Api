@@ -125,8 +125,21 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         User user = verifyKey(requestParams, loginUser);
         // Client转发到网关层
         // 网关层转发到对应的请求路径中
+        com.ean.client_sdk.model.User user1 = convertUserType(user);
         PovlApiClient tempClient = new PovlApiClient(loginUser.getAccessKey(), loginUser.getSecretKey());
-        return tempClient.getUsernameByPost(user);
+        return tempClient.getUsernameByPost(user1);
+    }
+
+    private com.ean.client_sdk.model.User convertUserType(User user) {
+        com.ean.client_sdk.model.User user1 = new com.ean.client_sdk.model.User();
+        user1.setUserAccount(user.getUserAccount());
+        user1.setUserAvatar(user.getUserAvatar());
+        user1.setUserName(user.getUserName());
+        user1.setUserPassword(user.getUserPassword());
+        user1.setUserRole(user.getUserRole());
+        user1.setAccessKey(user.getAccessKey());
+        user1.setSecretKey(user.getSecretKey());
+        return user1;
     }
 
     private User verifyKey(String requestParams, User loginUser) {

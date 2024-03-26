@@ -5,6 +5,7 @@ import com.ean.commonapi.model.vo.PostVO;
 import com.ean.project.common.BaseResponse;
 import com.ean.project.common.DeleteRequest;
 import com.ean.project.common.ResultUtils;
+import com.ean.project.model.dto.comment.AddCommentRequest;
 import com.ean.project.model.dto.post.PostAddRequest;
 import com.ean.project.model.dto.post.PostQueryRequest;
 import com.ean.project.model.dto.post.PostUpdateRequest;
@@ -91,6 +92,14 @@ public class PostController {
     public BaseResponse<String> favourPost(@PathVariable Long id, HttpServletRequest request) {
         String value = postService.favourPost(id, request);
         return ResultUtils.success(value);
+    }
+
+    @ApiOperation("发布评论")
+    @PostMapping("/comment/add")
+    public BaseResponse<Void> addComment(@RequestBody AddCommentRequest addCommentRequest,
+                                         HttpServletRequest request) {
+        postService.addComment(addCommentRequest, request);
+        return ResultUtils.success();
     }
 
 }

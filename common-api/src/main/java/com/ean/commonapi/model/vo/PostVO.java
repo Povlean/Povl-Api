@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author:ean
  */
@@ -31,6 +33,8 @@ public class PostVO {
     private Integer commentNum;
 
     private String userName;
+
+    private List<CommentVO> commentVOList;
 
     private String userAvatar;
 

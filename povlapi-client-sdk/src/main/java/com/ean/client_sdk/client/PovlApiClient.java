@@ -4,8 +4,8 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
+import com.ean.client_sdk.model.User;
 import com.ean.client_sdk.utils.SignUtil;
-import com.ean.commonapi.model.entity.User;
 import java.util.HashMap;
 import java.util.Map;
 

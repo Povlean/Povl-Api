@@ -1,4 +1,9 @@
 declare namespace API {
+  type AddCommentRequest = {
+    comment?: string;
+    id?: number;
+  };
+
   type BaseResponseboolean = {
     code?: number;
     data?: boolean;
@@ -131,10 +136,21 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseVoid = {
+    code?: number;
+    message?: string;
+  };
+
   type BaseResponseWeatherVO = {
     code?: number;
     data?: WeatherVO;
     message?: string;
+  };
+
+  type CommentVO = {
+    comment?: string;
+    userAvatar?: string;
+    userName?: string;
   };
 
   type DeleteRequest = {
@@ -507,6 +523,7 @@ declare namespace API {
 
   type PostVO = {
     commentNum?: number;
+    commentVOList?: CommentVO[];
     content?: string;
     createTime?: string;
     favourNum?: number;

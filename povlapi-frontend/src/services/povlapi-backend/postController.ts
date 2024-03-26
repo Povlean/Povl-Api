@@ -14,6 +14,21 @@ export async function addPostUsingPOST(body: API.PostAddRequest, options?: { [ke
   });
 }
 
+/** 发布评论 POST /api/post/comment/add */
+export async function addCommentUsingPOST(
+  body: API.AddCommentRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseVoid>('/api/post/comment/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 删除社区文章 POST /api/post/delete */
 export async function deletePostUsingPOST(
   body: API.DeleteRequest,

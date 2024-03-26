@@ -24,4 +24,15 @@
         userPassword,createTime,updateTime,
         isDelete,accessKey,secretKey
     </sql>
+    <select id="getUserByIds" resultType="com.ean.commonapi.model.entity.User">
+        SELECT id,userName,userAccount,
+        userAvatar,userRole,
+        userPassword,createTime,updateTime,
+        isDelete,accessKey,secretKey
+        FROM `user`
+        WHERE id IN
+        <foreach item="id" index="index" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>
