@@ -566,6 +566,11 @@ declare namespace API {
     id: number;
   };
 
+  type uploadUsingPOSTParams = {
+    /** id */
+    id?: number;
+  };
+
   type User = {
     accessKey?: string;
     createTime?: string;

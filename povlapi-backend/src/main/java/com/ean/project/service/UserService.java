@@ -76,7 +76,7 @@ public interface UserService extends IService<User> {
     * @author Ean  
     * @date 2024/3/11 17:13
     */
-    String uploadAvatar(MultipartFile file);
+    String uploadAvatar(MultipartFile file, String id);
 
     /**
     * @description: 根据id获取用户

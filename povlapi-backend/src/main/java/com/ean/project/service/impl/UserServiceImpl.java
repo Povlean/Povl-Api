@@ -51,6 +51,8 @@ import static com.ean.project.constant.UserConstant.USER_LOGIN_STATE;
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    private static final String HANDLER_PATH = "http://localhost:7529/api/image/";
+
     @Resource
     private UserMapper userMapper;
 
@@ -62,7 +64,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     private static final String SALT = "povl";
 
-    public static final String BASE_PATH = "D:\\tempImg";
+    public static final String BASE_PATH = "E:\\runoob\\Git-Repository\\Povl-Api\\povlapi-backend\\imgs\\";
 
     @Override
     public long userRegister(UserRegisterRequest userRegisterRequest) {
@@ -221,7 +223,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public String uploadAvatar(MultipartFile file) {
+    @Transactional(rollbackFor = Exception.class)
+    public String uploadAvatar(MultipartFile file, String id) {
         log.info(file.toString());
         String originalName = file.getOriginalFilename();
         String suffix = null;
@@ -230,13 +233,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         String fileName = UUID.randomUUID() + suffix;
         File dir = new File(BASE_PATH);
-        if(!dir.exists()){
+        if(!dir.exists()) {
             dir.mkdirs();
         }
         try {
             file.transferTo(new File(BASE_PATH + fileName));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        // 修改user的路径
+        User updateUser = new User();
+        updateUser.setId(Long.parseLong(id));
+        updateUser.setUserAvatar(HANDLER_PATH + fileName);
+        int count = userMapper.updateById(updateUser);
+        if (count < 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         return fileName;
     }

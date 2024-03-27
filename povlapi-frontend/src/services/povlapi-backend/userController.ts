@@ -137,11 +137,19 @@ export async function updateUserUsingPOST(
 }
 
 /** 上传头像 POST /api/user/upload */
-export async function uploadUsingPOST(body: string, options?: { [key: string]: any }) {
+export async function uploadUsingPOST(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.uploadUsingPOSTParams,
+  body: string,
+  options?: { [key: string]: any },
+) {
   return request<API.BaseResponsestring>('/api/user/upload', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+    },
+    params: {
+      ...params,
     },
     data: body,
     ...(options || {}),

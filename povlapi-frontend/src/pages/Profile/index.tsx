@@ -22,7 +22,6 @@ import { generateTextFileUsingGET, getUserByIdUsingGET, updateUserUsingPOST, upl
 import { ProColumns, ProFormInstance } from '@ant-design/pro-components';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { UploadChangeParam } from 'antd/es/upload/interface';
-import user from 'mock/user';
 
 export type Props = {
   values: API.User;
@@ -72,6 +71,7 @@ const FormDisabledDemo: React.FC<Props> = (props) => {
         setOldData(response.data)
         const { userAvatar } = response.data
         if (userAvatar) {
+          console.log("userAvatar==>" + userAvatar)
           setAvatarUrl(userAvatar)
         }
       }
@@ -114,7 +114,7 @@ const FormDisabledDemo: React.FC<Props> = (props) => {
   }
 
   // 设置头像地址
-  const handleChange = (info: UploadChangeParam<UploadFile<any>>) => {  
+  const handleChange = (info: UploadChangeParam<UploadFile<any>>) => {
     if (info.file.status !== 'uploading') {
       console.log(info.file, info.fileList);
     }
@@ -148,6 +148,8 @@ const FormDisabledDemo: React.FC<Props> = (props) => {
     return true;  
   };
 
+  const userId = oldData?.id;
+
   return (
       <Form
         labelCol={{ span: 4 }}
@@ -162,7 +164,7 @@ const FormDisabledDemo: React.FC<Props> = (props) => {
       >
         <Form.Item label="头像" valuePropName="fileList" getValueFromEvent={normFile}>
           <Upload 
-            action="http://localhost:7529/api/user/upload"
+            action={`http://localhost:7529/api/user/upload/${userId}`}
             listType="picture-card"
             beforeUpload={handleBeforeUpload}
             onChange={handleChange}

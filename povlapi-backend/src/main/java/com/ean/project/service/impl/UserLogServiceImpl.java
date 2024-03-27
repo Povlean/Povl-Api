@@ -50,7 +50,7 @@ public class UserLogServiceImpl extends ServiceImpl<UserLogMapper, UserLog>
             return new ArrayList<>();
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("id", userIds);
+        queryWrapper.in("id", userIds).orderBy(false, false, "createTime");
         List<User> users = userMapper.selectList(queryWrapper);
         if (CollectionUtil.isEmpty(users)) {
             return new ArrayList<>();

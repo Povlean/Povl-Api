@@ -37,7 +37,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 public class UserController {
 
-    private final String FILE_PATH = "E:\\file.txt";
+    private static final String FILE_PATH = "E:\\file.txt";
+
+    private static final String HANDLER_PATH = "http://localhost:7529/api/image/";
 
     @Resource
     private UserService userService;
@@ -99,10 +101,10 @@ public class UserController {
     }
 
     @ApiOperation("上传头像")
-    @PostMapping("/upload")
-    public BaseResponse<String> upload(MultipartFile file){
-        String fileName = userService.uploadAvatar(file);
-        return ResultUtils.success(fileName);
+    @PostMapping("/upload/{id}")
+    public BaseResponse<String> upload(MultipartFile file, @PathVariable String id){
+        String fileName = userService.uploadAvatar(file, id);
+        return ResultUtils.success(HANDLER_PATH + fileName);
     }
 
     @ApiOperation("根据id获取用户")
