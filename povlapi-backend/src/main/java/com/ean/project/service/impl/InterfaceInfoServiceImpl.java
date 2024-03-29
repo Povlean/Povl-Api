@@ -4,13 +4,16 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ean.client_sdk.client.PovlApiClient;
 import com.ean.commonapi.model.entity.InterfaceInfo;
 import com.ean.commonapi.model.entity.User;
 import com.ean.project.common.ErrorCode;
+import com.ean.project.constant.CommonConstant;
 import com.ean.project.exception.BusinessException;
 import com.ean.project.mapper.InterfaceInfoMapper;
+import com.ean.project.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.ean.project.model.dto.interfaceinfo.InterfaceInvokeRequest;
 import com.ean.project.model.enums.PostStatusEnum;
 import com.ean.project.service.InterfaceInfoService;
@@ -19,6 +22,7 @@ import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -128,6 +132,32 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         com.ean.client_sdk.model.User user1 = convertUserType(user);
         PovlApiClient tempClient = new PovlApiClient(loginUser.getAccessKey(), loginUser.getSecretKey());
         return tempClient.getUsernameByPost(user1);
+    }
+
+    @Override
+    public Page<InterfaceInfo> listInterfaceInfoByPage(InterfaceInfoQueryRequest interfaceInfoQueryRequest) {
+        if (interfaceInfoQueryRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 获取分页数量
+        long current = interfaceInfoQueryRequest.getCurrent();
+        long size = interfaceInfoQueryRequest.getPageSize();
+        // 获取前端中的传输数据
+        String sortField = interfaceInfoQueryRequest.getSortField();
+        String sortOrder = interfaceInfoQueryRequest.getSortOrder();
+        String content = interfaceInfoQueryRequest.getContent();
+        // 限制爬虫
+        if (size > 50) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        QueryWrapper<InterfaceInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(StringUtils.isNotBlank(interfaceInfoQueryRequest.getName()), "name", interfaceInfoQueryRequest.getName());
+        queryWrapper.like(StringUtils.isNotBlank(interfaceInfoQueryRequest.getUrl()), "url", interfaceInfoQueryRequest.getUrl());
+        queryWrapper.like(StringUtils.isNotBlank(interfaceInfoQueryRequest.getType()), "type", interfaceInfoQueryRequest.getType());
+        queryWrapper.like(StringUtils.isNotBlank(interfaceInfoQueryRequest.getMethod()), "method", interfaceInfoQueryRequest.getMethod());
+        queryWrapper.orderBy(StringUtils.isNotBlank(sortField),
+                sortOrder.equals(CommonConstant.SORT_ORDER_ASC), sortField);
+        return page(new Page<>(current, size), queryWrapper);
     }
 
     private com.ean.client_sdk.model.User convertUserType(User user) {
