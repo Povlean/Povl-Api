@@ -19,7 +19,7 @@ import {
   message,
 } from 'antd';
 import { generateTextFileUsingGET, getUserByIdUsingGET, updateUserUsingPOST, uploadUsingPOST } from '@/services/povlapi-backend/userController';
-import { ProColumns, ProFormInstance } from '@ant-design/pro-components';
+import { PageContainer, ProColumns, ProFormInstance } from '@ant-design/pro-components';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { UploadChangeParam } from 'antd/es/upload/interface';
 
@@ -151,6 +151,7 @@ const FormDisabledDemo: React.FC<Props> = (props) => {
   const userId = oldData?.id;
 
   return (
+    <PageContainer>
       <Form
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 14 }}
@@ -221,6 +222,7 @@ const FormDisabledDemo: React.FC<Props> = (props) => {
           </Button>
         </Form.Item>
       </Form>
+    </PageContainer>
   );
 };
 

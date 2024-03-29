@@ -16,7 +16,7 @@ const BasicFunc: React.FC = () => {
           cover={
             <img
               alt="example"
-              src="/images/solarTerm03.png"
+              src="/images/catAvatar.jpg"
             />
           }
           actions={[
@@ -26,8 +26,8 @@ const BasicFunc: React.FC = () => {
           ]}
         >
           <Meta
-            title="天气查询接口"
-            description="用于查询降水、天气、运动指数等数据的接口--该接口由和风天气API提供"
+            title="随机生成头像接口"
+            description="用于随机生成一张用于头像的图片"
           />
         </Card>
 
@@ -46,8 +46,8 @@ const BasicFunc: React.FC = () => {
           ]}
         >
           <Meta
-            title="音乐查询接口"
-            description="用于查询音乐名、专辑名、作者等数据的接口--该接口由网易云音乐API提供"
+            title="网易云音乐信息查询"
+            description="使用音乐id返回具体的音乐信息"
           />
         </Card>
 
@@ -56,7 +56,7 @@ const BasicFunc: React.FC = () => {
           cover={
             <img
               alt="example"
-              src="/images/lp.jpg"
+              src="/images/news.jpg"
             />
           }
           actions={[
@@ -66,14 +66,19 @@ const BasicFunc: React.FC = () => {
           ]}
         >
           <Meta
-            title="图书推荐接口"
-            description="用于查询书名、作家、年份、书籍内容等数据的接口--该接口由豆瓣API提供"
+            title="获取头条新闻"
+            description="用于查询近期热点新闻"
           />
         </Card>
       </div>
-      <Link to="/basicFunc2" style={{marginLeft: '950px' }}>
-        下一页
-      </Link> 
+      <div style={{ display: 'inline-block'}}>
+        <Link to="/basic" style={{marginLeft: '50px' }}>
+          上一页
+        </Link> 
+        <Link to="/basicFunc3" style={{marginLeft: '900px' }}>
+          下一页
+        </Link> 
+      </div>
     </PageContainer>
   );
 

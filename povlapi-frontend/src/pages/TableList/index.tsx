@@ -174,11 +174,6 @@ const TableList: React.FC = () => {
       }
     },
     {
-      title: '描述',
-      dataIndex: 'description',
-      valueType: 'text',
-    },
-    {
       title: '类型',
       dataIndex: 'type',
       valueType: 'text',
@@ -204,56 +199,9 @@ const TableList: React.FC = () => {
       }
     },
     {
-      title: '请求头',
-      dataIndex: 'requestHeader',
-      valueType: 'textarea',
-      formItemProps: {
-        rules: [{
-          required: true
-        }]
-      }
-    },
-    {
       title: '请求参数',
       dataIndex: 'requestParams',
       valueType: 'jsonCode',
-    },
-    {
-      title: '响应头',
-      dataIndex: 'responseHeader',
-      valueType: 'textarea',
-      formItemProps: {
-        rules: [{
-          required: true
-        }]
-      }
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      hideInForm: true,
-      valueEnum: {
-        0: {
-          text: '关闭',
-          status: 'Default',
-        },
-        1: {
-          text: '开启',
-          status: 'Processing',
-        },
-      },
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime',
-      valueType: 'dateTime',
-      hideInForm: true,
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'updateTime',
-      valueType: 'dateTime',
-      hideInForm: true,
     },
     {
       title: '操作',
@@ -269,24 +217,25 @@ const TableList: React.FC = () => {
         >
           修改
         </a>,
-        record.status === 0 ? <a
-          key="config"
-          onClick={() => {
-            handleOnline(record);
-          }}
-        >
-          发布
-        </a> : null,
-        record.status === 1 ? <Button
-          type='text'
-          key="config"
-          danger
-          onClick={() => {
-            handleOffline(record);
-          }}
-        >
-          下线
-        </Button> : null,
+        // record.status === 0 ? <a
+        //   type='text'
+        //   key="config"
+        //   onClick={() => {
+        //     handleOnline(record);
+        //   }}
+        // >
+        //   发布
+        // </a> : null,
+        // record.status === 1 ? <Button
+        //   type='text'
+        //   key="config"
+        //   danger
+        //   onClick={() => {
+        //     handleOffline(record);
+        //   }}
+        // >
+        //   下线
+        // </Button> : null,
         <Button
           type='text'
           key="config"
@@ -329,7 +278,7 @@ const TableList: React.FC = () => {
           const res: any = await listInterfaceInfoByPageUsingGET({
             ...params
           })
-          if (res?.data) {
+          if (res?.data) { 
             return {
               data: res?.data.records || [],
               success: true,
@@ -364,7 +313,7 @@ const TableList: React.FC = () => {
                   id="pages.searchTable.totalServiceCalls"
                   defaultMessage="Total number of service calls"
                 />{' '}
-                {selectedRowsState.reduce((pre, item) => pre + item.callNo!, 0)}{' '}
+                {selectedRowsState.reduce((pre, item) => pre + item.isDelete!, 0)}{' '}
                 <FormattedMessage id="pages.searchTable.tenThousand" defaultMessage="万" />
               </span>
             </div>

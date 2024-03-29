@@ -170,13 +170,7 @@ public class InterfaceInfoController {
         return ResultUtils.success(InterfaceInfoList);
     }
 
-    /**
-     * 分页获取列表
-     *
-     * @param interfaceInfoQueryRequest
-     * @param request
-     * @return
-     */
+    @ApiOperation("分页获取列表")
     @GetMapping("/list/page")
     public BaseResponse<Page<InterfaceInfo>> listInterfaceInfoByPage(InterfaceInfoQueryRequest interfaceInfoQueryRequest, HttpServletRequest request) {
         if (interfaceInfoQueryRequest == null) {

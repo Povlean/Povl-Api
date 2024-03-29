@@ -122,6 +122,18 @@ export default [
     component: './OnArticle',
   },
   {
+    hideInMenu: true,
+    path: '/basicFunc2',
+    name: 'basicFunc2',
+    component: './BasicFunc2',
+  },
+  {
+    hideInMenu: true,
+    path: '/basicFunc3',
+    name: 'basicFunc3',
+    component: './BasicFunc3',
+  },
+  {
     path: '*',
     layout: false,
     component: './404',

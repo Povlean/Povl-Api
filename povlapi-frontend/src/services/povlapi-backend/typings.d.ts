@@ -40,6 +40,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListNewsVO = {
+    code?: number;
+    data?: NewsVO[];
+    message?: string;
+  };
+
   type BaseResponseListPostVO = {
     code?: number;
     data?: PostVO[];
@@ -67,6 +73,12 @@ declare namespace API {
   type BaseResponselong = {
     code?: number;
     data?: number;
+    message?: string;
+  };
+
+  type BaseResponseMusicInfoVO = {
+    code?: number;
+    data?: MusicInfoVO;
     message?: string;
   };
 
@@ -109,6 +121,12 @@ declare namespace API {
   type BaseResponseSearchBookVO = {
     code?: number;
     data?: SearchBookVO;
+    message?: string;
+  };
+
+  type BaseResponseStockVO = {
+    code?: number;
+    data?: StockVO;
     message?: string;
   };
 
@@ -440,11 +458,30 @@ declare namespace API {
     viewName?: string;
   };
 
+  type musicInfoUsingPOSTParams = {
+    /** id */
+    id: string;
+  };
+
+  type MusicInfoVO = {
+    album?: string;
+    cover?: string;
+    id?: string;
+    sings?: string;
+    songs?: string;
+  };
+
   type MusicVO = {
     category?: string;
     description?: string;
     music?: string;
     singer?: string;
+  };
+
+  type NewsVO = {
+    hot?: string;
+    name?: string;
+    url?: string;
   };
 
   type OrderItem = {
@@ -561,6 +598,31 @@ declare namespace API {
     pressPlace?: string;
   };
 
+  type stockUsingGETParams = {
+    /** symbol */
+    symbol: string;
+  };
+
+  type StockVO = {
+    amount?: string;
+    amplitude?: string;
+    avg_price?: string;
+    chg?: string;
+    current?: string;
+    float_market_capital?: string;
+    high?: string;
+    last_close?: string;
+    low?: string;
+    market_capital?: string;
+    open?: string;
+    percent?: string;
+    symbol?: string;
+    timestamp?: string;
+    trade_volume?: string;
+    turnover_rate?: string;
+    volume?: string;
+  };
+
   type thumbPostUsingGETParams = {
     /** id */
     id: number;
@@ -568,7 +630,7 @@ declare namespace API {
 
   type uploadUsingPOSTParams = {
     /** id */
-    id?: number;
+    id: string;
   };
 
   type User = {
@@ -649,7 +711,7 @@ declare namespace API {
   type UserVO = {
     createTime?: string;
     gender?: string;
-    id?: number;
+    id?: string;
     job?: string;
     unionId?: string;
     updateTime?: string;

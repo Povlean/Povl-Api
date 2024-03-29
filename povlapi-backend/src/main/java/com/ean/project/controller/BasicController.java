@@ -6,21 +6,17 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ean.commonapi.model.entity.Music;
-import com.ean.commonapi.model.vo.ForecastVO;
-import com.ean.commonapi.model.vo.MusicVO;
-import com.ean.commonapi.model.vo.SearchBookVO;
-import com.ean.commonapi.model.vo.WeatherVO;
+import com.ean.commonapi.model.vo.*;
 import com.ean.project.common.BaseResponse;
 import com.ean.project.common.ErrorCode;
 import com.ean.project.common.ResultUtils;
 import com.ean.project.exception.BusinessException;
 import com.ean.project.service.MusicService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.util.Json;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -39,10 +35,14 @@ public class BasicController {
 
     public static final String BOOK_KEY = "ae1718d4587744b0b79f940fbef69e77";
 
+    public static final String CLIENT_ID = "XkQ6F5LDT63KszN4lCdpc0oY";
+
+    public static final String CLIENT_SECRET = "efQjAnMVqBBOwMpNMqwMQpxaePc00np3";
 
     @Resource
     private MusicService musicService;
 
+    @ApiOperation("城市天气接口")
     @GetMapping("/weather/{cityName}")
     public BaseResponse<WeatherVO> weatherCondition(@PathVariable String cityName) {
         if (StringUtils.isAnyBlank(cityName)) {
@@ -85,6 +85,7 @@ public class BasicController {
         return ResultUtils.success(weatherVO);
     }
 
+    @ApiOperation("热榜音乐接口")
     @GetMapping("/music")
     public BaseResponse<List<MusicVO>> getMusicTop10() {
         List<Music> list = musicService.list();
@@ -100,6 +101,7 @@ public class BasicController {
         return ResultUtils.success(musicVOList);
     }
 
+    @ApiOperation("书籍查询接口")
     @GetMapping("/book/{isbnNum}")
     public BaseResponse<SearchBookVO> searchBookByIsbn(@PathVariable String isbnNum) {
         if (StringUtils.isAnyBlank(isbnNum)) {
@@ -120,5 +122,114 @@ public class BasicController {
                 .pressDate(data.getString("pressDate"))
                 .build();
         return ResultUtils.success(searchBookVO);
+    }
+
+    @ApiOperation("随机一言接口")
+    @GetMapping("/words")
+    public BaseResponse<String> searchBookByIsbn() {
+        String url = "https://tenapi.cn/v2/yiyan";
+        String body = HttpRequest.get(url)
+                .execute()
+                .body();
+        return ResultUtils.success(body);
+    }
+
+    @ApiOperation("网易云音乐信息查询")
+    @PostMapping("/music/{id}")
+    public BaseResponse<MusicInfoVO> musicInfo(@PathVariable String id) {
+        String url = "https://tenapi.cn/v2/songinfo?id=" + id;
+        String body = HttpRequest.post(url)
+                .execute()
+                .body();
+        JSONObject jsonObject = JSONObject.parseObject(body);
+        String data = jsonObject.getString("data");
+        JSONObject jsonObject1 = JSONObject.parseObject(data);
+        MusicInfoVO musicInfoVO = MusicInfoVO.builder()
+                .album(jsonObject1.getString("album"))
+                .cover(jsonObject1.getString("cover"))
+                .sings(jsonObject1.getString("sings"))
+                .songs(jsonObject1.getString("songs"))
+                .id(id).build();
+        return ResultUtils.success(musicInfoVO);
+    }
+
+    @ApiOperation("热榜新闻查询")
+    @PostMapping("/news")
+    public BaseResponse<List<NewsVO>> hotNewList() {
+        String url = "https://tenapi.cn/v2/zhihuhot";
+        String body = HttpRequest.get(url)
+                .execute()
+                .body();
+        JSONArray jsonArray = JSONArray.parseArray(JSONObject.parseObject(body)
+                .getString("data"));
+        List<NewsVO> list = new ArrayList<>();
+        for (int i = 0;i < 10;i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            NewsVO newsVO = NewsVO.builder().name(jsonObject.getString("name"))
+                    .hot(jsonObject.getString("hot"))
+                    .url(jsonObject.getString("url"))
+                    .build();
+            list.add(newsVO);
+        }
+        return ResultUtils.success(list);
+    }
+
+    @ApiOperation("随机头像生成")
+    @GetMapping("/head")
+    public BaseResponse<String> getRandomHead() {
+        String url = "https://v2.api-m.com/api/head";
+        String body = HttpRequest.get(url)
+                .execute()
+                .body();
+        String data = JSONObject.parseObject(body).getString("data");
+        return ResultUtils.success(data);
+    }
+
+    @ApiOperation("随机昵称生成")
+    @GetMapping("/nickname")
+    public BaseResponse<String> getRandomNickname() {
+        String url = "https://api.codemao.cn/api/user/random/nickname";
+        String body = HttpRequest.get(url)
+                .execute()
+                .body();
+        String data = JSONObject.parseObject(body).getString("data");
+        String nickname = JSONObject.parseObject(data).getString("nickname");
+        return ResultUtils.success(nickname);
+    }
+
+    @ApiOperation("股票趋势接口")
+    @GetMapping("/stock/{symbol}")
+    public BaseResponse<StockVO> stock(@PathVariable String symbol) {
+        String url = "https://stock.xueqiu.com/v5/stock/realtime/quotec.json?symbol=" + symbol;
+        String body = HttpRequest.get(url)
+                .execute()
+                .body();
+        String data = JSONObject.parseObject(body).getString("data");
+        JSONObject jsonObject = JSONArray.parseArray(data).getJSONObject(0);
+        StockVO stockVO = StockVO.builder()
+                .symbol(jsonObject.getString("symbol"))
+                .current(jsonObject.getString("current"))
+                .amount(jsonObject.getString("amount"))
+                .avg_price(jsonObject.getString("avg_price"))
+                .amplitude(jsonObject.getString("amplitude"))
+                .chg(jsonObject.getString("chg"))
+                .float_market_capital(jsonObject.getString("float_market_capital"))
+                .market_capital(jsonObject.getString("market_capital"))
+                .high(jsonObject.getString("high"))
+                .low(jsonObject.getString("low"))
+                .last_close(jsonObject.getString("last_close"))
+                .volume(jsonObject.getString("volume"))
+                .trade_volume(jsonObject.getString("trade_volume"))
+                .turnover_rate(jsonObject.getString("turnover_rate"))
+                .timestamp(jsonObject.getString("timestamp"))
+                .build();
+        return ResultUtils.success(stockVO);
+    }
+
+    @ApiOperation("股票趋势接口")
+    @GetMapping("/ai")
+    public BaseResponse<StockVO> talkToErnie() {
+
+        return null;
     }
 }

@@ -50,18 +50,18 @@ const Music: React.FC = () => {
         <div style={{ marginBottom: '20px' }}>
             <Row gutter={16}>
                 <Col span={8}>
-                    <Card title="坂本龙一和他的音乐旅途" bordered={false}>
-                        <img src="images/img4.jpg" alt="Card Image 1" style={{ width: '100%', height: 'auto' }} />
+                    <Card title="静谧是向上的力量" bordered={false}>
+                        <img src="images/图书.jpg" alt="Card Image 1" style={{ width: '100%', height: 'auto' }} />
                     </Card>
                 </Col>
                 <Col span={8}>
-                    <Card title="Flower Dance" bordered={false}>
-                        <img src="images/img3.jpg" alt="Card Image 1" style={{ width: '100%', height: 'auto' }} />
+                    <Card title="书籍是人类进步的阶梯" bordered={false}>
+                        <img src="images/图书2.jpg" alt="Card Image 1" style={{ width: '100%', height: 'auto' }} />
                     </Card>
                 </Col>
                 <Col span={8}>
-                    <Card title="你的努力，云会知道" bordered={false}>
-                        <img src="images/img5.jpg" alt="Card Image 1" style={{ width: '100%', height: 'auto' }} />
+                    <Card title="书中没有智慧，智慧在人心中" bordered={false}>
+                        <img src="images/图书3.jpg" alt="Card Image 1" style={{ width: '100%', height: 'auto' }} />
                     </Card>
                 </Col>
             </Row>
