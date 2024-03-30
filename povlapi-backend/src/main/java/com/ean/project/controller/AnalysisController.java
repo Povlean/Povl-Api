@@ -34,9 +34,10 @@ public class AnalysisController {
 
     @ApiOperation("统计总共接口调用次数")
     @GetMapping("/top")
-    public BaseResponse<List<InterfaceAnalVO>> getTopInvokeInterface() {
+    public BaseResponse<List<AnalysisInfoBO>> getTopInvokeInterface() {
         List<AnalysisInfoBO> topInvokeInterface = analysisService.getTopInvokeInterface();
-        return ResultUtils.success(iInterfaceInfoMapper.interfaceToAnalVOList(topInvokeInterface));
+        return ResultUtils.success(topInvokeInterface);
+        // return null;
     }
 
     @ApiOperation("统计每日接口调用次数")

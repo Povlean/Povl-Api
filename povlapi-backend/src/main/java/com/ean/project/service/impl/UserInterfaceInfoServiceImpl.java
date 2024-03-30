@@ -1,7 +1,9 @@
 package com.ean.project.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ean.commonapi.model.entity.InterfaceInfo;
 import com.ean.commonapi.model.entity.User;
 import com.ean.commonapi.model.entity.UserInterfaceInfo;
 import com.ean.project.common.DeleteRequest;
@@ -12,6 +14,7 @@ import com.ean.project.model.dto.userinterfaceinfo.UserInterfaceInfoAddRequest;
 import com.ean.project.model.dto.userinterfaceinfo.UserInterfaceInfoUpdateRequest;
 import com.ean.project.service.UserInterfaceInfoService;
 import com.ean.project.service.UserService;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -42,9 +45,6 @@ public class UserInterfaceInfoServiceImpl extends ServiceImpl<UserInterfaceInfoM
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "接口或用户不存在");
             }
         }
-        if (userInterfaceInfo.getLeftNum() < 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "剩余次数不能小于 0");
-        }
     }
 
     @Override
@@ -53,11 +53,10 @@ public class UserInterfaceInfoServiceImpl extends ServiceImpl<UserInterfaceInfoM
         if (interfaceInfoId <= 0 || userId <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        UpdateWrapper<UserInterfaceInfo> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("interfaceInfoId", interfaceInfoId);
-        updateWrapper.eq("userId", userId);
-        updateWrapper.setSql("leftNum = leftNum - 1, totalNum = totalNum + 1");
-        return this.update(updateWrapper);
+        UserInterfaceInfo userInterfaceInfo = new UserInterfaceInfo();
+        userInterfaceInfo.setUserId(userId);
+        userInterfaceInfo.setInterfaceInfoId(interfaceInfoId);
+        return save(userInterfaceInfo);
     }
 
     @Override

@@ -48,7 +48,7 @@ import static com.ean.client_sdk.constants.ApiConstant.*;
 @Component
 public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
-    public static final List<String> IP_WHITE_LIST = Arrays.asList("127.0.0.1", "0:0:0:0:0:0:0:1");
+    // public static final List<String> IP_WHITE_LIST = Arrays.asList("127.0.0.1", "0:0:0:0:0:0:0:1");
 
     public static final long FIVE_MINUTE = 5 * 60l;
 
@@ -75,11 +75,11 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         String sourceAddress = Objects.requireNonNull(request.getLocalAddress()).getHostString();
         // 2.黑白名单
         ServerHttpResponse response = exchange.getResponse();
-        if (!IP_WHITE_LIST.contains(sourceAddress)) {
-            // 设置状态直接拦截
-            response.setStatusCode(HttpStatus.FORBIDDEN);
-            return response.setComplete();
-        }
+        // if (!IP_WHITE_LIST.contains(sourceAddress)) {
+        //     // 设置状态直接拦截
+        //     response.setStatusCode(HttpStatus.FORBIDDEN);
+        //     return response.setComplete();
+        // }
         // 3.AK SK 用户鉴权
         HttpHeaders headers = request.getHeaders();
         boolean isSuccess = verifyRoot(headers);
@@ -102,6 +102,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     // 校验AK SK用户权限
     public boolean verifyRoot(HttpHeaders headers) {
         String accessKey = headers.getFirst(ACCESS_KEY);
+        String secretKey = headers.getFirst(SECRET_KEY);
         // 从数据库中取出AK进行校验
         User invokeUser = innerUserService.getInvokeUser(accessKey);
         if (ObjectUtil.isNull(invokeUser)) {
@@ -121,11 +122,14 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         String sign = headers.getFirst(SIGN);
         String body = headers.getFirst(BODY);
         // 校验secretKey
-        String secretKey = invokeUser.getSecretKey();
+        // String userSecretKey = invokeUser.getSecretKey();
         String metaSign = SignUtil.getSign(body, secretKey);
         if (!metaSign.equals(sign)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        // if (!secretKey.equals(userSecretKey)) {
+        //     throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        // }
         return true;
     }
 
@@ -149,31 +153,31 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                             return super.writeWith(fluxBody.map(dataBuffer -> {
                                 // 调用后调用总量+1，剩余调用次数-1
                                 // 这里可以考虑替换为redis+SpringScheduler
-                                String redisKey = String.format("invoke:count:%s:%s", interfaceInfoId, userId);
-                                Object obj = redisTemplate.opsForValue().get(redisKey);
-                                if (ObjectUtil.isNull(obj)) {
-                                    // 如果redis中不存在
-                                    InvokeCountBO invokeCountBO = InvokeCountBO.builder()
-                                            .userId(userId)
-                                            .interfaceInfoId(interfaceInfoId)
-                                            .count(1)
-                                            .build();
-                                    redisTemplate.opsForValue().set(redisKey, JSONUtil.toJsonStr(invokeCountBO), 30, TimeUnit.MINUTES);
-                                } else {
-                                    // 如果Redis中已经存在
-                                    String res = redisTemplate.opsForValue().get(redisKey);
-                                    String count = JSON.parseObject(res).getString("count");
-                                    Integer countInt = Integer.valueOf(count);
-                                    // 调用次数加1
-                                    countInt = countInt + 1;
-                                    InvokeCountBO invokeCountBO = InvokeCountBO.builder()
-                                            .userId(userId)
-                                            .interfaceInfoId(interfaceInfoId)
-                                            .count(countInt)
-                                            .build();
-                                    redisTemplate.opsForValue().set(redisKey, JSONUtil.toJsonStr(invokeCountBO), 30, TimeUnit.MINUTES);
-                                }
-                                // innerUserInterfaceInfoService.invokeCount(interfaceInfoId, userId);
+                                // String redisKey = String.format("invoke:count:%s:%s", interfaceInfoId, userId);
+                                // Object obj = redisTemplate.opsForValue().get(redisKey);
+                                // if (ObjectUtil.isNull(obj)) {
+                                //     // 如果redis中不存在
+                                //     InvokeCountBO invokeCountBO = InvokeCountBO.builder()
+                                //             .userId(userId)
+                                //             .interfaceInfoId(interfaceInfoId)
+                                //             .count(1)
+                                //             .build();
+                                //     redisTemplate.opsForValue().set(redisKey, JSONUtil.toJsonStr(invokeCountBO), 30, TimeUnit.MINUTES);
+                                // } else {
+                                //     // 如果Redis中已经存在
+                                //     String res = redisTemplate.opsForValue().get(redisKey);
+                                //     String count = JSON.parseObject(res).getString("count");
+                                //     Integer countInt = Integer.valueOf(count);
+                                //     // 调用次数加1
+                                //     countInt = countInt + 1;
+                                //     InvokeCountBO invokeCountBO = InvokeCountBO.builder()
+                                //             .userId(userId)
+                                //             .interfaceInfoId(interfaceInfoId)
+                                //             .count(countInt)
+                                //             .build();
+                                //     redisTemplate.opsForValue().set(redisKey, JSONUtil.toJsonStr(invokeCountBO), 30, TimeUnit.MINUTES);
+                                // }
+                                innerUserInterfaceInfoService.invokeCount(interfaceInfoId, userId);
                                 byte[] content = new byte[dataBuffer.readableByteCount()];
                                 dataBuffer.read(content);
                                 DataBufferUtils.release(dataBuffer);//释放掉内存

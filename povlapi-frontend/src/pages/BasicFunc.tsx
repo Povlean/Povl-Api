@@ -27,7 +27,7 @@ const BasicFunc: React.FC = () => {
         >
           <Meta
             title="天气查询接口"
-            description="用于查询降水、天气、运动指数等数据的接口--该接口由和风天气API提供"
+            description="用于查询未来七天的最高最低气温"
           />
         </Card>
 
@@ -46,8 +46,8 @@ const BasicFunc: React.FC = () => {
           ]}
         >
           <Meta
-            title="音乐查询接口"
-            description="用于查询音乐名、专辑名、作者等数据的接口--该接口由网易云音乐API提供"
+            title="音乐推荐接口"
+            description="用于推荐网易云音乐的最热音乐"
           />
         </Card>
 
@@ -67,7 +67,7 @@ const BasicFunc: React.FC = () => {
         >
           <Meta
             title="图书推荐接口"
-            description="用于查询书名、作家、年份、书籍内容等数据的接口--该接口由豆瓣API提供"
+            description="使用图书的isbn编号查询书名、作家、年份、书籍内容等数据"
           />
         </Card>
       </div>

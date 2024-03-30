@@ -20,6 +20,6 @@ public class AnalysisInfoBO {
     private String interfaceName;
 
     @NotNull(message = "统计调用次数不能为空")
-    private Integer totalNum;
+    private Integer count;
 
 }

@@ -31,12 +31,7 @@ public class UserInterfaceInfo implements Serializable {
     /**
      * 总调用次数
      */
-    private Integer totalNum;
-
-    /**
-     * 剩余调用次数
-     */
-    private Integer leftNum;
+    private Integer count;
 
     /**
      * 0-正常，1-禁用

@@ -2,11 +2,11 @@ package com.ean.project.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ean.client_sdk.client.PovlApiClient;
+import com.ean.client_sdk.model.Number;
 import com.ean.commonapi.model.entity.InterfaceInfo;
 import com.ean.commonapi.model.entity.User;
 import com.ean.project.common.ErrorCode;
@@ -22,13 +22,14 @@ import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -69,13 +70,11 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         }
         String method = interfaceInfo.getMethod();
         String name = interfaceInfo.getName();
-        String requestHeader = interfaceInfo.getRequestHeader();
-        String responseHeader = interfaceInfo.getResponseHeader();
         String type = interfaceInfo.getType();
         String url = interfaceInfo.getUrl();
         // 校验是否为添加项
         if (isAdd) {
-            if (StringUtils.isAnyBlank(method, name, requestHeader, responseHeader, type, url)) {
+            if (StringUtils.isAnyBlank(method, name, type, url)) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
             }
         }
@@ -83,7 +82,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         if (StringUtils.isBlank(name) || name.length() > 20) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        if (StringUtils.isAnyBlank(method, requestHeader, responseHeader, type, url)) {
+        if (StringUtils.isAnyBlank(method, type, url)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
     }
@@ -115,7 +114,6 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         }
         Long id = interfaceInvokeRequest.getId();
         String requestParams = interfaceInvokeRequest.getRequestParams();
-        log.info("requestParams==>" + requestParams);
         // 判断接口是否存在
         InterfaceInfo oldInterfaceinfo = this.getById(id);
         if (ObjectUtil.isEmpty(oldInterfaceinfo)) {
@@ -123,15 +121,43 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         }
         if (oldInterfaceinfo.getStatus() == PostStatusEnum.OFFLINE.getValue()) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }        
+        }
+        String requestUrl = oldInterfaceinfo.getRequestUrl();
         User loginUser = userService.getLoginUser(request);
-        // 这里需要在请求体中校验 ak sk
-        User user = verifyKey(requestParams, loginUser);
+        com.ean.client_sdk.model.User user1 = convertUserType(loginUser);
         // Client转发到网关层
-        // 网关层转发到对应的请求路径中
-        com.ean.client_sdk.model.User user1 = convertUserType(user);
-        PovlApiClient tempClient = new PovlApiClient(loginUser.getAccessKey(), loginUser.getSecretKey());
-        return tempClient.getUsernameByPost(user1);
+        if (requestUrl.contains("user")) {
+            if (!verifyKey(requestParams, loginUser)) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            }
+            Gson gson = new Gson();
+            com.ean.client_sdk.model.User user = gson.fromJson
+                            (requestParams, com.ean.client_sdk.model.User.class);
+            PovlApiClient tempClient = new PovlApiClient(loginUser.getAccessKey(), loginUser.getSecretKey(), requestUrl);
+            return tempClient.getUsernameByPost(user);
+        }
+        // 获取algoController.minus的路径，
+        if (requestUrl.contains("algo")) {
+            if (!verifyKey(requestParams, loginUser)) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            }
+            Gson gson = new Gson();
+            Number number = gson.fromJson(requestParams, Number.class);
+            PovlApiClient tempClient = new PovlApiClient(loginUser.getAccessKey(), loginUser.getSecretKey(), requestUrl);
+            if (requestUrl.contains("minus")) {
+                return tempClient.minusNumber(number, user1);
+            }
+            if (requestUrl.contains("add")) {
+                return tempClient.algoAddNumber(number, user1);
+            }
+            if (requestUrl.contains("multi")) {
+                return tempClient.mutilNumber(number, user1);
+            }
+            if (requestUrl.contains("divided")) {
+                return tempClient.dividedNumber(number, user1);
+            }
+        }
+        return null;
     }
 
     @Override
@@ -172,7 +198,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         return user1;
     }
 
-    private User verifyKey(String requestParams, User loginUser) {
+    private Boolean verifyKey(String requestParams, User loginUser) {
         String accessKey = loginUser.getAccessKey();
         String secretKey = loginUser.getSecretKey();
         // 从请求参数中拆解ak sk
@@ -186,8 +212,25 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         if (!accessKey.equals(reqAk) || !secretKey.equals(reqSk)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        return user;
+        return true;
     }
+
+    // private Number verifyKey(String requestParams, User loginUser) {
+    //     String accessKey = loginUser.getAccessKey();
+    //     String secretKey = loginUser.getSecretKey();
+    //     // 从请求参数中拆解ak sk
+    //     Gson gson = new Gson();
+    //     User user = gson.fromJson(requestParams, User.class);
+    //     String reqAk = user.getAccessKey();
+    //     String reqSk = user.getSecretKey();
+    //     if (StringUtils.isAnyBlank(reqAk, reqSk)) {
+    //         throw new BusinessException(ErrorCode.NO_ACESSKEY_SERECTKEY_ERROR);
+    //     }
+    //     if (!accessKey.equals(reqAk) || !secretKey.equals(reqSk)) {
+    //         throw new BusinessException(ErrorCode.PARAMS_ERROR);
+    //     }
+    //     return user;
+    // }
 
     private String subApiSuffix(String metaPath) {
         // 去除/api

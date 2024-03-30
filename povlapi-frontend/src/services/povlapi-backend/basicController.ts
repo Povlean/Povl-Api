@@ -2,6 +2,14 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
+/** 股票趋势接口 GET /api/basic/ai */
+export async function talkToErnieUsingGET(options?: { [key: string]: any }) {
+  return request<API.BaseResponseStockVO>('/api/basic/ai', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 书籍查询接口 GET /api/basic/book/${param0} */
 export async function searchBookByIsbnUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

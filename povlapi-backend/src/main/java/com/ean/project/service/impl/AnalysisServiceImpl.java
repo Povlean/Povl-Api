@@ -15,6 +15,7 @@ import com.ean.project.mapper.UserInterfaceInfoMapper;
 import com.ean.project.mapper.UserLogMapper;
 import com.ean.project.service.AnalysisService;
 import com.ean.project.service.InterfaceInfoService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  * @author:ean
  */
 @Service
+@Slf4j
 public class AnalysisServiceImpl extends ServiceImpl<UserInterfaceInfoMapper, UserInterfaceInfo> implements AnalysisService {
 
     @Resource
@@ -54,13 +56,15 @@ public class AnalysisServiceImpl extends ServiceImpl<UserInterfaceInfoMapper, Us
             interfaceInfoIds.add(interfaceInfoId);
         });
         Map<Long, String> resMap = interfaceInfoService.getNameByIdList(interfaceInfoIds);
-        return analysisList.stream().map(a -> {
+        List<AnalysisInfoBO> analysisInfoBOList = analysisList.stream().map(a -> {
             String resName = resMap.get(a.getInterfaceInfoId());
             return AnalysisInfoBO.builder()
                     .interfaceName(resName)
-                    .totalNum(a.getTotalNum())
+                    .count(a.getCount())
                     .build();
         }).collect(Collectors.toList());
+        log.info("analysisInfoBOList===>" + analysisInfoBOList);
+        return analysisInfoBOList;
     }
 
     @Override

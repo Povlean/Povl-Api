@@ -118,10 +118,10 @@ public class InterfaceInfoController {
         if (interfaceInfoUpdateRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        InterfaceInfo InterfaceInfo = new InterfaceInfo();
-        BeanUtils.copyProperties(interfaceInfoUpdateRequest, InterfaceInfo);
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        BeanUtils.copyProperties(interfaceInfoUpdateRequest, interfaceInfo);
         // 参数校验
-        interfaceInfoService.validInterfaceInfo(InterfaceInfo, false);
+        interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
         User user = userService.getLoginUser(request);
         long id = interfaceInfoUpdateRequest.getId();
         // 判断是否存在
@@ -133,7 +133,7 @@ public class InterfaceInfoController {
         if (!oldInterfaceInfo.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
-        boolean result = interfaceInfoService.updateById(InterfaceInfo);
+        boolean result = interfaceInfoService.updateById(interfaceInfo);
         return ResultUtils.success(result);
     }
 

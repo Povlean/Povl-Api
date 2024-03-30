@@ -22,9 +22,11 @@ public class PovlApiClientConfig {
 
     private String secretKey;
 
+    private String requestUrl;
+
     @Bean
     public PovlApiClient povlApiClient() {
-        return new PovlApiClient(accessKey, secretKey);
+        return new PovlApiClient(accessKey, secretKey, requestUrl);
     }
 
 }

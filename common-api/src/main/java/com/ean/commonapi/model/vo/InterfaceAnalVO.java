@@ -18,6 +18,6 @@ public class InterfaceAnalVO {
     private String interfaceName;
 
     @NotNull(message = "调用总数不能为空")
-    private Integer totalNum;
+    private Integer count;
 
 }

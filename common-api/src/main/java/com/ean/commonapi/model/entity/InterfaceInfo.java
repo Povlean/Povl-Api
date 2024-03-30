@@ -66,6 +66,11 @@ public class InterfaceInfo implements Serializable {
     private String method;
 
     /*
+     * 转发后缀
+     * */
+    private String requestUrl;
+
+    /*
     * 用户ID
     * */
     private Long userId;

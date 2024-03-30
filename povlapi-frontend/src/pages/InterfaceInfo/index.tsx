@@ -45,6 +45,7 @@ const Index: React.FC = () => {
     setInvokeLoading(true);
     try {
       const res = await invokeInterfaceInfoUsingPOST({
+
         id: params.id,
         ...values,
       });
@@ -64,6 +65,7 @@ const Index: React.FC = () => {
             <Descriptions.Item label="接口状态">{data.status ? '开启' : '关闭'}</Descriptions.Item>
             <Descriptions.Item label="描述">{data.description}</Descriptions.Item>
             <Descriptions.Item label="请求地址">{data.url}</Descriptions.Item>
+            <Descriptions.Item label="转发后缀">{data.requestUrl}</Descriptions.Item>
             <Descriptions.Item label="请求方法">{data.method}</Descriptions.Item>
             <Descriptions.Item label="请求参数">{data.requestParams}</Descriptions.Item>
             <Descriptions.Item label="请求头">{data.requestHeader}</Descriptions.Item>

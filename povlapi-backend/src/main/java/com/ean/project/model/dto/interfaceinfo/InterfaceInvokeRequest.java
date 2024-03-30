@@ -19,6 +19,11 @@ public class InterfaceInvokeRequest implements Serializable {
     private Long id;
 
     /**
+     * 转发后缀
+     */
+    private String requestUrl;
+
+    /**
      * 请求参数
      */
     private String requestParams;

@@ -205,8 +205,8 @@ declare namespace API {
   type InputStream = true;
 
   type InterfaceAnalVO = {
+    count: number;
     interfaceName: string;
-    totalNum: number;
   };
 
   type InterfaceInfo = {
@@ -218,6 +218,7 @@ declare namespace API {
     name?: string;
     requestHeader?: string;
     requestParams?: string;
+    requestUrl?: string;
     responseHeader?: string;
     status?: number;
     type?: string;
@@ -247,6 +248,7 @@ declare namespace API {
     name?: string;
     requestHeader?: string;
     requestParams?: string;
+    requestUrl?: string;
     responseHeader?: string;
     status?: number;
     type?: string;
@@ -256,6 +258,7 @@ declare namespace API {
   type InterfaceInvokeRequest = {
     id?: number;
     requestParams?: string;
+    requestUrl?: string;
   };
 
   type listInterfaceInfoByPageUsingGETParams = {
@@ -661,13 +664,12 @@ declare namespace API {
   };
 
   type UserInterfaceInfo = {
+    count?: number;
     createTime?: string;
     id?: number;
     interfaceInfoId?: number;
     isDelete?: number;
-    leftNum?: number;
     status?: number;
-    totalNum?: number;
     updateTime?: string;
     userId?: number;
   };

@@ -9,6 +9,7 @@ declare namespace API {
     id?: number;
     isDelete?: number;
     method?: string;
+    requestUrl?: string;
     name?: string;
     requestParams?: string;
     requestHeader?: string;

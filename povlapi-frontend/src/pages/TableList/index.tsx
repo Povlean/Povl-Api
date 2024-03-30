@@ -199,6 +199,16 @@ const TableList: React.FC = () => {
       }
     },
     {
+      title: '转发后缀',
+      dataIndex: 'requestUrl',
+      valueType: 'text',
+      formItemProps: {
+        rules: [{
+          required: true
+        }]
+      }
+    },
+    {
       title: '请求参数',
       dataIndex: 'requestParams',
       valueType: 'jsonCode',
