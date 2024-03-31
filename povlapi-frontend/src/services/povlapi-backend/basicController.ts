@@ -54,10 +54,10 @@ export async function musicInfoUsingPOST(
   });
 }
 
-/** 热榜新闻查询 POST /api/basic/news */
-export async function hotNewListUsingPOST(options?: { [key: string]: any }) {
+/** 热榜新闻查询 GET /api/basic/news */
+export async function hotNewListUsingGET(options?: { [key: string]: any }) {
   return request<API.BaseResponseListNewsVO>('/api/basic/news', {
-    method: 'POST',
+    method: 'GET',
     ...(options || {}),
   });
 }
@@ -99,7 +99,7 @@ export async function weatherConditionUsingGET(
 }
 
 /** 随机一言接口 GET /api/basic/words */
-export async function searchBookByIsbnUsingGET1(options?: { [key: string]: any }) {
+export async function randomWordsUsingGET(options?: { [key: string]: any }) {
   return request<API.BaseResponsestring>('/api/basic/words', {
     method: 'GET',
     ...(options || {}),

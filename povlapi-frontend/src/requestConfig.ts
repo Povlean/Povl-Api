@@ -102,7 +102,7 @@ export const requestConfig: RequestConfig = {
       // 拦截响应数据，进行个性化处理
       const { data } = response as unknown as ResponseStructure;
       console.log("intercepter===>" + JSON.stringify(data))
-      if (data.code !== 0) {
+      if (data.code !== 0 && !JSON.stringify(data).includes('accessKey')) {
         throw new Error(data.message);
       }
       console.log("Interceptor:response===>" + response); 

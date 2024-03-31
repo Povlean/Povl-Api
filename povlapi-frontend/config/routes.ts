@@ -89,6 +89,7 @@ export default [
     component: './Community',
   },
   {
+    access: 'canAdmin',
     icon: 'crown',
     path: '/log',
     name: 'log',
@@ -114,6 +115,34 @@ export default [
     path: '/book',
     name: 'book',
     component: './IDE/Book',
+  },
+  {
+    // layout: false,
+    hideInMenu: true,
+    path: '/avatar',
+    name: 'avatar',
+    component: './IDE/Avatar',
+  },
+  {
+    // layout: false,
+    hideInMenu: true,
+    path: '/musicSearch',
+    name: 'musicSearch',
+    component: './IDE/MusicSearch',
+  },
+  {
+    // layout: false,
+    hideInMenu: true,
+    path: '/news',
+    name: 'news',
+    component: './IDE/News',
+  },
+  {
+    // layout: false,
+    hideInMenu: true,
+    path: '/words',
+    name: 'words',
+    component: './IDE/Words',
   },
   {
     hideInMenu: true,

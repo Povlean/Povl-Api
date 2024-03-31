@@ -4,6 +4,11 @@ declare namespace API {
     id?: number;
   };
 
+  type AnalysisInfoBO = {
+    count: number;
+    interfaceName: string;
+  };
+
   type BaseResponseboolean = {
     code?: number;
     data?: boolean;
@@ -16,9 +21,9 @@ declare namespace API {
     message?: string;
   };
 
-  type BaseResponseListInterfaceAnalVO = {
+  type BaseResponseListAnalysisInfoBO = {
     code?: number;
-    data?: InterfaceAnalVO[];
+    data?: AnalysisInfoBO[];
     message?: string;
   };
 
@@ -203,11 +208,6 @@ declare namespace API {
   };
 
   type InputStream = true;
-
-  type InterfaceAnalVO = {
-    count: number;
-    interfaceName: string;
-  };
 
   type InterfaceInfo = {
     createTime?: string;

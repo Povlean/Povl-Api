@@ -20,7 +20,7 @@ const BasicFunc: React.FC = () => {
             />
           }
           actions={[
-            <Link to="/weather">
+            <Link to="/words">
               体验
             </Link> 
           ]}

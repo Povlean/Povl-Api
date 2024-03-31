@@ -66,7 +66,7 @@ const BasicFunc: React.FC = () => {
           ]}
         >
           <Meta
-            title="图书推荐接口"
+            title="图书查询接口"
             description="使用图书的isbn编号查询书名、作家、年份、书籍内容等数据"
           />
         </Card>

@@ -20,7 +20,7 @@ const BasicFunc: React.FC = () => {
             />
           }
           actions={[
-            <Link to="/weather">
+            <Link to="/avatar">
               体验
             </Link> 
           ]}
@@ -40,7 +40,7 @@ const BasicFunc: React.FC = () => {
             />
           }
           actions={[
-            <Link to="/music">
+            <Link to="/musicSearch">
               体验
             </Link> 
           ]}
@@ -60,7 +60,7 @@ const BasicFunc: React.FC = () => {
             />
           }
           actions={[
-            <Link to="/book">
+            <Link to="/news">
               体验
             </Link> 
           ]}

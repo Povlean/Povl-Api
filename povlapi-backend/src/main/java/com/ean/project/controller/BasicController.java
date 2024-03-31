@@ -126,7 +126,7 @@ public class BasicController {
 
     @ApiOperation("随机一言接口")
     @GetMapping("/words")
-    public BaseResponse<String> searchBookByIsbn() {
+    public BaseResponse<String> randomWords() {
         String url = "https://tenapi.cn/v2/yiyan";
         String body = HttpRequest.get(url)
                 .execute()
@@ -154,7 +154,7 @@ public class BasicController {
     }
 
     @ApiOperation("热榜新闻查询")
-    @PostMapping("/news")
+    @GetMapping("/news")
     public BaseResponse<List<NewsVO>> hotNewList() {
         String url = "https://tenapi.cn/v2/zhihuhot";
         String body = HttpRequest.get(url)
@@ -229,7 +229,6 @@ public class BasicController {
     @ApiOperation("股票趋势接口")
     @GetMapping("/ai")
     public BaseResponse<StockVO> talkToErnie() {
-
         return null;
     }
 }
