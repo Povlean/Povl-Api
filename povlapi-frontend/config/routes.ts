@@ -145,6 +145,13 @@ export default [
     component: './IDE/Words',
   },
   {
+    // layout: false,
+    hideInMenu: true,
+    path: '/stock',
+    name: 'stock',
+    component: './IDE/Stock',
+  },
+  {
     hideInMenu: true,
     path: '/article',
     name: 'article',

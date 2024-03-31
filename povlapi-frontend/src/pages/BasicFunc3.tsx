@@ -31,7 +31,7 @@ const BasicFunc: React.FC = () => {
           />
         </Card>
 
-        <Card
+        {/* <Card
           style={{ width: 300, margin: 20}}
           cover={
             <img
@@ -49,7 +49,7 @@ const BasicFunc: React.FC = () => {
             title="ERNIE-AI对话"
             description="体验与ERNIE对话"
           />
-        </Card>
+        </Card> */}
 
         <Card
           style={{ width: 300, margin: 20}}
@@ -60,7 +60,7 @@ const BasicFunc: React.FC = () => {
             />
           }
           actions={[
-            <Link to="/book">
+            <Link to="/stock">
               体验
             </Link>
           ]}
