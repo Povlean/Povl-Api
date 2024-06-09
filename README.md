@@ -9,5 +9,7 @@ Povlapi-frontend
 后端初始化项目 
 Povlapi-backend
 
+该PovlApi项目是本人毕业设计使用的项目，用于学习交流。
+
 
 
