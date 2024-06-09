@@ -29,13 +29,13 @@ nacos 版本：
 ![](./images/newsApi.png)
 
 头像API：
-![](./images/newsApi.png)
+![](./images/avatarApi.png)
 
 鸡汤API：
 ![](./images/wordsApi.png)
 
 社区功能：
-![](./images/communityApi.png)
+![](./images/community.png)
 
 数据分析：
 ![](./images/ana.png)
