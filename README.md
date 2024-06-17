@@ -22,9 +22,9 @@ Povl-Api项目目前用于熟悉SpringCloud微服务组件，以及分布式架�
 
 ### 本地环境
 
-要运行该项目，需要本地下载Nacos 2.2.0软件
+要运行该项目，需要本地下载Nacos 2.2.0软件。进入到软件的 bin 目录下，使用命令 startup.cmd -m standalone 命令运行单机nacos
 
-进入到软件的 bin 目录下，使用命令 startup.cmd -m standalone 命令运行单机nacos
+前端的node版本为16.20.2
 
 ### 效果展示
 
